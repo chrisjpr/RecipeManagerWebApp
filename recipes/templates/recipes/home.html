@@ -1,0 +1,18 @@
+{% extends "recipes/base.html" %}
+
+{% block content %}
+  <h1>🍴 Welcome to RecipeManager</h1>
+  <p>Here are some tasty recipes to explore:</p>
+
+  <ul>
+    {% for recipe in recipes %}
+      <li>
+        <a href="{% url 'recipe_detail' slug=recipe.safe_title %}">
+          {{ recipe.title }}
+        </a>
+      </li>
+    {% endfor %}
+  </ul>
+
+  <p><a href="{% url 'recipe_list' %}">View all recipes →</a></p>
+{% endblock %}

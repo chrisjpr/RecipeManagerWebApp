@@ -1,3 +1,30 @@
-from django.shortcuts import render
+
+
+from django.shortcuts import render, get_object_or_404
+from rest_framework import viewsets
+from .models import Recipe
+from .serializers import RecipeSerializer
 
 # Create your views here.
+
+class RecipeViewSet(viewsets.ModelViewSet):
+    queryset = Recipe.objects.all()
+    serializer_class = RecipeSerializer
+
+
+# Render a Recipe Template
+def recipe_detail(request, slug):
+    recipe = get_object_or_404(Recipe, safe_title=slug)
+    return render(request, 'recipes/recipe_detail.html', {
+        'recipe': recipe
+    })
+
+# Render all Recipes
+def recipe_list(request):
+    recipes = Recipe.objects.all()
+    return render(request, 'recipes/recipe_list.html', {'recipes': recipes})
+
+# specify homepage
+def home(request):
+    recipes = Recipe.objects.all()[:5]
+    return render(request, 'recipes/home.html', {'recipes': recipes})
