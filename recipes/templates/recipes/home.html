@@ -1,6 +1,16 @@
 {% extends "recipes/base.html" %}
 
 {% block content %}
+  {% if user.is_authenticated %}
+    <p>Welcome, {{ user.username }}!</p>
+    <form method="post" action="{% url 'logout' %}">
+      {% csrf_token %}
+      <button type="submit">Logout</button>
+    </form>
+  {% else %}
+    <p><a href="{% url 'login' %}">Login</a> | <a href="{% url 'register' %}">Register</a></p>
+  {% endif %}
+
   <h1>🍴 Welcome to RecipeManager</h1>
   <p>Here are some tasty recipes to explore:</p>
 

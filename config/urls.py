@@ -21,7 +21,16 @@ from django.urls import path, include
 # for mail sending
 from django.core.mail import send_mail
 from django.http import HttpResponse
+from django.conf import settings
+from django.conf.urls.static import static
+from django.contrib.auth import views as auth_views
+
+
+# Import Own Templates / Views
 from recipes.views import home
+from accounts.views import register
+
+
 
 
 #region TEST FUNCTIONS
@@ -49,7 +58,17 @@ def test_email_view(request):
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("test-email/", test_email_view),
+    
+    # API and App URLs
     path("api/", include("recipes.urls")),
-    path('recipes/', include('recipes.urls')),
+    path("recipes/", include("recipes.urls")),
+
+    # Authentication
+    path("accounts/", include("accounts.urls")),  # ✅ Your custom login/logout/register
+
+    # Home
     path("", home, name="home"),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

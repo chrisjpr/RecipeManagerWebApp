@@ -49,7 +49,9 @@
     <h1>{{ recipe.title }}</h1>
 
     {% if recipe.image %}
-        <img src="{{ recipe.image.url }}" alt="Recipe Image" class="recipe-image">
+    <img src="{{ recipe.image.url }}" alt="{{ recipe.title }}">
+    {% else %}
+    <p>No image uploaded.</p>
     {% endif %}
 
     <p><strong>Cooking Time:</strong> {{ recipe.cook_time }} minutes</p>
