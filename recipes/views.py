@@ -1,9 +1,13 @@
 
 
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from rest_framework import viewsets
 from .models import Recipe
 from .serializers import RecipeSerializer
+from django.contrib.auth.decorators import login_required
+
+
+
 
 # Create your views here.
 
@@ -20,11 +24,15 @@ def recipe_detail(request, slug):
     })
 
 # Render all Recipes
+@login_required
 def recipe_list(request):
-    recipes = Recipe.objects.all()
-    return render(request, 'recipes/recipe_list.html', {'recipes': recipes})
+    recipes = Recipe.objects.filter(user=request.user)
+    return render(request, "recipes/recipe_list.html", {"recipes": recipes})
 
 # specify homepage
+@login_required
 def home(request):
-    recipes = Recipe.objects.all()[:5]
+    recipes = Recipe.objects.filter(user=request.user)
     return render(request, 'recipes/home.html', {'recipes': recipes})
+
+

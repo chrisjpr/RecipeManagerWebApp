@@ -11,5 +11,5 @@ router.register(r'recipes', RecipeViewSet, basename='recipe')
 urlpatterns = [
     path('', include(router.urls)),
     path('', recipe_list, name='recipe_list'),
-    path('<slug:slug>/', recipe_detail, name='recipe_detail'),  # optional
+    path('<slug:slug>/', recipe_detail, name='recipe_detail'),
 ]

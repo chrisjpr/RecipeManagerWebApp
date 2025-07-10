@@ -4,24 +4,28 @@ from .models import Recipe, Ingredient, IngredientCategory
 
 # Register your models here.
 
-# Inline for Ingredient (used inside IngredientCategory admin)
 class IngredientInline(admin.TabularInline):
     model = Ingredient
     extra = 1
+    fields = ['name', 'quantity', 'unit', 'category']
+    autocomplete_fields = ['category']  # optional, for UX
 
-# Inline for IngredientCategory (used inside Recipe admin)
 class IngredientCategoryInline(admin.StackedInline):
     model = IngredientCategory
     extra = 1
-    show_change_link = True
 
-# Register Recipe with inlines for IngredientCategories (not Ingredients directly!)
 @admin.register(Recipe)
 class RecipeAdmin(admin.ModelAdmin):
     inlines = [IngredientCategoryInline]
-    list_display = ('title',)  # Add fields like source_url or created_at if they exist
+    list_display = ('title', 'user')
     search_fields = ('title',)
-    # list_filter = ('created_at',)  # Only include if `created_at` is defined on model
+    exclude = ('user',)
+
+    def save_model(self, request, obj, form, change):
+        if not obj.pk:
+            obj.user = request.user
+        super().save_model(request, obj, form, change)
+
 
 # Register IngredientCategory separately to manage its Ingredients
 @admin.register(IngredientCategory)
