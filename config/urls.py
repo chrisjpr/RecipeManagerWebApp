@@ -16,28 +16,40 @@ Including another URLconf
 """
 
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 
 # for mail sending
 from django.core.mail import send_mail
 from django.http import HttpResponse
+from recipes.views import home
+
+
+#region TEST FUNCTIONS
+##################### TEST FUNCTIONS #####################
+
+def test_email_view(request):
+    subject = "✅ Test Email from RecipeManager"
+    message = "This is a test message to confirm your email setup works."
+    from_email = None
+    recipient_list = ["chris@judkins.de"]
+
+    try:
+        send_mail(subject, message, from_email, recipient_list)
+        return HttpResponse("✅ Email sent successfully!")
+    except Exception as e:
+        return HttpResponse(f"❌ Error sending email: {e}")
 
 
 
-
-def test_email(request):
-    send_mail(
-        'Test Email from Django',
-        'This is a test message sent via Strato SMTP.',
-        'recipemanager@judkins.de',
-        ['chris@judkins.de'],  # Replace with your own
-        fail_silently=False,
-    )
-    return HttpResponse("Email sent!")
+##################### /TEST FUNCTIONS #####################
+#endregion
 
 
-
+## URL PATTERNS (CONNECTS WEBPAGE URLS TO BACKEND FUNCTIONS)
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path('test-email/', test_email),
+    path("test-email/", test_email_view),
+    path("api/", include("recipes.urls")),
+    path('recipes/', include('recipes.urls')),
+    path("", home, name="home"),
 ]

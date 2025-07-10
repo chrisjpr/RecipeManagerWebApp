@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Recipe Manager{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- CSS Reset + Minimal Styling -->
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 2rem;
+            background: #fefefe;
+            color: #333;
+        }
+        header {
+            margin-bottom: 2rem;
+        }
+        nav a {
+            margin-right: 1rem;
+            text-decoration: none;
+            color: #0077cc;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+        main {
+            max-width: 800px;
+            margin: auto;
+        }
+        footer {
+            margin-top: 4rem;
+            text-align: center;
+            font-size: 0.85rem;
+            color: #aaa;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🍳 Recipe Manager</h1>
+        <nav>
+            <a href="{% url 'home' %}">Home</a>
+            <a href="{% url 'recipe_list' %}">All Recipes</a>
+        </nav>
+    </header>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        &copy; {{ year|default:2025 }} RecipeManager. All rights reserved.
+    </footer>
+</body>
+</html>
