@@ -12,9 +12,14 @@
   <label>Optional Title:</label><br>
   <input type="text" name="custom_title" placeholder="e.g. Vegan Carbonara"><br><br>
 
-  <label>Custom Prompt Instructions (optional):</label><br>
-  <textarea name="custom_instruction" rows="4" cols="50" placeholder="e.g. Use no processed vegan cheese"></textarea><br><br>
+  <label>Optional Instructions:</label><br>
+  <textarea name="custom_instruction" placeholder="e.g. No onions, extra garlic" rows="3" cols="40"></textarea><br><br>
 
   <label>
-    <input type="checkbox" name="transform_vegan"> Make Vegan
-  </label><br><b
+    <input type="checkbox" name="transform_vegan">
+    🌱 Transform to Vegan
+  </label><br><br>
+
+  <button type="submit">Add Recipe</button>
+</form>
+{% endblock %}

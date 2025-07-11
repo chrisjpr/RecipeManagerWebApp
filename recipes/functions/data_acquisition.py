@@ -4,10 +4,11 @@ import base64
 import requests
 from io import BytesIO
 from fractions import Fraction
-from PIL import Image
+from PIL import Image, ImageChops
 from recipe_scrapers import scrape_me
 from rembg import remove
 import openai
+import io
 
 # ------------------------- UTILS -------------------------
 
@@ -42,7 +43,6 @@ def fetch_recipe_from_url(url):
     scraper = scrape_me(url)
     return {
         "title": scraper.title(),
-        "safe_title": slugify(scraper.title()),
         "ingredients": scraper.ingredients(),
         "instructions": scraper.instructions().split("\n"),
         "cook_time": str(scraper.total_time() or 1),
@@ -101,16 +101,20 @@ Expected output format:
             "instructions": data["instructions"],
         }
 
-# ------------------ IMAGE EXTRACTION ---------------------
 
+#region EXTRACT RECIPE FROM IMAGES
+##################### EXTRACT RECIPE FROM IMAGES #####################
 def extract_recipe_from_images(images, api_key, transform_vegan=False, custom_instruction="", custom_title=""):
     client = openai.OpenAI(api_key=api_key)
 
     image_parts = []
+    original_images = []
+
     for file in images:
         image_bytes = file.read()
         if not image_bytes:
             continue
+        original_images.append(image_bytes)
         b64 = base64.b64encode(image_bytes).decode("utf-8")
         image_parts.append({
             "type": "image_url",
@@ -126,7 +130,7 @@ Return JSON:
 "title": "string",
 "cook_time": "string or number",
 "portions": "string or number",
-"ingredients": [{{"category": "Ingredients", "items": [{{"name": "string", "quantity": "float", "unit": "string"}}]}}],
+"ingredients": [{{"category": "Ingredients", "items": [{{"name": "string", "quantity": "float", "unit": "string"}}]}}], 
 "instructions": ["step 1", "step 2", ...]
 }}
 
@@ -139,6 +143,7 @@ Return JSON:
 """
 
     try:
+        # Step 1: Get structured data from GPT-4o
         response = client.chat.completions.create(
             model="gpt-4o",
             messages=[{"role": "user", "content": [{"type": "text", "text": instruction}, *image_parts]}],
@@ -148,12 +153,67 @@ Return JSON:
         data["safe_title"] = slugify(custom_title or data.get("title", "recipe"))
         if custom_title:
             data["title"] = custom_title
+
+        # Step 2: Process best image (first one for simplicity)
+        if original_images:
+            raw_img = Image.open(BytesIO(original_images[0])).convert("RGBA")
+            fg_only = remove(raw_img)
+
+            bbox = fg_only.getbbox()
+            if bbox:
+                cropped = fg_only.crop(bbox)
+            else:
+                cropped = fg_only  # fallback
+
+            # Remove alpha for JPG compatibility
+            white_bg = Image.new("RGB", cropped.size, (255, 255, 255))
+            white_bg.paste(cropped, mask=cropped.split()[3])
+
+            buffer = BytesIO()
+            white_bg.save(buffer, format="PNG")
+            buffer.seek(0)
+
+            # 🟩 Crop the visible content to avoid transparent boundaries
+            cropped_bytes = crop_image_to_visible_area(buffer.getvalue())
+            data["image_bytes"] = cropped_bytes
+
         return data
+
     except Exception as e:
         print("❌ Failed to parse image LLM response:", e)
         return None
+    
 
-# ------------------ IMAGE DOWNLOAD -----------------------
+#---------------------- IMAGE PROCESSING FUNCTIONS -----------------------#
+def crop_image_to_visible_area(image_bytes):
+    """
+    Crops an image to its visible (non-transparent) area.
+
+    Args:
+        image_bytes (bytes): PNG image with possible transparency
+
+    Returns:
+        bytes: Cropped image as PNG
+    """
+    image = Image.open(io.BytesIO(image_bytes)).convert("RGBA")
+
+    # Create a mask from alpha channel
+    alpha = image.split()[3]
+    bbox = alpha.getbbox()
+
+    if bbox:
+        cropped = image.crop(bbox)
+    else:
+        cropped = image  # fallback if bbox fails
+
+    # Optionally: convert to RGB on white background (for JPEG-like output)
+    white_bg = Image.new("RGB", cropped.size, (255, 255, 255))
+    white_bg.paste(cropped, mask=cropped.split()[3])  # use alpha as mask
+
+    buffer = io.BytesIO()
+    white_bg.save(buffer, format="PNG")
+    return buffer.getvalue()
+
 
 def download_image_from_url(image_url):
     try:
@@ -163,3 +223,7 @@ def download_image_from_url(image_url):
     except Exception as e:
         print("❌ Error downloading image:", e)
         return None
+
+##################### EXTRACT RECIPE FROM IMAGES #####################
+#endregion
+
