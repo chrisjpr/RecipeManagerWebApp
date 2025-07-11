@@ -19,11 +19,6 @@ instruction_formset = InstructionFormSet(prefix="instructions")
 
 # Create your views here.
 
-# specify homepage
-@login_required
-def home(request):
-    recipes = Recipe.objects.filter(user=request.user)
-    return render(request, 'recipes/home.html', {'recipes': recipes})
 
 # Render a Recipe Template
 def recipe_detail(request, recipe_id):
@@ -38,11 +33,13 @@ def recipe_list(request):
     recipes = Recipe.objects.filter(user=request.user)
     return render(request, "recipes/recipe_list.html", {"recipes": recipes})
 
+# specify homepage
+@login_required
+def home(request):
+    recipes = Recipe.objects.filter(user=request.user)
+    return render(request, 'recipes/home.html', {'recipes': recipes})
 
 
-#region MANIPULATE RECIPES
-
-############## MANIPULATE RECIPES ##############
 @login_required
 def recipe_delete(request, pk):
     recipe = get_object_or_404(Recipe, pk=pk)
@@ -86,11 +83,10 @@ def recipe_edit(request, pk):
         "instruction_formset": instruction_formset,
         "recipe": recipe
     })
-############## /MANIPULATE RECIPES ##############
 
-#region MANUAL CREATION
+#region Manual Recipe Creation
 
-################## MANUAL CREATION ##################
+################## Create Recipe Manually ######### #########
 @login_required
 def create_recipe(request):
     if request.method == 'POST':
@@ -127,12 +123,9 @@ def create_recipe(request):
             "ingredient_formset": ingredient_formset,
             "instruction_formset": instruction_formset
         })
-################## /MANUAL CREATION ##################
-#endregion MANUAL CREATION    
+    
 
-
-
-#region AI DATA RETRIEVAL
+#region AI Data Retrieval
 ################## AI DATA RETRIEVAL ##################
 
 @login_required
@@ -144,11 +137,10 @@ def add_recipe_from_url(request):
         custom_title = request.POST.get('custom_title', '')
 
         try:
-            # Get structured data from URL via GPT
-            structured_data = get_data_from_url(
+            # Get structured data + image
+            structured_data, image_bytes = get_data_from_url(
                 url=url,
-                api_key=settings.OPENAI_API_KEY,
-                html_dir='.',  # update if needed
+                api_key=settings.OPENAI_KEY,
                 transform_vegan=transform_vegan,
                 custom_instructions=custom_instruction
             )
@@ -157,8 +149,12 @@ def add_recipe_from_url(request):
             if custom_title:
                 structured_data['title'] = custom_title
 
-            # Save to DB
-            recipe = save_structured_recipe_to_db(structured_data, user=request.user)
+            # Save to DB with image
+            recipe = save_structured_recipe_to_db(
+                data=structured_data,
+                user=request.user,
+                image_bytes=image_bytes
+            )
 
             messages.success(request, f"🎉 Recipe '{recipe.title}' created from URL!")
             return redirect('recipe_detail', recipe_id=recipe.recipe_id)
@@ -166,7 +162,7 @@ def add_recipe_from_url(request):
         except Exception as e:
             print("❌ Error in add_recipe_from_url:", e)
             messages.error(request, "Error while creating recipe from URL.")
-    
+
     return render(request, 'recipes/add_recipe_from_url.html')
 
 
@@ -182,13 +178,14 @@ def add_recipe_from_image(request):
             # Extract data from image via GPT-4o
             structured_data, best_image_bytes = get_data_from_image(
                 images=images,
-                api_key=settings.OPENAI_API_KEY,
-                html_dir='.',  # update as needed
+                api_key=settings.OPENAI_KEY,
                 transform_vegan=transform_vegan,
                 custom_instruction=custom_instruction,
                 custom_title=custom_title,
                 return_image_bytes=True
             )
+            
+            best_image_bytes = crop_image_to_visible_area(best_image_bytes) if best_image_bytes else None
 
             # Save recipe
             recipe = save_structured_recipe_to_db(

@@ -5,63 +5,67 @@ from .data_acquisition import *
 ##################### GET DATA FROM URL / IMAGE FUNCTIONS #####################
 
 def get_data_from_url(url, api_key, transform_vegan=False, custom_instructions=""):
-    """
-    Fetches and organizes recipe data from a URL and prepares it for database insertion.
-    Returns a dictionary with all necessary fields for saving.
-    """
-
-    # Step 1: Raw scrape
     raw_data = fetch_recipe_from_url(url)
-
-    # Step 2: LLM postprocessing
     structured_data = organize_with_llm(raw_data, api_key, transform_vegan, custom_instructions)
 
-    # Step 3: Download image (optional)
-    image_io = None
-    if raw_data.get("image_url"):
-        image_io = download_image_from_url(raw_data["image_url"])
+    # Get image
+    image_path = raw_data.get("image_url")  # comes from scrape_me
+    image_bytes = None
 
-    # Step 4: Return all fields needed for DB save
-    return {
+    if image_path:
+        try:
+            response = requests.get(image_path)
+            if response.status_code == 200:
+                original = response.content
+                image_bytes = crop_image_to_visible_area(original)
+        except Exception as e:
+            print(f"⚠️ Failed to download image from URL: {e}")
+
+    # Final data
+    new_recipe_data = {
         "title": raw_data["title"],
         "safe_title": slugify(raw_data["title"]),
-        "cook_time": raw_data.get("cook_time", 1),
-        "portions": raw_data.get("portions", 1),
-        "image_file": image_io,  # This can be passed directly to a Django ImageField
+        "cook_time": raw_data["cook_time"],
+        "portions": raw_data["portions"],
+        "image_url": raw_data["image_url"],
         "ingredients": structured_data["ingredients"],
         "instructions": structured_data["instructions"]
     }
 
-def get_data_from_image(images, api_key, html_dir, transform_vegan=False, custom_instruction="", custom_title=""):
-    """
-    Main pipeline to extract and structure a recipe from uploaded images.
-    Returns a dictionary with all required recipe information.
-    """
+    return new_recipe_data, image_bytes
 
-    print("🔄 Starting pipeline to get data from image...")
+def get_data_from_image(images, api_key, transform_vegan, custom_instruction, custom_title="", return_image_bytes=True):
+    structured_data = None
+    best_image_bytes = None
 
-    structured_data = extract_recipe_from_images(
-        images=images,
-        api_key=api_key,
-        html_dir=html_dir,
-        transform_vegan=transform_vegan,
-        custom_instruction=custom_instruction,
-        custom_title=custom_title
-    )
+    try:
+        result = extract_recipe_from_images(
+            images=images,
+            api_key=api_key,
+            transform_vegan=transform_vegan,
+            custom_instruction=custom_instruction,
+            custom_title=custom_title
+        )
+        if result is None:
+            raise ValueError("No result returned from image analysis.")
 
-    if not structured_data:
-        raise ValueError("No structured data returned from image extraction.")
+        structured_data = result
+        best_image_bytes = result.get("image_bytes", None)  # manually inject this below if needed
 
-    # Normalize quantities (optional)
-    for group in structured_data.get("ingredients", []):
-        for item in group.get("items", []):
+        # If result only contains image path/url, re-fetch bytes:
+        if return_image_bytes and not best_image_bytes and result.get("image_url"):
             try:
-                item["quantity"] = parse_quantity_to_float(str(item["quantity"])) if item.get("quantity") else None
+                resp = requests.get(result["image_url"])
+                if resp.status_code == 200:
+                    best_image_bytes = resp.content
             except Exception as e:
-                print(f"⚠️ Could not parse quantity '{item['quantity']}':", e)
-                item["quantity"] = None
+                print(f"⚠️ Could not re-download image: {e}")
 
-    return structured_data
+        return structured_data, best_image_bytes
+
+    except Exception as e:
+        print("❌ Failed to extract recipe from image:", e)
+        raise
 
 ##################### GET DATA FROM URL / IMAGE FUNCTIONS #####################
 
@@ -71,56 +75,93 @@ from django.core.files.base import ContentFile
 from django.conf import settings
 import os
 
-#region Save Structured Recipe to DB
-##################### Save Structured Recipe to DB #####################
+#region STR DATA TO DB
+##################### SAVE STRUCTURED DATA TO DB FUNCTION #####################
+
+def clean_int_from_string(value, fallback=1):
+    """
+    Extracts the first integer found in a string like '4 servings' or '30 min'.
+    Returns fallback (default 1) if nothing is found or invalid.
+    """
+    try:
+        return int(re.search(r'\d+', str(value)).group())
+    except:
+        return fallback
+
+
+def clean_quantity(value):
+    """
+    Attempts to convert a quantity string like '1 1/2' or '½' to a float.
+    Returns None if invalid.
+    """
+    from fractions import Fraction
+
+    if not value:
+        return None
+    value = str(value).strip()
+
+    unicode_fractions = {
+        '½': 0.5, '⅓': 1/3, '⅔': 2/3,
+        '¼': 0.25, '¾': 0.75, '⅛': 0.125,
+        '⅜': 0.375, '⅝': 0.625, '⅞': 0.875,
+    }
+
+    if value in unicode_fractions:
+        return float(unicode_fractions[value])
+
+    try:
+        if ' ' in value:
+            whole, frac = value.split()
+            return float(whole) + float(Fraction(frac))
+        if '/' in value:
+            return float(Fraction(value))
+        if '-' in value:
+            start, end = map(float, value.split('-'))
+            return round((start + end) / 2, 2)
+        return float(value)
+    except:
+        return None
 
 def save_structured_recipe_to_db(data, user, image_bytes=None):
     """
-    Save a structured recipe (from GPT or similar) into the database.
-    
-    Arguments:
-        data (dict): Must contain title, cook_time, portions, ingredients (list), instructions (list)
-        user (User): Django User who owns the recipe
-        image_bytes (bytes or None): Optional image to save to Recipe.image (as ImageField)
-    Returns:
-        Recipe instance
+    Save a structured recipe dictionary to the Django database.
     """
-
-    # Create Recipe object
     recipe = Recipe(
-        title=data["title"],
-        cook_time=int(data.get("cook_time", 1)),
-        portions=int(data.get("portions", 1)),
+        title=data.get("title", "Untitled"),
+        safe_title=slugify(data.get("title", "Untitled")),
+        cook_time=clean_int_from_string(data.get("cook_time")),
+        portions=clean_int_from_string(data.get("portions")),
         notes="Imported automatically",
-        user=user
+        user=user,
     )
 
-    # Optionally save image to ImageField
+    # Optionally attach image
     if image_bytes:
-        filename = f"{data['safe_title']}.png"
+        filename = f"{data.get('safe_title', 'recipe')}.png"
         recipe.image.save(filename, ContentFile(image_bytes), save=False)
 
     recipe.save()
 
-    # Add ingredients
+    # Save ingredients
     for group in data.get("ingredients", []):
         category = group.get("category", "")
         for item in group.get("items", []):
             Ingredient.objects.create(
                 recipe_id=recipe,
                 category=category,
-                name=item.get("name", ""),
-                quantity=item.get("quantity") or None,
-                unit=item.get("unit") or ""
+                name=item.get("name", "").strip(),
+                quantity=clean_quantity(item.get("quantity")),
+                unit=(item.get("unit") or "").strip()
             )
 
-    # Add instructions
+    # Save instructions
     for idx, step in enumerate(data.get("instructions", []), start=1):
         Instruction.objects.create(
             recipe_id=recipe,
             step_number=idx,
-            description=step
+            description=step.strip()
         )
 
     return recipe
-##################### /Save Structured Recipe to DB #####################
+
+##################### Save Structured Recipe to DB #####################

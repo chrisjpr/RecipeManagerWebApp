@@ -2,52 +2,214 @@
 {% block title %}{{ recipe.title }} | Recipe Manager{% endblock %}
 
 {% block content %}
-<article>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  body {
+    font-family: 'Inter', sans-serif;
+    background: #f7f9fc;
+    color: #333;
+    margin: 0;
+    padding: 0;
+  }
+
+  .recipe-header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    background: linear-gradient(120deg, #fff6ec, #fefeff);
+    border-bottom: 1px solid #ddd;
+    padding: 2rem;
+    align-items: center;
+    border-radius: 12px;
+    margin-bottom: 2rem;
+  }
+
+  .recipe-header img {
+    max-width: 300px;
+    border-radius: 12px;
+    border: 4px solid #ffecd1;
+  }
+
+  .recipe-info {
+    flex: 1;
+    margin-left: 2rem;
+  }
+
+  .recipe-info h2 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .recipe-meta {
+    font-size: 1.1rem;
+    color: #555;
+    margin-bottom: 1rem;
+  }
+
+  .content-section {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 2rem;
+  }
+
+  .box {
+    flex: 1;
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    border: 1px solid #eee;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    min-width: 300px;
+  }
+
+  .box h3 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+    border-bottom: 1px solid #f0d9c3;
+    padding-bottom: 0.5rem;
+  }
+
+  .ingredient-item {
+    margin-bottom: 0.75rem;
+  }
+
+  .portion-controls {
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .portion-controls input {
+    width: 60px;
+    padding: 6px;
+    font-size: 1rem;
+    margin-right: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+  }
+
+  .portion-controls button {
+    background-color: #ffcb91;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: 0.2s ease;
+  }
+
+  .portion-controls button:hover {
+    background-color: #ffa95e;
+  }
+
+  ol {
+    padding-left: 1.5rem;
+    line-height: 1.7;
+  }
+
+  .notes-box {
+    margin-top: 2rem;
+    background-color: #fff8ef;
+    border-left: 5px solid #ffcb91;
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+  }
+
+  .action-buttons {
+    margin-top: 2rem;
+    text-align: center;
+  }
+
+  .action-buttons a {
+    margin: 0 0.5rem;
+    padding: 8px 16px;
+    background: #e7f1ff;
+    color: #333;
+    text-decoration: none;
+    border-radius: 6px;
+    border: 1px solid #b8daff;
+    font-weight: 500;
+  }
+
+  .action-buttons a:hover {
+    background-color: #cde4ff;
+  }
+</style>
+
+<div class="recipe-header">
+  {% if recipe.image %}
+    <img src="{{ recipe.image.url }}" alt="{{ recipe.title }}">
+  {% endif %}
+  <div class="recipe-info">
     <h2>{{ recipe.title }}</h2>
+    <div class="recipe-meta">
+      <p>🕒 Cook Time: {{ recipe.cook_time }} min</p>
+      <p>🍽️ Portions: <span id="base-portions">{{ recipe.portions }}</span></p>
+    </div>
+    <div class="action-buttons">
+      {% if user == recipe.user %}
+        <a href="{% url 'recipe_edit' recipe.recipe_id %}">✏️ Edit</a>
+        <a href="{% url 'recipe_delete' recipe.recipe_id %}">🗑️ Delete</a>
+      {% endif %}
+    </div>
+  </div>
+</div>
 
-    {% if recipe.image %}
-        <img src="{{ recipe.image.url }}" alt="{{ recipe.title }}" style="max-width:100%; height:auto; margin-bottom: 1rem;">
-    {% endif %}
+<div class="content-section">
+  <div class="box">
+    <h3>🧂 Ingredients</h3>
 
-    <p><strong>Cook time:</strong> {{ recipe.cook_time }} minutes</p>
-    <p><strong>Portions:</strong> {{ recipe.portions }}</p>
+    <div class="portion-controls">
+      <input id="portionMultiplier" type="number" value="1" step="0.1" min="0.1">
+      <button onclick="adjustPortions()">Adjust</button>
+    </div>
 
-    {% if recipe.notes %}
-        <p><strong>Notes:</strong> {{ recipe.notes }}</p>
-    {% endif %}
+    <ul>
+      {% for ingredient in recipe.ingredients.all %}
+        <li class="ingredient-item ingredient"
+            data-quantity="{{ ingredient.quantity|default_if_none:0 }}"
+            data-unit="{{ ingredient.unit }}"
+            data-name="{{ ingredient.name }}">
+          {{ ingredient.quantity|default_if_none:"" }} {{ ingredient.unit }} {{ ingredient.name }}
+          {% if ingredient.category %}<em> ({{ ingredient.category }})</em>{% endif %}
+        </li>
+      {% empty %}
+        <li>No ingredients listed.</li>
+      {% endfor %}
+    </ul>
+  </div>
 
-    <section>
-        <h3>🧂 Ingredients</h3>
-        <ul>
-        {% for ingredient in recipe.ingredients.all %}
-            <li>
-                {% if ingredient.quantity %}{{ ingredient.quantity }} {% endif %}
-                {% if ingredient.unit %}{{ ingredient.unit }} {% endif %}
-                {{ ingredient.name }}
-                {% if ingredient.category %}<em> ({{ ingredient.category }})</em>{% endif %}
-            </li>
-        {% empty %}
-            <li>No ingredients listed.</li>
-        {% endfor %}
-        </ul>
-    </section>
+  <div class="box">
+    <h3>📋 Instructions</h3>
+    <ol>
+      {% for instruction in recipe.instructions.all %}
+        <li>{{ instruction.description|safe }}</li>
+      {% empty %}
+        <li>No instructions provided.</li>
+      {% endfor %}
+    </ol>
+  </div>
+</div>
 
-    <section>
-        <h3>📋 Instructions</h3>
-        <ol>
-        {% for instruction in recipe.instructions.all %}
-            <li>{{ instruction.description|safe }}</li>
-        {% empty %}
-            <li>No instructions provided.</li>
-        {% endfor %}
-        </ol>
-    </section>
+{% if recipe.notes %}
+  <div class="notes-box">
+    <strong>Notes:</strong><br>
+    {{ recipe.notes|linebreaks }}
+  </div>
+{% endif %}
 
-    {% if user == recipe.user %}
-        <div style="margin-top: 1.5rem;">
-            <a href="{% url 'recipe_edit' recipe.recipe_id %}" style="margin-right:1rem;">✏️ Edit</a>
-            <a href="{% url 'recipe_delete' recipe.recipe_id %}">🗑️ Delete</a>
-        </div>
-    {% endif %}
-</article>
+<script>
+function adjustPortions() {
+  const multiplier = parseFloat(document.getElementById("portionMultiplier").value);
+  document.querySelectorAll('.ingredient').forEach(el => {
+    const quantity = parseFloat(el.dataset.quantity || 0);
+    const unit = el.dataset.unit || '';
+    const name = el.dataset.name || '';
+    const adjusted = quantity ? (quantity * multiplier).toFixed(1) + ' ' : '';
+    el.textContent = adjusted + unit + ' ' + name;
+  });
+}
+</script>
+
 {% endblock %}
