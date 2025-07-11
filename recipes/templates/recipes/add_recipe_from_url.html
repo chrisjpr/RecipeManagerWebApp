@@ -5,19 +5,25 @@
 
   <form method="post">
     {% csrf_token %}
+
     <div class="form-group">
       <label for="recipe_url">Recipe URL</label>
       <input type="url" name="recipe_url" required class="form-control" placeholder="https://..." style="width: 100%;">
     </div>
 
     <div class="form-group">
-      <label for="custom_instructions">Custom Instructions (optional)</label>
-      <textarea name="custom_instructions" class="form-control" rows="4" placeholder="E.g., avoid nuts, make gluten-free..."></textarea>
+      <label for="custom_title">Custom Recipe Title (optional)</label>
+      <input type="text" name="custom_title" class="form-control" placeholder="e.g., Vegan Pasta Deluxe" style="width: 100%;">
     </div>
 
     <div class="form-group">
-      <input type="checkbox" name="veganize" id="veganize">
-      <label for="veganize">Transform to Vegan Recipe</label>
+      <label for="custom_instruction">Custom Instructions (optional)</label>
+      <textarea name="custom_instruction" class="form-control" rows="4" placeholder="E.g., avoid nuts, make gluten-free..."></textarea>
+    </div>
+
+    <div class="form-group">
+      <input type="checkbox" name="transform_vegan" id="transform_vegan">
+      <label for="transform_vegan">Transform to Vegan Recipe</label>
     </div>
 
     <button type="submit" class="btn btn-primary">Add Recipe</button>
