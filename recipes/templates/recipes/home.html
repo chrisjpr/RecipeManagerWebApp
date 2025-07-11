@@ -11,16 +11,18 @@
     <p><a href="{% url 'login' %}">Login</a> | <a href="{% url 'register' %}">Register</a></p>
   {% endif %}
 
-  <h1>🍴 Welcome to RecipeManager</h1>
+  <h2>🍴 Welcome to RecipeManager</h2>
   <p>Here are some tasty recipes to explore:</p>
 
   <ul>
     {% for recipe in recipes %}
       <li>
-        <a href="{% url 'recipe_detail' slug=recipe.safe_title %}">
+        <a href="{% url 'recipe_detail' recipe.recipe_id %}">
           {{ recipe.title }}
         </a>
       </li>
+    {% empty %}
+      <li>No recipes available yet. Be the first to add one!</li>
     {% endfor %}
   </ul>
 

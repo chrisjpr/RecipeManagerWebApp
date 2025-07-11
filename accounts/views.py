@@ -10,14 +10,14 @@ from django.contrib import messages
 # Create your views here.
 
 
-def register(request):
+def register_view(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = RegisterForm(request.POST)
         if form.is_valid():
             form.save()
             return redirect('login')  # Redirect to login after successful registration
     else:
-        form = UserCreationForm()
+        form = RegisterForm()
     return render(request, 'registration/register.html', {'form': form})
 
 

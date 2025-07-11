@@ -1,95 +1,53 @@
-<!-- templates/recipes/recipe_detail.html -->
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>{{ recipe.title }}</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', sans-serif;
-            margin: 40px auto;
-            max-width: 800px;
-            color: #333;
-        }
+{% extends 'recipes/base.html' %}
+{% block title %}{{ recipe.title }} | Recipe Manager{% endblock %}
 
-        h1, h2, h3 {
-            color: #444;
-        }
-
-        img.recipe-image {
-            display: block;
-            max-width: 100%;
-            height: auto;
-            margin: 20px auto;
-            border-radius: 12px;
-        }
-
-        .ingredients, .instructions, .notes {
-            margin-top: 40px;
-        }
-
-        .ingredient-category {
-            margin-bottom: 20px;
-        }
-
-        ul, ol {
-            padding-left: 20px;
-        }
-
-        .notes {
-            background-color: #f9f4e8;
-            padding: 15px;
-            border-left: 5px solid #ffcd91;
-            border-radius: 5px;
-        }
-    </style>
-</head>
-<body>
-
-    <h1>{{ recipe.title }}</h1>
+{% block content %}
+<article>
+    <h2>{{ recipe.title }}</h2>
 
     {% if recipe.image %}
-    <img src="{{ recipe.image.url }}" alt="{{ recipe.title }}">
-    {% else %}
-    <p>No image uploaded.</p>
+        <img src="{{ recipe.image.url }}" alt="{{ recipe.title }}" style="max-width:100%; height:auto; margin-bottom: 1rem;">
     {% endif %}
 
-    <p><strong>Cooking Time:</strong> {{ recipe.cook_time }} minutes</p>
+    <p><strong>Cook time:</strong> {{ recipe.cook_time }} minutes</p>
     <p><strong>Portions:</strong> {{ recipe.portions }}</p>
 
-    <div class="ingredients">
-        <h2>Ingredients</h2>
-        {% for category in recipe.ingredient_categories.all %}
-            <div class="ingredient-category">
-                <h3>{{ category.name }}</h3>
-                <ul>
-                    {% for item in category.items.all %}
-                        <li>
-                            {% if item.quantity %}{{ item.quantity }}{% endif %}
-                            {% if item.unit %} {{ item.unit }}{% endif %}
-                            {{ item.name }}
-                        </li>
-                    {% endfor %}
-                </ul>
-            </div>
-        {% endfor %}
-    </div>
-
-    <div class="instructions">
-        <h2>Instructions</h2>
-        <ol>
-            {% for step in recipe.instructions %}
-                <li>{{ step }}</li>
-            {% endfor %}
-        </ol>
-    </div>
-
     {% if recipe.notes %}
-    <div class="notes">
-        <h2>Notes</h2>
-        <p>{{ recipe.notes }}</p>
-    </div>
+        <p><strong>Notes:</strong> {{ recipe.notes }}</p>
     {% endif %}
 
-</body>
-</html>
+    <section>
+        <h3>🧂 Ingredients</h3>
+        <ul>
+        {% for ingredient in recipe.ingredients.all %}
+            <li>
+                {% if ingredient.quantity %}{{ ingredient.quantity }} {% endif %}
+                {% if ingredient.unit %}{{ ingredient.unit }} {% endif %}
+                {{ ingredient.name }}
+                {% if ingredient.category %}<em> ({{ ingredient.category }})</em>{% endif %}
+            </li>
+        {% empty %}
+            <li>No ingredients listed.</li>
+        {% endfor %}
+        </ul>
+    </section>
+
+    <section>
+        <h3>📋 Instructions</h3>
+        <ol>
+        {% for instruction in recipe.instructions.all %}
+            <li>{{ instruction.description|safe }}</li>
+        {% empty %}
+            <li>No instructions provided.</li>
+        {% endfor %}
+        </ol>
+    </section>
+
+    {% if user == recipe.user %}
+        <div style="margin-top: 1.5rem;">
+            <a href="{% url 'recipe_edit' recipe.recipe_id %}" style="margin-right:1rem;">✏️ Edit</a>
+            <a href="{% url 'recipe_delete' recipe.recipe_id %}">🗑️ Delete</a>
+        </div>
+    {% endif %}
+</article>
+{% endblock %}
