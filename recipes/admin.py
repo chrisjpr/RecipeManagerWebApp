@@ -1,5 +1,8 @@
 from django.contrib import admin
-from .models import Recipe, Ingredient, IngredientCategory
+from .models import Recipe, Ingredient, Instruction
+import traceback
+from django.core.files.storage import default_storage
+
 
 
 # Register your models here.
@@ -8,34 +11,66 @@ class IngredientInline(admin.TabularInline):
     model = Ingredient
     extra = 1
     fields = ['name', 'quantity', 'unit', 'category']
-    autocomplete_fields = ['category']  # optional, for UX
+    autocomplete_fields = []  # Optional: disable to show dropdown with labels
 
-class IngredientCategoryInline(admin.StackedInline):
-    model = IngredientCategory
+
+    # Provide recipe object to formfield_for_foreignkey
+    def get_formset(self, request, obj=None, **kwargs):
+        request._obj_ = obj  # stash current recipe
+        return super().get_formset(request, obj, **kwargs)
+
+
+
+class InstructionInline(admin.TabularInline):
+    model = Instruction
     extra = 1
+    fields = ['step_number', 'description']
+    ordering = ['step_number']
 
 @admin.register(Recipe)
 class RecipeAdmin(admin.ModelAdmin):
-    inlines = [IngredientCategoryInline]
-    list_display = ('title', 'user')
+    inlines = [IngredientInline, InstructionInline]
+    list_display = ('title', 'user', 'recipe_id', 'cook_time', 'portions')
     search_fields = ('title',)
-    exclude = ('user',)
+
+
+
 
     def save_model(self, request, obj, form, change):
-        if not obj.pk:
-            obj.user = request.user
-        super().save_model(request, obj, form, change)
+        try:
+            image_file = request.FILES.get("image")
+
+            if image_file:
+                print("✅ Image upload initiated")
+                print("📝 Image name:", image_file.name)
+                print("📦 Storage backend:", default_storage.__class__.__name__)
+
+                # Save the file manually to trigger storage backend
+                saved_path = obj.image.save(image_file.name, image_file, save=False)
+                print("✅ Image saved to:", saved_path)
+                print("🌐 Image URL should be:", obj.image.url)
+            else:
+                print("⚠️ No image found in request.FILES")
+            if not obj.user:
+                obj.user = request.user
+            super().save_model(request, obj, form, change)
+        except Exception as e:
+            print("❌ Exception during image save:")
+            traceback.print_exc()
 
 
-# Register IngredientCategory separately to manage its Ingredients
-@admin.register(IngredientCategory)
-class IngredientCategoryAdmin(admin.ModelAdmin):
-    inlines = [IngredientInline]
-    list_display = ('name', 'recipe')
-    search_fields = ('name',)
 
 # Optionally register Ingredient if needed
 @admin.register(Ingredient)
 class IngredientAdmin(admin.ModelAdmin):
-    list_display = ('name', 'category', 'quantity', 'unit')
+
+    list_display = ('recipe_id', 'name', 'quantity', 'unit', 'category')
     search_fields = ('name',)
+
+@admin.register(Instruction)
+class InstructionAdmin(admin.ModelAdmin):
+    list_display = ('recipe_id', 'step_number', 'description')
+    search_fields = ('description',)
+    ordering = ['step_number']  
+
+

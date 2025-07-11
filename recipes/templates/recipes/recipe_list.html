@@ -1,11 +1,11 @@
-{% extends "base.html" %}
+{% extends "recipes/base.html" %}
 
 {% block content %}
   <h1>🍽 All Recipes</h1>
   <ul>
     {% for recipe in recipes %}
       <li>
-        <a href="{% url 'recipe_detail' slug=recipe.safe_title %}">
+        <a href="{% url 'recipe_detail' recipe_id=recipe.recipe_id %}">
           {{ recipe.title }}
         </a> – {{ recipe.portions }} portions, {{ recipe.cook_time }} min
       </li>
