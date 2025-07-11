@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>📸 Add Recipe From Image</h2>
+
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+
+  <label>Select image(s):</label><br>
+  <input type="file" name="images" accept="image/*" multiple required><br><br>
+
+  <label>Optional Title:</label><br>
+  <input type="text" name="custom_title" placeholder="e.g. Vegan Carbonara"><br><br>
+
+  <label>Custom Prompt Instructions (optional):</label><br>
+  <textarea name="custom_instruction" rows="4" cols="50" placeholder="e.g. Use no processed vegan cheese"></textarea><br><br>
+
+  <label>
+    <input type="checkbox" name="transform_vegan"> Make Vegan
+  </label><br><b

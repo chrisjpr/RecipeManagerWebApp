@@ -26,7 +26,7 @@ class Recipe(models.Model):
 
 
 class Ingredient(models.Model):
-    ingredient_id = models.AutoField(primary_key=True, unique=True)
+    ingredient_id = models.AutoField(primary_key=True, unique=True, editable=False)
     category = models.CharField(max_length=255, blank=True, null=True)
     recipe_id = models.ForeignKey(Recipe, related_name='ingredients', on_delete=models.CASCADE, null=True, blank=True)
 
@@ -39,7 +39,7 @@ class Ingredient(models.Model):
 
 
 class Instruction(models.Model):
-    instruction_id = models.AutoField(primary_key=True, unique=True)
+    instruction_id = models.AutoField(primary_key=True, unique=True, editable=False)
     recipe_id = models.ForeignKey(Recipe, related_name='instructions', on_delete=models.CASCADE)
     step_number = models.PositiveIntegerField()
     description = models.TextField()

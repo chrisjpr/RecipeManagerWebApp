@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<h2>Edit Recipe: {{ recipe.title }}</h2>
+
+<form method="post" enctype="multipart/form-data" id="recipeForm">
+  {% csrf_token %}
+  {{ recipe_form.as_p }}
+
+  <h3>Ingredients</h3>
+  <div id="ingredients-formset">
+    {{ ingredient_formset.management_form }}
+    {% for form in ingredient_formset %}
+      <div class="ingredients-form form-inline">
+        {% for field in form.visible_fields %}
+          <div class="form-group">
+            {{ field.label_tag }} {{ field }}
+            {% if field.errors %}
+              <div class="form-error">{{ field.errors }}</div>
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+    {% endfor %}
+  </div>
+  <button type="button" id="add-ingredient">➕ Add Ingredient</button>
+
+  <h3>Instructions</h3>
+  <div id="instructions-formset">
+    {{ instruction_formset.management_form }}
+    {% for form in instruction_formset %}
+      <div class="instructions-form form-inline">
+        {% for field in form.visible_fields %}
+          <div class="form-group">
+            {{ field.label_tag }} {{ field }}
+            {% if field.errors %}
+              <div class="form-error">{{ field.errors }}</div>
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+    {% endfor %}
+  </div>
+  <button type="button" id="add-instruction">➕ Add Instruction</button>
+
+  <br><br>
+  <button type="submit">💾 Save Changes</button>
+</form>
+
+<!-- Empty templates for JS cloning -->
+<div id="empty-ingredients-form" style="display: none;">
+  <div class="ingredients-form form-inline">
+    {% for field in ingredient_formset.empty_form %}
+      {% if field.is_hidden %}
+        {{ field }}
+      {% else %}
+        <div class="form-group">
+          {{ field.label_tag }} {{ field }}
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>
+
+</div>
+
+<div id="empty-instructions-form" style="display: none;">
+  <div class="instructions-form form-inline">
+    {% for field in instruction_formset.empty_form %}
+      {% if field.is_hidden %}
+        {{ field }}
+      {% else %}
+        <div class="form-group">
+          {{ field.label_tag }} {{ field }}
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>
+
+<style>
+  .form-inline {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    min-width: 150px;
+  }
+  .form-error {
+    color: red;
+    font-size: 0.85rem;
+  }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  function addForm(prefix) {
+    const totalFormsInput = document.getElementById(`id_${prefix}-TOTAL_FORMS`);
+    const totalForms = parseInt(totalFormsInput.value);
+    const formsetDiv = document.getElementById(`${prefix}-formset`);
+
+    const emptyTemplate = document.getElementById(`empty-${prefix}-form`).innerHTML;
+    const newFormHtml = emptyTemplate.replace(/__prefix__/g, totalForms);
+
+    const newForm = document.createElement('div');
+    newForm.innerHTML = newFormHtml;
+
+    formsetDiv.appendChild(newForm.firstElementChild);
+    totalFormsInput.value = totalForms + 1;
+  }
+
+  document.getElementById('add-ingredient').addEventListener('click', function () {
+    addForm('ingredients');
+  });
+
+  document.getElementById('add-instruction').addEventListener('click', function () {
+    addForm('instructions');
+  });
+});
+</script>
+{% endblock %}

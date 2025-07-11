@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>📥 Add Recipe from URL</h2>
+
+  <form method="post">
+    {% csrf_token %}
+    <div class="form-group">
+      <label for="url">Recipe URL</label>
+      <input type="url" name="url" required class="form-control" placeholder="https://..." style="width: 100%;">
+    </div>
+
+    <div class="form-group">
+      <label for="custom_instructions">Custom Instructions (optional)</label>
+      <textarea name="custom_instructions" class="form-control" rows="4" placeholder="E.g., avoid nuts, make gluten-free..."></textarea>
+    </div>
+
+    <div class="form-group">
+      <input type="checkbox" name="veganize" id="veganize">
+      <label for="veganize">Transform to Vegan Recipe</label>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Add Recipe</button>
+  </form>
+{% endblock %}
