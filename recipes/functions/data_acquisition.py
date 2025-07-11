@@ -54,12 +54,18 @@ def fetch_recipe_from_url(url):
 
 def organize_with_llm(data, api_key, transform_vegan=False, custom_instructions=""):
     if transform_vegan:
-        preamble = "You are a vegan chef... Please transform the following recipe..."
+        preamble =  """You are a vegan chef, capable of transforming all non-vegan Recipes
+        into 100% vegan Recipes, using the best of what the world of vegan replacement products/ cooking
+        techniques has to offer. Please transform the following recipe to a vegan Recipe,
+        by applying only proofingly working techniques and mimicking taste and food texture as good as
+        possible. Here is the recipe:"""
     else:
-        preamble = "Here is a recipe..."
+        preamble = "Here is a recipe:"
 
     prompt = f"""
 {preamble}
+
+
 Ingredients:
 {data["ingredients"]}
 Instructions:
@@ -73,7 +79,7 @@ Please fulfill the following requirements precisely:
 - Split quantity and unit (unit can be an empty string).
 - Only in the instructions: 
     - ALWAYS: Add the required quantities to the respective ingredients, like Meat [500g] or Lettuce [1 Head]. DO NOT FORGET!
-    - ALWAYS: For ingredients mentioned add bold formatting, such that it is correctly identified as bold in html code
+    - ALWAYS: For ingredients mentioned add bold formatting, such that it is correctly identified as bold in html code by using <b> tags!
 - Output the result as raw JSON only (no Markdown formatting, no commentary, no "```json" wrappers, no text before or after the JSON).
 - Do NOT include any extraneous information.
 
@@ -121,7 +127,16 @@ def extract_recipe_from_images(images, api_key, transform_vegan=False, custom_in
             "image_url": {"url": f"data:image/png;base64,{b64}"}
         })
 
-    system_prompt = "You are a vegan chef..." if transform_vegan else "You are a chef assistant..."
+    if transform_vegan:
+        system_prompt =   """You are a vegan chef, capable of transforming all non-vegan Recipes
+        into 100% vegan Recipes, using the best of what the world of vegan replacement products/ cooking
+        techniques has to offer. Please transform the following recipe to a vegan Recipe,
+        by applying only proofingly working techniques and mimicking taste and food texture as good as
+        possible. Here is the recipe:"""
+    else:
+        system_prompt = """You are a chef assistant, capable of extracting recipes from images.
+        Please extract the recipe from the following images.
+        Here are the images:"""
     instruction = f"""
 {system_prompt}
 
@@ -133,13 +148,20 @@ Return JSON:
 "ingredients": [{{"category": "Ingredients", "items": [{{"name": "string", "quantity": "float", "unit": "string"}}]}}], 
 "instructions": ["step 1", "step 2", ...]
 }}
-
+Please fulfill the following requirements precisely:
 - {custom_instruction}
 - Translate to german.
-- Convert to decimal.
-- Split quantity + unit.
-- Bold ingredients in instructions as <b>Ingredient [amount]</b>.
-- Return only JSON. No markdown, no commentary.
+- Split dressings/sauces/.. into extra groups when applicable.
+- Convert fractions and ranges to decimal.
+- Split quantity and unit (unit can be an empty string).
+- Only in the instructions: 
+    - ALWAYS: Add the required quantities to the respective ingredients, like Meat [500g] or Lettuce [1 Head]. DO NOT FORGET!
+    - ALWAYS: For ingredients mentioned add bold formatting, such that it is correctly identified as bold in html code by using <b> tags!
+- Output the result as raw JSON only (no Markdown formatting, no commentary, no "```json" wrappers, no text before or after the JSON).
+- Do NOT include any extraneous information.
+  
+Expected output format:
+{{ "ingredients": [{{"category": "string", "items": [{{"name": "string", "quantity": "string", "unit": "string"}}]}}], "instructions": ["string"] }}
 """
 
     try:
@@ -150,7 +172,6 @@ Return JSON:
             temperature=0
         )
         data = json.loads(response.choices[0].message.content.strip())
-        data["safe_title"] = slugify(custom_title or data.get("title", "recipe"))
         if custom_title:
             data["title"] = custom_title
 

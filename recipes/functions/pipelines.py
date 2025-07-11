@@ -1,5 +1,5 @@
 from .data_acquisition import *
-
+import uuid
 
 #region GET DATA FROM URL / IMAGE FUNCTIONS
 ##################### GET DATA FROM URL / IMAGE FUNCTIONS #####################
@@ -24,7 +24,6 @@ def get_data_from_url(url, api_key, transform_vegan=False, custom_instructions="
     # Final data
     new_recipe_data = {
         "title": raw_data["title"],
-        "safe_title": slugify(raw_data["title"]),
         "cook_time": raw_data["cook_time"],
         "portions": raw_data["portions"],
         "image_url": raw_data["image_url"],
@@ -128,7 +127,6 @@ def save_structured_recipe_to_db(data, user, image_bytes=None):
     """
     recipe = Recipe(
         title=data.get("title", "Untitled"),
-        safe_title=slugify(data.get("title", "Untitled")),
         cook_time=clean_int_from_string(data.get("cook_time")),
         portions=clean_int_from_string(data.get("portions")),
         notes="Imported automatically",
@@ -137,8 +135,8 @@ def save_structured_recipe_to_db(data, user, image_bytes=None):
 
     # Optionally attach image
     if image_bytes:
-        filename = f"{data.get('safe_title', 'recipe')}.png"
-        recipe.image.save(filename, ContentFile(image_bytes), save=False)
+            filename = f"recipe_{uuid.uuid4().hex}.png"
+            recipe.image.save(filename, ContentFile(image_bytes), save=False)
 
     recipe.save()
 

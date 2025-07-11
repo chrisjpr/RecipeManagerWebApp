@@ -184,7 +184,7 @@ def add_recipe_from_image(request):
                 custom_title=custom_title,
                 return_image_bytes=True
             )
-            
+
             best_image_bytes = crop_image_to_visible_area(best_image_bytes) if best_image_bytes else None
 
             # Save recipe
