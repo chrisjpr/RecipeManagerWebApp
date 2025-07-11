@@ -11,19 +11,14 @@ from .forms import AddRecipeForm
 from .models import Recipe, Ingredient, Instruction
 from django.conf import settings
 
-from .functions.pipelines import *  
-from .functions.data_acquisition import *
+from functions.pipelines import *  
+from functions.data_acquisition import *
 
 ingredient_formset = IngredientFormSet(prefix="ingredients")
 instruction_formset = InstructionFormSet(prefix="instructions")
 
 # Create your views here.
 
-# specify homepage
-@login_required
-def home(request):
-    recipes = Recipe.objects.filter(user=request.user)
-    return render(request, 'recipes/home.html', {'recipes': recipes})
 
 # Render a Recipe Template
 def recipe_detail(request, recipe_id):
@@ -38,11 +33,13 @@ def recipe_list(request):
     recipes = Recipe.objects.filter(user=request.user)
     return render(request, "recipes/recipe_list.html", {"recipes": recipes})
 
+# specify homepage
+@login_required
+def home(request):
+    recipes = Recipe.objects.filter(user=request.user)
+    return render(request, 'recipes/home.html', {'recipes': recipes})
 
 
-#region MANIPULATE RECIPES
-
-############## MANIPULATE RECIPES ##############
 @login_required
 def recipe_delete(request, pk):
     recipe = get_object_or_404(Recipe, pk=pk)
@@ -86,7 +83,6 @@ def recipe_edit(request, pk):
         "instruction_formset": instruction_formset,
         "recipe": recipe
     })
-############## /MANIPULATE RECIPES ##############
 
 #region MANUAL CREATION
 
@@ -132,7 +128,7 @@ def create_recipe(request):
 
 
 
-#region AI DATA RETRIEVAL
+#region AI Data Retrieval
 ################## AI DATA RETRIEVAL ##################
 
 @login_required
@@ -207,4 +203,4 @@ def add_recipe_from_image(request):
     return render(request, 'recipes/add_recipe_from_image.html')
 ################## /AI DATA RETRIEVAL ##################
 
-#endregion AI Data Retrieva
+#endregion AI Data Retrieval

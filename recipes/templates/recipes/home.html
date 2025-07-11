@@ -1,4 +1,4 @@
-{% extends "recipes/base.html" %}
+{% extends "base.html" %}
 
 {% block content %}
   {% if user.is_authenticated %}
@@ -27,4 +27,5 @@
   </ul>
 
   <p><a href="{% url 'recipe_list' %}">View all recipes →</a></p>
+  <a href="{% url 'create_recipe' %}">Create a new recipe</a>
 {% endblock %}
