@@ -4,131 +4,244 @@
 {% block content %}
 <h2>Edit Recipe: {{ recipe.title }}</h2>
 
-<form method="post" enctype="multipart/form-data" id="recipeForm">
+<form method="post" enctype="multipart/form-data" id="recipeForm" style="max-width: 900px;">
   {% csrf_token %}
-  {{ recipe_form.as_p }}
 
-  <h3>Ingredients</h3>
-  <div id="ingredients-formset">
+  <div class="card">
+    <h3>📝 Basic Info</h3>
+    {{ recipe_form.title.label_tag }} {{ recipe_form.title }}<br><br>
+    {{ recipe_form.cook_time.label_tag }} {{ recipe_form.cook_time }}<br><br>
+    {{ recipe_form.portions.label_tag }} {{ recipe_form.portions }}<br><br>
+    {{ recipe_form.image.label_tag }} {{ recipe_form.image }}<br><br>
+    {{ recipe_form.notes.label_tag }} {{ recipe_form.notes }}
+  </div>
+
+  <div class="card">
+    <h3>🥦 Ingredients</h3>
     {{ ingredient_formset.management_form }}
-{% for form in ingredient_formset %}
-  <div class="ingredients-form form-inline">
-    {{ form.non_field_errors }}
-    {% for hidden in form.hidden_fields %}
-      {{ hidden }}
-    {% endfor %}
-    {% for field in form.visible_fields %}
-      <div class="form-group">
-        {{ field.label_tag }} {{ field }}
-        {% if field.errors %}
-          <div class="form-error">{{ field.errors }}</div>
-        {% endif %}
-      </div>
-    {% endfor %}
+    <div id="ingredients-formset">
+      {% for form in ingredient_formset %}
+        <div class="form-inline entry">
+          {% for hidden in form.hidden_fields %}
+            {{ hidden }}
+          {% endfor %}
+          {% for field in form.visible_fields %}
+            {% if field.name != 'DELETE' %}
+              <div class="form-group">
+                {{ field.label_tag }} {{ field }}
+              </div>
+            {% endif %}
+          {% endfor %}
+          <input type="hidden" name="{{ form.prefix }}-DELETE" id="id_{{ form.prefix }}-DELETE">
+          <button type="button" class="delete-row">❌</button>
+        </div>
+      {% endfor %}
+    </div>
+    <button type="button" class="add-row" data-prefix="ingredients">➕ Add Ingredient</button>
   </div>
-{% endfor %}
-  </div>
-  <button type="button" id="add-ingredient">➕ Add Ingredient</button>
 
-  <h3>Instructions</h3>
-  <div id="instructions-formset">
+  <div class="card">
+    <h3>📋 Instructions</h3>
     {{ instruction_formset.management_form }}
-{% for form in instruction_formset %}
-  <div class="instructions-form form-inline">
-    {{ form.non_field_errors }}
-    {% for hidden in form.hidden_fields %}
-      {{ hidden }}
-    {% endfor %}
-    {% for field in form.visible_fields %}
-      <div class="form-group">
-        {{ field.label_tag }} {{ field }}
-        {% if field.errors %}
-          <div class="form-error">{{ field.errors }}</div>
-        {% endif %}
-      </div>
-    {% endfor %}
+    <div id="instructions-formset">
+      {% for form in instruction_formset %}
+        <div class="form-inline entry instruction-entry">
+          {% for hidden in form.hidden_fields %}
+            {{ hidden }}
+          {% endfor %}
+          {% for field in form.visible_fields %}
+            {% if field.name != 'DELETE' %}
+              <div class="form-group {% if field.name == 'description' %}instruction-text{% endif %}">
+                {{ field.label_tag }} {{ field }}
+              </div>
+            {% endif %}
+          {% endfor %}
+          <input type="hidden" name="{{ form.prefix }}-DELETE" id="id_{{ form.prefix }}-DELETE">
+          <button type="button" class="delete-row">❌</button>
+        </div>
+      {% endfor %}
+    </div>
+    <button type="button" class="add-row" data-prefix="instructions">➕ Add Instruction</button>
   </div>
-{% endfor %}
-  </div>
-  <button type="button" id="add-instruction">➕ Add Instruction</button>
 
-  <br><br>
-  <button type="submit">💾 Save Changes</button>
+  <br>
+  <button type="submit" class="submit-btn">💾 Save Changes</button>
 </form>
 
-<!-- Empty templates for JS cloning -->
+<!-- Empty form templates -->
 <div id="empty-ingredients-form" style="display: none;">
-  <div class="ingredients-form form-inline">
-    {% for field in ingredient_formset.empty_form %}
-      {% if field.is_hidden %}
-        {{ field }}
-      {% else %}
+  <div class="form-inline entry">
+    {% for hidden in ingredient_formset.empty_form.hidden_fields %}
+      {{ hidden }}
+    {% endfor %}
+    {% for field in ingredient_formset.empty_form.visible_fields %}
+      {% if field.name != 'DELETE' %}
         <div class="form-group">
           {{ field.label_tag }} {{ field }}
         </div>
       {% endif %}
     {% endfor %}
+    <input type="hidden" name="ingredients-__prefix__-DELETE" id="id_ingredients-__prefix__-DELETE">
+    <button type="button" class="delete-row">❌</button>
   </div>
-</div>
-
 </div>
 
 <div id="empty-instructions-form" style="display: none;">
-  <div class="instructions-form form-inline">
-    {% for field in instruction_formset.empty_form %}
-      {% if field.is_hidden %}
-        {{ field }}
-      {% else %}
+  <div class="form-inline entry">
+    {% for hidden in instruction_formset.empty_form.hidden_fields %}
+      {{ hidden }}
+    {% endfor %}
+    {% for field in instruction_formset.empty_form.visible_fields %}
+      {% if field.name != 'DELETE' %}
         <div class="form-group">
           {{ field.label_tag }} {{ field }}
         </div>
       {% endif %}
     {% endfor %}
+    <input type="hidden" name="instructions-__prefix__-DELETE" id="id_instructions-__prefix__-DELETE">
+    <button type="button" class="delete-row">❌</button>
   </div>
 </div>
 
+<!-- ========== STYLES ========== -->
 <style>
+  .card {
+    background: #fff;
+    border: 2px solid #ddd;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.05);
+  }
+
   .form-inline {
     display: flex;
     flex-wrap: wrap;
     gap: 1rem;
     margin-bottom: 1rem;
+    border: 1px solid #ddd;
+    padding: 1rem;
+    border-radius: 8px;
+    align-items: flex-end;
   }
+
   .form-group {
     display: flex;
     flex-direction: column;
+    flex: 1;
     min-width: 150px;
   }
-  .form-error {
-    color: red;
-    font-size: 0.85rem;
+
+  .form-group label {
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    padding: 0.4rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1rem;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  textarea {
+    height: 60px;
+    resize: vertical;
+  }
+
+  .delete-row {
+    background: #dc3545;
+    color: white;
+    font-size: 1.2rem;
+    padding: 0.4rem 0.8rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .delete-row::before {
+    content: "✖";
+  }
+
+  .delete-row:hover {
+    background-color: #b42d3b;
+  }
+
+  .add-row {
+    background: #007bff;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+  }
+
+  .add-row:hover {
+    background-color: #0056b3;
+  }
+
+  .submit-btn {
+    background-color: #28a745;
+    color: white;
+    font-size: 1.1rem;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    display: block;
+    margin: 2rem auto 0;
+  }
+
+  .submit-btn:hover {
+    background-color: #218838;
   }
 </style>
 
+<!-- ========== SCRIPT ========== -->
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-  function addForm(prefix) {
-    const totalFormsInput = document.getElementById(`id_${prefix}-TOTAL_FORMS`);
-    const totalForms = parseInt(totalFormsInput.value);
-    const formsetDiv = document.getElementById(`${prefix}-formset`);
+  document.addEventListener('DOMContentLoaded', function () {
+    function attachDeleteButtons() {
+      document.querySelectorAll('.delete-row').forEach(button => {
+        button.onclick = function () {
+          const entry = button.closest('.entry');
+          const deleteInput = entry.querySelector('input[name$="-DELETE"]');
+          if (deleteInput) {
+            deleteInput.value = 'on';
+          }
+          entry.style.display = 'none';
+        };
+      });
+    }
 
-    const emptyTemplate = document.getElementById(`empty-${prefix}-form`).innerHTML;
-    const newFormHtml = emptyTemplate.replace(/__prefix__/g, totalForms);
+    function addForm(prefix) {
+      const totalForms = document.getElementById(`id_${prefix}-TOTAL_FORMS`);
+      const formsetDiv = document.getElementById(`${prefix}-formset`);
+      const newIndex = parseInt(totalForms.value);
+      const template = document.getElementById(`empty-${prefix}-form`).innerHTML;
+      const newFormHtml = template.replace(/__prefix__/g, newIndex);
+      const wrapper = document.createElement('div');
+      wrapper.innerHTML = newFormHtml;
+      formsetDiv.appendChild(wrapper.firstElementChild);
+      totalForms.value = newIndex + 1;
+      attachDeleteButtons();
+    }
 
-    const newForm = document.createElement('div');
-    newForm.innerHTML = newFormHtml;
+    document.querySelectorAll('.add-row').forEach(button => {
+      button.addEventListener('click', () => {
+        addForm(button.dataset.prefix);
+      });
+    });
 
-    formsetDiv.appendChild(newForm.firstElementChild);
-    totalFormsInput.value = totalForms + 1;
-  }
-
-  document.getElementById('add-ingredient').addEventListener('click', function () {
-    addForm('ingredients');
+    attachDeleteButtons();
   });
-
-  document.getElementById('add-instruction').addEventListener('click', function () {
-    addForm('instructions');
-  });
-});
 </script>
 {% endblock %}

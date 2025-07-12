@@ -2,103 +2,349 @@
 {% load static %}
 
 {% block content %}
-<h2>Create a Recipe</h2>
-<form method="post" enctype="multipart/form-data" id="recipeForm">
+
+
+
+<h2 style="margin-bottom: 1rem;">🍽️ Create a New Recipe</h2>
+
+<form method="post" enctype="multipart/form-data" id="recipeForm" style="max-width: 900px;">
   {% csrf_token %}
-  {{ recipe_form.as_p }}
 
-  <h3>Ingredients</h3>
-  <div id="ingredients-formset">
+  <!-- ========== MODE SWITCH ========== -->
+<div class="mode-switch">
+  <h3>🚀 Choose Input Mode</h3>
+  <div class="toggle-wrapper">
+    <label class="toggle">
+      <input type="radio" name="use_llm" value="manual" id="modeManual" checked>
+      <span class="option manual">✍️ Manual</span>
+    </label>
+    <label class="toggle">
+      <input type="radio" name="use_llm" value="ai" id="modeAI">
+      <span class="option ai">🤖 AI Assistance</span>
+    </label>
+  </div>
+</div>
+
+  <!-- ========== BASIC INFO ========== -->
+  <div class="card">
+    <h3>📝 Basic Info</h3>
+    <div class="form-row">
+      <label>{{ recipe_form.title.label }}:</label>
+      {{ recipe_form.title }}
+    </div>
+    <div class="form-row">
+      <label>{{ recipe_form.cook_time.label }} (minutes):</label>
+      {{ recipe_form.cook_time }}
+    </div>
+    <div class="form-row">
+      <label>{{ recipe_form.portions.label }}:</label>
+      {{ recipe_form.portions }}
+    </div>
+    <div class="form-row">
+      <label>{{ recipe_form.image.label }}:</label>
+      {{ recipe_form.image }}
+    </div>
+    <div class="form-row">
+      <label>{{ recipe_form.notes.label }}:</label>
+      {{ recipe_form.notes }}
+    </div>
+  </div>
+
+  <!-- ========== LLM FIELDS ========== -->
+  <div class="card llm-section" style="display: none;">
+    <h3>🤖 LLM Assistance</h3>
+    <div class="form-row">
+      <label for="ingredients_text">Ingredients (one per line):</label>
+      <textarea name="ingredients_text" rows="6" class="form-control" placeholder="e.g., 2 cups flour"></textarea>
+    </div>
+    <div class="form-row">
+      <label for="instructions_text">Instructions (one step per line):</label>
+      <textarea name="instructions_text" rows="6" class="form-control" placeholder="e.g., Preheat oven to 180°C"></textarea>
+    </div>
+    <div class="form-row">
+      {{ recipe_form.transform_vegan }} {{ recipe_form.transform_vegan.label_tag }}
+    </div>
+    <div class="form-row">
+      <label>{{ recipe_form.custom_instruction.label }}</label>
+      {{ recipe_form.custom_instruction }}
+      <small>Optional: Add specific formatting or grouping instructions.</small>
+    </div>
+  </div>
+
+  <!-- ========== MANUAL FIELDS ========== -->
+<!-- ========== MANUAL FIELDS ========== -->
+<div class="manual-section">
+  <div class="card">
+    <h3>🥦 Ingredients</h3>
     {{ ingredient_formset.management_form }}
-    {% for form in ingredient_formset %}
-      <div class="ingredients-form form-inline">
-        {% for field in form.visible_fields %}
-          <div class="form-group">
-            {{ field.label_tag }} {{ field }}
-          </div>
-        {% endfor %}
-      </div>
-    {% endfor %}
+    <div id="ingredients-formset">
+      {% for form in ingredient_formset %}
+        <div class="form-inline entry">
+          {% for field in form.visible_fields %}
+            {% if field.name != 'DELETE' %}
+              <div class="form-group">
+                {{ field.label_tag }} {{ field }}
+              </div>
+            {% endif %}
+          {% endfor %}
+          <button type="button" class="delete-row">❌</button>
+        </div>
+      {% endfor %}
+    </div>
+    <button type="button" class="add-row" data-prefix="ingredients">➕ Add Ingredient</button>
   </div>
-  <button type="button" id="add-ingredient">➕ Add Ingredient</button>
 
-  <h3>Instructions</h3>
-  <div id="instructions-formset">
+  <div class="card">
+    <h3>📋 Instructions</h3>
     {{ instruction_formset.management_form }}
-    {% for form in instruction_formset %}
-      <div class="instructions-form form-inline">
-        {% for field in form.visible_fields %}
-          <div class="form-group">
-            {{ field.label_tag }} {{ field }}
-          </div>
-        {% endfor %}
-      </div>
-    {% endfor %}
+    <div id="instructions-formset">
+      {% for form in instruction_formset %}
+        <div class="form-inline entry instruction-entry">
+          {% for field in form.visible_fields %}
+            {% if field.name != 'DELETE' %}
+              <div class="form-group {% if field.name == 'description' %}instruction-text{% endif %}">
+                {{ field.label_tag }} {{ field }}
+              </div>
+            {% endif %}
+          {% endfor %}
+          <button type="button" class="delete-row">❌</button>
+        </div>
+      {% endfor %}
+    </div>
+    <button type="button" class="add-row" data-prefix="instructions">➕ Add Instruction</button>
   </div>
-  <button type="button" id="add-instruction">➕ Add Instruction</button>
+</div>
 
-  <br><br>
-  <button type="submit">Save Recipe</button>
+
+  <br>
+  <button type="submit" class="submit-btn">✅ Save Recipe</button>
 </form>
 
-<!-- HIDDEN TEMPLATE FOR JS CLONING -->
+<!-- Hidden Form Templates -->
 <div id="empty-ingredients-form" style="display: none;">
-  <div class="ingredients-form form-inline">
+  <div class="form-inline entry">
     {% for field in ingredient_formset.empty_form.visible_fields %}
-      <div class="form-group">
-        {{ field.label_tag }} {{ field }}
-      </div>
+      {% if field.name != 'DELETE' %}
+        <div class="form-group">
+          {{ field.label_tag }} {{ field }}
+        </div>
+      {% endif %}
     {% endfor %}
+    <button type="button" class="delete-row">❌</button>
   </div>
 </div>
 
 <div id="empty-instructions-form" style="display: none;">
-  <div class="instructions-form form-inline">
+  <div class="form-inline entry">
     {% for field in instruction_formset.empty_form.visible_fields %}
-      <div class="form-group">
-        {{ field.label_tag }} {{ field }}
-      </div>
+      {% if field.name != 'DELETE' %}
+        <div class="form-group">
+          {{ field.label_tag }} {{ field }}
+        </div>
+      {% endif %}
     {% endfor %}
+    <button type="button" class="delete-row">❌</button>
   </div>
 </div>
 
+<!-- ========== STYLES ========== -->
 <style>
+  .mode-switch {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .toggle-wrapper {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    margin-top: 1rem;
+  }
+
+  .toggle input[type="radio"] {
+    display: none;
+  }
+
+  .option {
+    padding: 1rem 2.5rem;
+    border-radius: 10px;
+    font-size: 1.4rem;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border: 3px solid #ccc;
+    user-select: none;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.05);
+  }
+
+  .toggle input[type="radio"]:checked + .option.manual {
+    background: #fffbe6;
+    border-color: #ffc107;
+    box-shadow: 0 0 14px #ffc107aa;
+  }
+
+  .toggle input[type="radio"]:checked + .option.ai {
+    background: #e0f7ff;
+    border-color: #17a2b8;
+    box-shadow: 0 0 14px #17a2b8aa;
+  }
+
+  .toggle .option.manual::before {
+    content: "✍️ ";
+  }
+
+  .toggle .option.ai::before {
+    content: "🤖 ";
+  }
+
+  .card {
+    background: #fff;
+    border: 2px solid #ddd;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.05);
+  }
+
   .form-inline {
     display: flex;
-    gap: 1rem;
     flex-wrap: wrap;
+    gap: 1rem;
     margin-bottom: 1rem;
+    border: 1px solid #ddd;
+    padding: 1rem;
+    border-radius: 8px;
+    align-items: flex-end;
   }
+
   .form-group {
     display: flex;
     flex-direction: column;
+    flex: 1;
+    min-width: 150px;
+  }
+
+  .form-group label {
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  
+  .textarea {
+  height: 80px; /* or smaller like 60px */
+  resize: vertical; /* allow manual resizing if needed */
+  padding: 0.5rem;
+  font-size: 1rem;
+  border-radius: 6px;
+}
+
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1rem;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .delete-row {
+    background: #dc3545;
+    color: white;
+    font-size: 1.2rem;
+    padding: 0.4rem 0.8rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .delete-row::before {
+    content: "✖";
+  }
+
+  .delete-row:hover {
+    background-color: #b42d3b;
+  }
+
+  .add-row {
+    background: #007bff;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+  }
+
+  .add-row:hover {
+    background-color: #0056b3;
+  }
+
+  .submit-btn {
+    background-color: #28a745;
+    color: white;
+    font-size: 1.1rem;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    display: block;
+    margin: 2rem auto 0;
+  }
+
+  .submit-btn:hover {
+    background-color: #218838;
   }
 </style>
 
+<!-- ========== SCRIPT ========== -->
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-  function addForm(prefix) {
-    const totalForms = document.getElementById(`id_${prefix}-TOTAL_FORMS`);
-    const formsetDiv = document.getElementById(`${prefix}-formset`);
-    const newIndex = parseInt(totalForms.value);
+  document.addEventListener('DOMContentLoaded', function () {
+    const manualSections = document.querySelectorAll('.manual-section');
+    const aiSections = document.querySelectorAll('.ai-section');
 
-    const emptyFormTemplate = document.getElementById(`empty-${prefix}-form`).innerHTML;
-    const newFormHtml = emptyFormTemplate.replace(/__prefix__/g, newIndex);
+    function toggleMode() {
+      const mode = document.querySelector('input[name="use_llm"]:checked').value;
+      manualSections.forEach(section => section.style.display = (mode === 'manual') ? 'block' : 'none');
+      aiSections.forEach(section => section.style.display = (mode === 'ai') ? 'block' : 'none');
+    }
 
-    const wrapper = document.createElement('div');
-    wrapper.innerHTML = newFormHtml;
-    formsetDiv.appendChild(wrapper.firstElementChild);
+    document.querySelectorAll('input[name="use_llm"]').forEach(input => {
+      input.addEventListener('change', toggleMode);
+    });
 
-    totalForms.value = newIndex + 1;
-  }
+    toggleMode(); // Initial run
 
-  document.getElementById('add-ingredient').addEventListener('click', function () {
-    addForm('ingredients');
+    function attachDeleteButtons() {
+      document.querySelectorAll('.delete-row').forEach(button => {
+        button.onclick = () => button.closest('.form-inline').remove();
+      });
+    }
+
+    function addForm(prefix) {
+      const totalForms = document.getElementById(`id_${prefix}-TOTAL_FORMS`);
+      const formsetDiv = document.getElementById(`${prefix}-formset`);
+      const newIndex = parseInt(totalForms.value);
+      const template = document.getElementById(`empty-${prefix}-form`).innerHTML;
+      const newFormHtml = template.replace(/__prefix__/g, newIndex);
+      const wrapper = document.createElement('div');
+      wrapper.innerHTML = newFormHtml;
+      formsetDiv.appendChild(wrapper.firstElementChild);
+      totalForms.value = newIndex + 1;
+      attachDeleteButtons();
+    }
+
+    document.querySelectorAll('.add-row').forEach(button => {
+      button.addEventListener('click', () => {
+        addForm(button.dataset.prefix);
+      });
+    });
+
+    attachDeleteButtons();
   });
-
-  document.getElementById('add-instruction').addEventListener('click', function () {
-    addForm('instructions');
-  });
-});
 </script>
 {% endblock %}

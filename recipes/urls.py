@@ -17,5 +17,6 @@ urlpatterns = [
     path('create_recipe/', views.create_recipe, name='create_recipe'),
     path("add-from-url/", views.add_recipe_from_url, name="add_recipe_from_url"),
     path("add-from-image/", views.add_recipe_from_image, name="add_recipe_from_image"),
-    
+    path('recipes/add-from-text/', views.add_recipe_from_text, name='add_recipe_from_text'),
+
 ]
