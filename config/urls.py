@@ -24,6 +24,7 @@ from django.http import HttpResponse
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.auth import views as auth_views
+from django.views.generic import RedirectView
 
 
 # Import Own Templates / Views
@@ -58,7 +59,13 @@ def test_email_view(request):
 
 ## URL PATTERNS (CONNECTS WEBPAGE URLS TO BACKEND FUNCTIONS)
 urlpatterns = [
+    
+    # REIDRECT ROOT URL TO RECIPES APP
+    path('', RedirectView.as_view(url='/recipemanager/', permanent=False)),
+    # ADMIN PAGE
     path("admin/", admin.site.urls),
+
+    # EMAIL SENDING TEST
     path("test-email/", test_email_view),
     
     # API and App URLs
