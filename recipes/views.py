@@ -13,13 +13,15 @@ from django.conf import settings
 
 from .functions.pipelines import *  
 from .functions.data_acquisition import *
+from .forms import ParseWithLLMForm
 
 ingredient_formset = IngredientFormSet(prefix="ingredients")
 instruction_formset = InstructionFormSet(prefix="instructions")
 
 # Create your views here.
 
-
+#region MANAGING RECIPES
+########################## MANAGING RECIPES ##########################
 # Render a Recipe Template
 def recipe_detail(request, recipe_id):
     recipe = get_object_or_404(Recipe, recipe_id=recipe_id)
@@ -83,46 +85,109 @@ def recipe_edit(request, pk):
         "instruction_formset": instruction_formset,
         "recipe": recipe
     })
+########################## MANAGING RECIPES ##########################
+#endregion MANAGING RECIPES
+
 
 #region Manual Recipe Creation
 
 ################## Create Recipe Manually ######### #########
 @login_required
 def create_recipe(request):
+    use_llm = False  # default for GET or manual
+
     if request.method == 'POST':
         recipe_form = RecipeForm(request.POST, request.FILES)
         ingredient_formset = IngredientFormSet(request.POST, prefix="ingredients")
         instruction_formset = InstructionFormSet(request.POST, prefix="instructions")
 
-        if recipe_form.is_valid() and ingredient_formset.is_valid() and instruction_formset.is_valid():
-            recipe = recipe_form.save(commit=False)
-            recipe.user = request.user
-            recipe.save()
+        use_llm = request.POST.get("use_llm") == "ai"
+        transform_vegan = request.POST.get("transform_vegan") == "on"
+        custom_instruction = request.POST.get("custom_instruction", "")
 
-            ingredient_formset.instance = recipe
-            instruction_formset.instance = recipe
+        if use_llm:
+            ingredients_text = request.POST.get('ingredients_text', '')
+            instructions_text = request.POST.get('instructions_text', '')
 
-            ingredient_formset.save()
-            instruction_formset.save()
+            ingredients = [line.strip() for line in ingredients_text.splitlines() if line.strip()]
+            instructions = [line.strip() for line in instructions_text.splitlines() if line.strip()]
 
-            return redirect('home')
+            raw_data = {
+                "ingredients": ingredients,
+                "instructions": instructions
+            }
+
+            if recipe_form.is_valid():
+                try:
+                    structured_data = organize_with_llm(
+                        data=raw_data,
+                        api_key=settings.OPENAI_KEY,
+                        transform_vegan=transform_vegan,
+                        custom_instructions=custom_instruction
+                    )
+
+                    recipe = Recipe.objects.create(
+                        user=request.user,
+                        title=recipe_form.cleaned_data.get("title"),
+                        cook_time=recipe_form.cleaned_data.get("cook_time") or 0,
+                        portions=recipe_form.cleaned_data.get("portions") or 1,
+                        notes=recipe_form.cleaned_data.get("notes", ""),
+                        image=recipe_form.cleaned_data.get("image")
+                    )
+
+                    for group in structured_data.get("ingredients", []):
+                        for item in group.get("items", []):
+                            Ingredient.objects.create(
+                                recipe_id=recipe,
+                                name=item.get("name", ""),
+                                quantity=float(item.get("quantity") or 0),
+                                unit=item.get("unit", ""),
+                                category=group.get("category", "")
+                            )
+
+                    for i, step in enumerate(structured_data.get("instructions", []), start=1):
+                        Instruction.objects.create(
+                            recipe_id=recipe,
+                            step_number=i,
+                            description=step
+                        )
+
+                    messages.success(request, f"✅ Recipe '{recipe.title}' created via LLM.")
+                    return redirect('recipe_detail', recipe_id=recipe.recipe_id)
+
+                except Exception as e:
+                    print("❌ LLM error:", repr(e))
+                    messages.error(request, f"Failed to parse and save recipe using LLM: {str(e)}")
+            else:
+                messages.error(request, "Please correct the form errors above.")
         else:
-            # You MUST return a response here
-            return render(request, "recipes/create_recipe.html", {
-                "recipe_form": recipe_form,
-                "ingredient_formset": ingredient_formset,
-                "instruction_formset": instruction_formset
-            })
+            # Manual input path
+            if recipe_form.is_valid() and ingredient_formset.is_valid() and instruction_formset.is_valid():
+                recipe = recipe_form.save(commit=False)
+                recipe.user = request.user
+                recipe.save()
 
-    else:  # GET request
+                ingredient_formset.instance = recipe
+                instruction_formset.instance = recipe
+                ingredient_formset.save()
+                instruction_formset.save()
+
+                messages.success(request, f"✅ Recipe '{recipe.title}' created.")
+                return redirect('recipe_detail', recipe_id=recipe.recipe_id)
+
+            messages.error(request, "Please correct the errors below.")
+
+    else:
         recipe_form = RecipeForm()
         ingredient_formset = IngredientFormSet(prefix="ingredients")
         instruction_formset = InstructionFormSet(prefix="instructions")
-        return render(request, "recipes/create_recipe.html", {
-            "recipe_form": recipe_form,
-            "ingredient_formset": ingredient_formset,
-            "instruction_formset": instruction_formset
-        })
+
+    return render(request, "recipes/create_recipe.html", {
+        "recipe_form": recipe_form,
+        "ingredient_formset": ingredient_formset,
+        "instruction_formset": instruction_formset
+    })
+
     
 
 #region AI Data Retrieval
@@ -202,6 +267,53 @@ def add_recipe_from_image(request):
             messages.error(request, "Error while creating recipe from image.")
 
     return render(request, 'recipes/add_recipe_from_image.html')
+
+
+
+
+@login_required
+def add_recipe_from_text(request):
+    if request.method == 'POST':
+        form = ParseWithLLMForm(request.POST)
+        if form.is_valid():
+            raw_text = form.cleaned_data['raw_recipe_text']
+            use_llm = form.cleaned_data['use_llm']
+            custom_instruction = form.cleaned_data['custom_instruction']
+
+            try:
+                if use_llm:
+                    structured_data = organize_recipe_with_llm(
+                        recipe_input=raw_text,
+                        custom_instruction=custom_instruction,
+                        api_key=settings.OPENAI_KEY
+                    )
+                else:
+                    structured_data = {
+                        "title": "Untitled Recipe",
+                        "ingredients": [],
+                        "instructions": [],
+                        "notes": "",
+                        "raw_text": raw_text,
+                    }
+
+                recipe = save_structured_recipe_to_db(
+                    data=structured_data,
+                    user=request.user,
+                    image_bytes=None  # no image from text input
+                )
+
+                messages.success(request, f"✅ Recipe '{recipe.title}' created!")
+                return redirect('recipe_detail', recipe_id=recipe.recipe_id)
+
+            except Exception as e:
+                print("❌ Error in add_recipe_from_text:", e)
+                messages.error(request, "Error while creating recipe from text input.")
+
+    else:
+        form = ParseWithLLMForm()
+
+    return render(request, 'recipes/add_recipe_from_text.html', {"form": form})
+
 ################## /AI DATA RETRIEVAL ##################
 
 #endregion AI Data Retrieva
