@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from .models import CustomUser
 from django.utils.translation import gettext_lazy as _
+from .models import FriendRequest, Friendship
 
 
 
@@ -11,8 +12,6 @@ class CustomUserAdmin(UserAdmin):
         (_('Friends'), {'fields': ('friends',)}),
     )
 
-    # Optional: Show 'friends' on the list display or add/edit forms
-    filter_horizontal = ('friends',)
 
     list_display = UserAdmin.list_display + ('get_friend_count',)
 
@@ -22,3 +21,14 @@ class CustomUserAdmin(UserAdmin):
     get_friend_count.short_description = 'Friends'
 
 admin.site.register(CustomUser, CustomUserAdmin)
+
+
+@admin.register(FriendRequest)
+class FriendRequestAdmin(admin.ModelAdmin):
+    list_display = ('from_user', 'to_user', 'created_at')
+    search_fields = ('from_user__username', 'to_user__username')
+
+@admin.register(Friendship)
+class FriendshipAdmin(admin.ModelAdmin):
+    list_display = ('user', 'friend', 'created_at')
+    search_fields = ('user__username', 'friend__username')

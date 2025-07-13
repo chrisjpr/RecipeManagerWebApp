@@ -18,5 +18,10 @@ urlpatterns = [
     path("add-from-url/", views.add_recipe_from_url, name="add_recipe_from_url"),
     path("add-from-image/", views.add_recipe_from_image, name="add_recipe_from_image"),
     path('recipes/add-from-text/', views.add_recipe_from_text, name='add_recipe_from_text'),
+    path('friends/recipes/<int:friend_id>/', views.friends_recipes, name='friends_recipes'),
+    path('copy/<int:recipe_id>/', views.copy_recipe, name='copy_recipe'),
+
 
 ]
+
+
