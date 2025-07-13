@@ -20,7 +20,7 @@ def register_view(request):
         form = RegisterForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('login')  # Redirect to login after successful registration
+            return redirect('accounts:login')  # Redirect to login after successful registration
     else:
         form = RegisterForm()
     return render(request, 'registration/register.html', {'form': form})
