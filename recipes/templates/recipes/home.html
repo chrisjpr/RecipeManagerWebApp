@@ -8,15 +8,15 @@
 
   {% if user.is_authenticated %}
     <div style="text-align: center; margin-bottom: 1rem;">
-      <form method="post" action="{% url 'logout' %}">
+      <form method="post" action="{% url 'accounts:logout' %}">
         {% csrf_token %}
         <button class="btn btn-danger" style="background-color: #dc3545; color: white; border: none; padding: 8px 16px; border-radius: 6px;">Logout</button>
       </form>
     </div>
   {% else %}
     <div style="text-align: center; margin-bottom: 2rem;">
-      <a href="{% url 'login' %}" class="btn btn-primary">🔑 Login</a> |
-      <a href="{% url 'register' %}" class="btn btn-secondary">📝 Register</a>
+      <a href="{% url 'accounts:login' %}" class="btn btn-primary">🔑 Login</a> |
+      <a href="{% url 'accounts:register' %}" class="btn btn-secondary">📝 Register</a>
     </div>
   {% endif %}
 
@@ -24,9 +24,9 @@
     <h3 class="section-title">🧰 Toolbox</h3>
     <p class="subtitle">Create recipes manually or let AI help you extract them from various sources:</p>
     <div style="display: flex; flex-wrap: wrap; gap: 1rem;">
-      <a href="{% url 'create_recipe' %}" class="adjust-button"> 👽 Create Recipe Manually</a>
-      <a href="{% url 'add_recipe_from_url' %}" class="adjust-button">🤖 Import From URL</a>
-      <a href="{% url 'add_recipe_from_image' %}" class="adjust-button">📷 Import From Image</a>
+      <a href="{% url 'recipes:create_recipe' %}" class="adjust-button"> 👽 Create Recipe Manually</a>
+      <a href="{% url 'recipes:add_recipe_from_url' %}" class="adjust-button">🤖 Import From URL</a>
+      <a href="{% url 'recipes:add_recipe_from_image' %}" class="adjust-button">📷 Import From Image</a>
     </div>
   </div>
 
@@ -36,7 +36,7 @@
       <ul style="list-style: none; padding-left: 0;">
         {% for recipe in recipes %}
           <li style="margin-bottom: 1rem;">
-            <a href="{% url 'recipe_detail' recipe.recipe_id %}" style="text-decoration: none; color: var(--primary-color); font-weight: 600;">
+            <a href="{% url 'recipes:recipe_detail' recipe.recipe_id %}" style="text-decoration: none; color: var(--primary-color); font-weight: 600;">
               {{ recipe.title }}
             </a>
             <span class="subtitle">• {{ recipe.portions }} servings • {{ recipe.cook_time }} min</span>
@@ -47,7 +47,8 @@
       <p>No recipes yet. Be the first to add a delicious one! 🍲</p>
     {% endif %}
     <div style="margin-top: 1rem;">
-      <a href="{% url 'recipe_list' %}" class="adjust-button">📚 View All Recipes</a>
+      <a href="{% url 'recipes:recipe_list' %}" class="adjust-button">📚 View All Recipes</a>
     </div>
   </div>
 {% endblock %}
+

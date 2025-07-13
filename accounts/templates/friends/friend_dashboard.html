@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<h2>👥 Friends Dashboard</h2>
+
+<!-- Flash messages -->
+{% if messages %}
+  {% for message in messages %}
+    <div class="message {{ message.tags }}">{{ message }}</div>
+  {% endfor %}
+{% endif %}
+
+<!-- Send Friend Request -->
+<div class="card">
+  <h3>➕ Send Friend Request</h3>
+  <form method="get" action="{% url 'accounts:friend_search' %}">
+    <input type="text" name="q" placeholder="Search username" required>
+    <button type="submit">🔍 Search</button>
+  </form>
+</div>
+
+{% if results %}
+  <div class="card">
+    <h4>Search Results</h4>
+    <ul>
+      {% for user in results %}
+        <li>
+          {{ user.username }}
+          <form method="post" action="{% url 'accounts:send_friend_request' user.id %}" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit">Send Request</button>
+          </form>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+{% endif %}
+
+<!-- Incoming Friend Requests -->
+{% if received_requests %}
+  <div class="card">
+    <h3>📩 Friend Requests (Received)</h3>
+    <ul>
+      {% for request in received_requests %}
+        <li>
+          {{ request.from_user.username }}
+          <form method="post" action="{% url 'accounts:accept_friend_request' request.id %}" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit">✅ Accept</button>
+          </form>
+          <form method="post" action="{% url 'accounts:decline_friend_request' request.id %}" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit">❌ Decline</button>
+          </form>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+{% endif %}
+
+<!-- Sent Friend Requests -->
+{% if sent_requests %}
+  <div class="card">
+    <h3>📤 Friend Requests (Sent)</h3>
+    <ul>
+      {% for request in sent_requests %}
+        <li>{{ request.to_user.username }} (pending)</li>
+      {% endfor %}
+    </ul>
+  </div>
+{% endif %}
+
+<!-- Current Friends -->
+{% if friends %}
+  <div class="card">
+    <h3>✅ Your Friends</h3>
+    <ul>
+      {% for friend in friends %}
+        <li>
+          {{ friend.username }}
+          <a href="{% url 'recipes:friends_recipes' friend.id %}">📖 View Recipes</a>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+{% else %}
+  <p>You have no friends yet.</p>
+{% endif %}
+
+{% endblock %}

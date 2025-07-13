@@ -1,16 +1,55 @@
-{% extends "base.html" %}
-
+{% extends 'base.html' %}
 {% block content %}
-  <h1>🍽 All Recipes</h1>
-  <ul>
+<h2>📋 My Recipes</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Portions</th>
+      <th>Cook Time</th>
+      <th>Visibility</th>
+      <th>Update</th>
+    </tr>
+  </thead>
+  <tbody>
     {% for recipe in recipes %}
-      <li>
-        <a href="{% url 'recipe_detail' recipe_id=recipe.recipe_id %}">
-          {{ recipe.title }}
-        </a> – {{ recipe.portions }} portions, {{ recipe.cook_time }} min
-      </li>
-    {% empty %}
-      <li>No recipes found.</li>
+      <tr>
+        <form method="post">
+          {% csrf_token %}
+          <input type="hidden" name="update" value="{{ recipe.recipe_id }}">
+          <td>{{ recipe.title }}</td>
+          <td>{{ recipe.portions }}</td>
+          <td>{{ recipe.cook_time }}</td>
+          <td>
+            <select name="visibility_{{ recipe.recipe_id }}">
+              <option value="private" {% if recipe.visibility == 'private' %}selected{% endif %}>Private</option>
+              <option value="friends" {% if recipe.visibility == 'friends' %}selected{% endif %}>Friends</option>
+              <option value="public" {% if recipe.visibility == 'public' %}selected{% endif %}>Public</option>
+            </select>
+          </td>
+          <td>
+            <button type="submit">💾 Save</button>
+          </td>
+        </form>
+      </tr>
     {% endfor %}
-  </ul>
+  </tbody>
+</table>
+
+<style>
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1.5rem;
+  }
+  th, td {
+    border: 1px solid #ddd;
+    padding: 0.8rem;
+    text-align: center;
+  }
+  th {
+    background-color: #f4f4f4;
+  }
+</style>
 {% endblock %}

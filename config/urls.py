@@ -70,10 +70,10 @@ urlpatterns = [
     
     # API and App URLs
     path("recipe_api/", include("recipes.urls")),
-    path("recipemanager/", include("recipes.urls")),
+    path("recipemanager/", include(("recipes.urls", 'recipes')), name='recipes'),  # ✅ THIS LINE
 
     # Authentication
-    path("accounts/", include("accounts.urls")),  # ✅ Your custom login/logout/register
+    path('accounts/', include(('accounts.urls', 'accounts')), name = 'accounts'),  # ✅ THIS LINE
 
 ]
 

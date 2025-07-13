@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% block title %}Friends' Recipes | Recipe Manager{% endblock %}
+
+{% block content %}
+<h2>👩‍🍳 Friends' Shared Recipes</h2>
+
+{% if recipes %}
+  <table class="recipe-table">
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Portions</th>
+        <th>Cook Time</th>
+        <th>Visibility</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for recipe in recipes %}
+        <tr>
+          <td>
+            <a href="{% url 'recipe_detail' recipe.recipe_id %}" class="title-link">
+              {{ recipe.title }}
+            </a>
+          </td>
+          <td>{{ recipe.portions }}</td>
+          <td>{{ recipe.cook_time }} min</td>
+          <td>{{ recipe.get_visibility_display }}</td>
+          <td>
+            <a href="{% url 'recipes:copy_recipe' recipe.recipe_id %}" class="copy-btn">📋 Copy</a>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% else %}
+  <p>No visible recipes from friends yet. Encourage them to share something delicious! 🍲</p>
+{% endif %}
+{% endblock %}
+
+<style>
+  h2 {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .recipe-table {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    border-collapse: collapse;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .recipe-table th,
+  .recipe-table td {
+    padding: 1rem;
+    text-align: center;
+    border-bottom: 1px solid #e0e0e0;
+  }
+
+  .recipe-table th {
+    background-color: #f9f9f9;
+    font-weight: bold;
+  }
+
+  .recipe-table td:last-child {
+    white-space: nowrap;
+  }
+
+  .title-link {
+    font-weight: bold;
+    color: #007bff;
+    text-decoration: none;
+  }
+
+  .title-link:hover {
+    text-decoration: underline;
+  }
+
+  .copy-btn {
+    background-color: #007bff;
+    color: white;
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.2s;
+  }
+
+  .copy-btn:hover {
+    background-color: #0056b3;
+  }
+</style>

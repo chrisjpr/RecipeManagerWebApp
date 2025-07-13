@@ -20,6 +20,17 @@ class Recipe(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+
+    # recipe visibility choices
+    VISIBILITY_CHOICES = [
+    ('private', 'Private'),
+    ('friends', 'Friends'),
+    ('public', 'Public'),
+    ]
+    visibility = models.CharField(max_length=10,
+                                   choices=VISIBILITY_CHOICES, default='private')
+
+
     def __str__(self):
         return self.title
 

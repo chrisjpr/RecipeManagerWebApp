@@ -3,8 +3,8 @@
 {% block content %}
   <h2>👋 You’ve been logged out</h2>
   <p>
-    <a href="{% url 'login' %}">Log in again</a>,
-    <a href="{% url 'register' %}">create a new account</a>,
-    or return to the <a href="{% url 'home' %}">home page</a>.
+    <a href="{% url 'accounts:login' %}">Log in again</a>,
+    <a href="{% url 'accounts:register' %}">create a new account</a>,
+    or return to the <a href="{% url 'recipes:home' %}">home page</a>.
   </p>
 {% endblock %}

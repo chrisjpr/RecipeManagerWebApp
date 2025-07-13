@@ -10,6 +10,7 @@ from django.contrib import messages
 from .forms import AddRecipeForm
 from .models import Recipe, Ingredient, Instruction
 from django.conf import settings
+from accounts.models import Friendship
 
 from .functions.pipelines import *  
 from .functions.data_acquisition import *
@@ -33,8 +34,25 @@ def recipe_detail(request, recipe_id):
 @login_required
 def recipe_list(request):
     recipes = Recipe.objects.filter(user=request.user)
-    return render(request, "recipes/recipe_list.html", {"recipes": recipes})
 
+    if request.method == 'POST':
+        recipe_id = request.POST.get('update')
+        
+        if recipe_id:  # Only proceed if recipe_id is valid
+            new_visibility = request.POST.get(f'visibility_{recipe_id}')
+            try:
+                recipe = get_object_or_404(Recipe, recipe_id=int(recipe_id), user=request.user)
+                recipe.visibility = new_visibility
+                recipe.save()
+                messages.success(request, f"Visibility for '{recipe.title}' updated.")
+            except (ValueError, Recipe.DoesNotExist):
+                messages.error(request, "Invalid recipe or update failed.")
+        else:
+            messages.error(request, "No recipe selected for update.")
+
+        return redirect('recipe_list')
+
+    return render(request, 'recipes/recipe_list.html', {'recipes': recipes})
 # specify homepage
 @login_required
 def home(request):
@@ -316,4 +334,43 @@ def add_recipe_from_text(request):
 
 ################## /AI DATA RETRIEVAL ##################
 
-#endregion AI Data Retrieva
+#endregion AI Data Retrieval
+
+
+
+#region FRIEND MANAGEMENT
+###################### FRIEND MANAGEMENT #####################
+@login_required
+def friends_recipes(request, friend_id):
+    # Only allow if they are actually friends
+    if not Friendship.objects.filter(user=request.user, friend_id=friend_id).exists():
+        return HttpResponseForbidden("You are not friends with this user.")
+    
+    recipes = Recipe.objects.filter(user_id=friend_id, visibility__in=['friends', 'public'])
+    return render(request, 'recipes/friends_recipes.html', {'recipes': recipes})
+
+@login_required
+def copy_recipe(request, recipe_id):
+    original = get_object_or_404(Recipe, recipe_id=recipe_id)
+    if original.visibility not in ['friends', 'public']:
+        return HttpResponseForbidden("Not allowed to copy this recipe.")
+    
+    copied = Recipe.objects.create(
+        title=f"{original.title} (Copy)",
+        cook_time=original.cook_time,
+        portions=original.portions,
+        image=original.image,
+        notes=original.notes,
+        user=request.user,
+        visibility='private',
+    )
+    for ing in original.ingredients.all():
+        copied.ingredients.create(name=ing.name, quantity=ing.quantity, category=ing.category)
+    for inst in original.instructions.all():
+        copied.instructions.create(description=inst.description, step_number=inst.step_number)
+    
+    messages.success(request, "Recipe copied!")
+    return redirect('recipes:friends_recipes', friend_id=original.user_id)
+
+###################### /FRIEND MANAGEMENT #####################
+#endregion FRIEND MANAGEMENT
