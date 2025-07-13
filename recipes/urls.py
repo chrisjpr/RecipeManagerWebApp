@@ -20,6 +20,7 @@ urlpatterns = [
     path('recipes/add-from-text/', views.add_recipe_from_text, name='add_recipe_from_text'),
     path('friends/recipes/<int:friend_id>/', views.friends_recipes, name='friends_recipes'),
     path('copy/<int:recipe_id>/', views.copy_recipe, name='copy_recipe'),
+    path('update-visibility/', views.update_visibility_ajax, name='update_visibility'),
 
 
 ]

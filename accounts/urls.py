@@ -11,5 +11,8 @@ urlpatterns = [
     path('friends/accept/<int:request_id>/', views.accept_friend_request, name='accept_friend_request'),
     path('friends/decline/<int:request_id>/', views.decline_friend_request, name='decline_friend_request'),
     path('friend_search/', views.friend_search, name='friend_search'),  # ✅ Add this line
+    path('friends/delete/<int:user_id>/', views.delete_friend, name='delete_friend'),
+    path('verify/<uuid:code>/', views.verify_email, name='verify_email'),
+    path('resend-verification/', views.resend_verification, name='resend_verification'),
 
 ]

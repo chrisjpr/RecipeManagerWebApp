@@ -2,54 +2,357 @@
 {% block content %}
 <h2>📋 My Recipes</h2>
 
-<table>
+<form method="post">
+  {% csrf_token %}
+  <!-- Control Panel: Search & Bulk -->
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+    
+    <!-- Title search -->
+    <div>
+      <label for="search"><strong>Search by Title:</strong></label>
+      <input type="text" id="search" placeholder="Search by title">
+    </div>
+
+    <!-- Ingredient search -->
+<div>
+  <label for="ingredient-search"><strong>Search by Ingredients:</strong></label>
+  <div id="ingredient-search-container">
+    <div id="ingredient-tokens"></div>
+    <input type="text" id="ingredient-search" placeholder="Type ingredient..." autocomplete="off">
+    <div id="ingredient-suggestions" class="suggestions-box"></div>
+  </div>
+</div>
+
+    <!-- Visibility control -->
+    <div style="display: flex; gap: 1rem; align-items: center;">
+      <label for="set_all_visibility"><strong>Set All To:</strong></label>
+      <select id="set_all_visibility">
+        <option value="">-- Choose Visibility --</option>
+        <option value="private">Private</option>
+        <option value="friends">Friends</option>
+        <option value="public">Public</option>
+      </select>
+
+      <button type="submit">💾 Save Changes</button>
+    </div>
+  </div>
+
+  <!-- Recipe Table -->
+<table id="recipe-table">
   <thead>
     <tr>
       <th>Title</th>
       <th>Portions</th>
       <th>Cook Time</th>
+      <th>Created At</th>
       <th>Visibility</th>
-      <th>Update</th>
+      <th>Edit</th>
+      <th>Delete</th>
     </tr>
   </thead>
   <tbody>
     {% for recipe in recipes %}
       <tr>
-        <form method="post">
-          {% csrf_token %}
-          <input type="hidden" name="update" value="{{ recipe.recipe_id }}">
-          <td>{{ recipe.title }}</td>
-          <td>{{ recipe.portions }}</td>
-          <td>{{ recipe.cook_time }}</td>
-          <td>
-            <select name="visibility_{{ recipe.recipe_id }}">
-              <option value="private" {% if recipe.visibility == 'private' %}selected{% endif %}>Private</option>
-              <option value="friends" {% if recipe.visibility == 'friends' %}selected{% endif %}>Friends</option>
-              <option value="public" {% if recipe.visibility == 'public' %}selected{% endif %}>Public</option>
-            </select>
-          </td>
-          <td>
-            <button type="submit">💾 Save</button>
-          </td>
-        </form>
+        <td class="title-cell">
+          <a href="{% url 'recipes:recipe_detail' recipe.recipe_id %}">{{ recipe.title }}</a>
+        </td>
+        <td>{{ recipe.portions }}</td>
+        <td>{{ recipe.cook_time }}</td>
+        <td>{{ recipe.created_at|date:"Y-m-d H:i" }}</td>
+        <td>
+          <input type="hidden" name="recipe_ids" value="{{ recipe.recipe_id }}">
+          <select name="visibility_{{ recipe.recipe_id }}" data-recipe-id="{{ recipe.recipe_id }}" class="visibility-select">
+            <option value="private" {% if recipe.visibility == 'private' %}selected{% endif %}>Private</option>
+            <option value="friends" {% if recipe.visibility == 'friends' %}selected{% endif %}>Friends</option>
+            <option value="public" {% if recipe.visibility == 'public' %}selected{% endif %}>Public</option>
+          </select>
+        </td>
+        <td>
+          <form method="get" action="{% url 'recipes:recipe_edit' pk=recipe.recipe_id %}" style="display:inline;">
+            <button type="submit" class="edit-btn">✏️ Edit</button>
+          </form>
+        </td>
+        <td>
+          <form method="post" action="{% url 'recipes:recipe_delete' pk=recipe.recipe_id %}" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this recipe?');">
+            {% csrf_token %}
+            <button type="submit" class="delete-btn">🗑️ Delete</button>
+          </form>
+        </td>
       </tr>
     {% endfor %}
   </tbody>
 </table>
+</form>
 
+<!-- JavaScript: Bulk select + Search -->
+<script>
+  document.getElementById('set_all_visibility').addEventListener('change', function () {
+    const newValue = this.value;
+    if (newValue) {
+      document.querySelectorAll('select[name^="visibility_"]').forEach(select => {
+        select.value = newValue;
+      });
+    }
+  });
+
+  document.getElementById('search').addEventListener('input', function () {
+    const term = this.value.toLowerCase();
+    const rows = document.querySelectorAll('#recipe-table tbody tr');
+
+    rows.forEach(row => {
+      const title = row.querySelector('.title-cell').textContent.toLowerCase();
+      row.style.display = title.includes(term) ? '' : 'none';
+    });
+  });
+</script>
+
+<!-- JavaScript: AJAX updates on dropdown change -->
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  document.querySelectorAll('.visibility-select').forEach(function(select) {
+    select.addEventListener('change', function () {
+      const recipeId = this.dataset.recipeId;
+      const newVisibility = this.value;
+
+      fetch("{% url 'recipes:update_visibility' %}", {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': '{{ csrf_token }}',
+        },
+        body: JSON.stringify({
+          recipe_id: recipeId,
+          visibility: newVisibility
+        })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.status === "success") {
+          console.log(`✅ Recipe ${recipeId} updated.`);
+        } else {
+          console.warn(`⚠️ Failed to update recipe ${recipeId}: ${data.message}`);
+        }
+      })
+      .catch(error => {
+        console.error("AJAX error:", error);
+      });
+    });
+  });
+});
+</script>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const ingredientInput = document.getElementById('ingredient-search');
+  const suggestionBox = document.getElementById('ingredient-suggestions');
+
+  // Collect all ingredients from recipes
+  const ingredientSet = new Set();
+  document.querySelectorAll('tr[data-ingredients]').forEach(row => {
+    const ingList = row.dataset.ingredients.split(',');
+    ingList.forEach(ing => {
+      const cleaned = ing.trim().toLowerCase();
+      if (cleaned) ingredientSet.add(cleaned);
+    });
+  });
+  const allIngredients = Array.from(ingredientSet).sort();
+
+  // Update suggestions
+  ingredientInput.addEventListener('input', function () {
+    const input = this.value.toLowerCase();
+    const lastToken = input.split(',').pop().trim();
+    suggestionBox.innerHTML = '';
+
+    if (lastToken.length === 0) {
+      suggestionBox.style.display = 'none';
+      return;
+    }
+
+    const matches = allIngredients.filter(ing => ing.startsWith(lastToken));
+    if (matches.length > 0) {
+      matches.forEach(match => {
+        const item = document.createElement('div');
+        item.textContent = match;
+        item.style.padding = '4px';
+        item.style.cursor = 'pointer';
+        item.addEventListener('mousedown', () => {
+          const tokens = ingredientInput.value.split(',');
+          tokens[tokens.length - 1] = match;
+          ingredientInput.value = tokens.join(', ') + ', ';
+          suggestionBox.style.display = 'none';
+          filterByIngredients();
+        });
+        suggestionBox.appendChild(item);
+      });
+      suggestionBox.style.display = 'block';
+    } else {
+      suggestionBox.style.display = 'none';
+    }
+  });
+
+  // Filter table rows based on ingredient input
+  ingredientInput.addEventListener('input', filterByIngredients);
+
+  function filterByIngredients() {
+    const filterTokens = ingredientInput.value.toLowerCase().split(',').map(i => i.trim()).filter(Boolean);
+    const rows = document.querySelectorAll('#recipe-table tbody tr');
+
+    rows.forEach(row => {
+      const recipeIngs = row.dataset.ingredients.split(',').map(i => i.trim().toLowerCase());
+      const show = filterTokens.every(token => recipeIngs.includes(token));
+      row.style.display = show ? '' : 'none';
+    });
+  }
+
+  // Hide suggestions if clicked outside
+  document.addEventListener('click', (e) => {
+    if (!ingredientInput.contains(e.target) && !suggestionBox.contains(e.target)) {
+      suggestionBox.style.display = 'none';
+    }
+  });
+});
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const input = document.getElementById('ingredient-search');
+  const suggestionsBox = document.getElementById('ingredient-suggestions');
+  const tokensContainer = document.getElementById('ingredient-tokens');
+  const selectedIngredients = new Set();
+
+  // Gather all user ingredients from the table
+  const allIngredients = new Set();
+  document.querySelectorAll('tr[data-ingredients]').forEach(row => {
+    const ingStr = row.getAttribute('data-ingredients');
+    ingStr.split(',').map(i => i.trim()).forEach(i => {
+      if (i) allIngredients.add(i.toLowerCase());
+    });
+  });
+
+  function renderSuggestions(term) {
+    const termLC = term.toLowerCase();
+    const matches = [...allIngredients].filter(i => i.startsWith(termLC) && !selectedIngredients.has(i));
+    suggestionsBox.innerHTML = '';
+    matches.forEach(m => {
+      const div = document.createElement('div');
+      div.className = 'suggestion';
+      div.textContent = capitalizeMatch(m, term);
+      div.addEventListener('click', () => {
+        addIngredientToken(m);
+        input.value = '';
+        suggestionsBox.innerHTML = '';
+        filterRecipes();
+      });
+      suggestionsBox.appendChild(div);
+    });
+  }
+
+  function capitalizeMatch(word, term) {
+    if (term.length === 0) return word;
+    return term + word.slice(term.length);
+  }
+
+  function addIngredientToken(ingredient) {
+    const ingLC = ingredient.toLowerCase();
+    if (selectedIngredients.has(ingLC)) return;
+
+    selectedIngredients.add(ingLC);
+
+    const token = document.createElement('div');
+    token.className = 'ingredient-token';
+    token.textContent = ingredient;
+    const close = document.createElement('span');
+    close.textContent = '×';
+    close.className = 'remove';
+    close.addEventListener('click', () => {
+      selectedIngredients.delete(ingLC);
+      tokensContainer.removeChild(token);
+      filterRecipes();
+    });
+    token.appendChild(close);
+    tokensContainer.appendChild(token);
+  }
+
+  function filterRecipes() {
+    const rows = document.querySelectorAll('#recipe-table tbody tr');
+    rows.forEach(row => {
+      const rowIngredients = row.getAttribute('data-ingredients').toLowerCase().split(',').map(i => i.trim());
+      const matchesAll = [...selectedIngredients].every(sel => rowIngredients.includes(sel));
+      row.style.display = matchesAll ? '' : 'none';
+    });
+  }
+
+  input.addEventListener('input', () => {
+    renderSuggestions(input.value.trim());
+  });
+
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && input.value.trim()) {
+      e.preventDefault();
+      addIngredientToken(input.value.trim());
+      input.value = '';
+      suggestionsBox.innerHTML = '';
+      filterRecipes();
+    }
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('#ingredient-search-container')) {
+      suggestionsBox.innerHTML = '';
+    }
+  });
+});
+</script>
+
+<!-- Styling -->
 <style>
+  .title-cell a {
+    text-decoration: none;
+    color: black;
+  }
+
+  .title-cell a:visited {
+    color: black;
+  }
+
+  .title-cell a:hover {
+    text-decoration: none;
+    color: black;
+  }
+
+  .title-cell a:active {
+    color: black;
+  }
+
   table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 1.5rem;
+    margin-top: 1rem;
   }
+
   th, td {
     border: 1px solid #ddd;
     padding: 0.8rem;
     text-align: center;
   }
+
+  th:first-child,
+  td:first-child {
+    text-align: left;
+    width: 1%; /* prevents it from expanding unnecessarily */
+    white-space: nowrap; /* keeps title in one line */
+  }
+
   th {
     background-color: #f4f4f4;
   }
+
+  input[type="text"] {
+    padding: 0.4rem;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+  }
 </style>
 {% endblock %}
+  

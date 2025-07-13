@@ -1,17 +1,18 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.conf import settings
-
+import uuid
 
 # Create your models here.
 
 
 
+
 class CustomUser(AbstractUser):
-    # Add custom fields here if needed
+    is_verified = models.BooleanField(default=False)
+    verification_code = models.UUIDField(default=uuid.uuid4, null=True, blank=True)
 
-    pass
-
+    
 class FriendRequest(models.Model):
     from_user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='sent_requests', on_delete=models.CASCADE)
     to_user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='received_requests', on_delete=models.CASCADE)

@@ -1,10 +1,14 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <h2>👋 You’ve been logged out</h2>
-  <p>
-    <a href="{% url 'accounts:login' %}">Log in again</a>,
-    <a href="{% url 'accounts:register' %}">create a new account</a>,
-    or return to the <a href="{% url 'recipes:home' %}">home page</a>.
-  </p>
+<div class="card" style="max-width: 500px; margin: 2rem auto; text-align: center;">
+  <h2 style="margin-bottom: 1rem;">👋 You’ve been logged out</h2>
+  <p class="subtitle">Thanks for visiting! Choose your next step below:</p>
+
+  <div style="display: flex; flex-direction: column; gap: 1rem; margin-top: 2rem;">
+    <a href="{% url 'accounts:login' %}" style="background-color: var(--primary-color); padding: 0.7rem; border-radius: 8px; color: white; text-decoration: none; font-weight: bold;">🔑 Log In Again</a>
+    <a href="{% url 'accounts:register' %}" style="background-color: var(--accent-color); padding: 0.7rem; border-radius: 8px; color: black; text-decoration: none; font-weight: bold;">📝 Create New Account</a>
+    <a href="{% url 'recipes:home' %}" style="background-color: #f0f0f0; padding: 0.7rem; border-radius: 8px; text-decoration: none; font-weight: bold;">🏠 Return to Home Page</a>
+  </div>
+</div>
 {% endblock %}

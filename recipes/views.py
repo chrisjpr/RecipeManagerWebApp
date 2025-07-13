@@ -11,6 +11,9 @@ from .forms import AddRecipeForm
 from .models import Recipe, Ingredient, Instruction
 from django.conf import settings
 from accounts.models import Friendship
+from django.views.decorators.http import require_POST
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
 
 from .functions.pipelines import *  
 from .functions.data_acquisition import *
@@ -20,6 +23,17 @@ ingredient_formset = IngredientFormSet(prefix="ingredients")
 instruction_formset = InstructionFormSet(prefix="instructions")
 
 # Create your views here.
+
+# specify homepage
+@login_required
+def home(request):
+    recipes = Recipe.objects.filter(user=request.user).order_by('-created_at')[:10] if request.user.is_authenticated else []
+    random_images = Recipe.objects.exclude(image='').order_by('?')[:12]  # For rotator
+    return render(request, 'recipes/home.html', {
+        'recipes': recipes,
+        'random_images': random_images,
+    })
+
 
 #region MANAGING RECIPES
 ########################## MANAGING RECIPES ##########################
@@ -36,28 +50,54 @@ def recipe_list(request):
     recipes = Recipe.objects.filter(user=request.user)
 
     if request.method == 'POST':
-        recipe_id = request.POST.get('update')
-        
-        if recipe_id:  # Only proceed if recipe_id is valid
-            new_visibility = request.POST.get(f'visibility_{recipe_id}')
-            try:
-                recipe = get_object_or_404(Recipe, recipe_id=int(recipe_id), user=request.user)
-                recipe.visibility = new_visibility
-                recipe.save()
-                messages.success(request, f"Visibility for '{recipe.title}' updated.")
-            except (ValueError, Recipe.DoesNotExist):
-                messages.error(request, "Invalid recipe or update failed.")
-        else:
-            messages.error(request, "No recipe selected for update.")
+        recipe_ids = request.POST.getlist("recipe_ids")
+        updated_count = 0
 
-        return redirect('recipe_list')
+        if not recipe_ids:
+            messages.error(request, "No recipes found for update.")
+            return redirect('recipes:recipe_list')
+
+        for rid in recipe_ids:
+            visibility = request.POST.get(f'visibility_{rid}')
+            if visibility:
+                try:
+                    recipe = get_object_or_404(Recipe, recipe_id=int(rid), user=request.user)
+                    recipe.visibility = visibility
+                    recipe.save()
+                    updated_count += 1
+                except (ValueError, Recipe.DoesNotExist):
+                    messages.warning(request, f"Failed to update recipe with ID {rid}.")
+            else:
+                messages.warning(request, f"No visibility selected for recipe ID {rid}.")
+
+        if updated_count:
+            messages.success(request, f"✅ Updated visibility for {updated_count} recipe(s).")
+        else:
+            messages.info(request, "No recipes were updated.")
+
+        return redirect('recipes:recipe_list')
 
     return render(request, 'recipes/recipe_list.html', {'recipes': recipes})
-# specify homepage
+
+    return render(request, 'recipes/recipe_list.html', {'recipes': recipes})
+
+@require_POST
 @login_required
-def home(request):
-    recipes = Recipe.objects.filter(user=request.user)
-    return render(request, 'recipes/home.html', {'recipes': recipes})
+def update_visibility_ajax(request):
+    try:
+        data = json.loads(request.body)
+        recipe_id = data.get("recipe_id")
+        visibility = data.get("visibility")
+
+        recipe = get_object_or_404(Recipe, recipe_id=recipe_id, user=request.user)
+        recipe.visibility = visibility
+        recipe.save()
+
+        return JsonResponse({"status": "success"})
+
+    except Exception as e:
+        return JsonResponse({"status": "error", "message": str(e)})
+
 
 
 @login_required
@@ -107,9 +147,8 @@ def recipe_edit(request, pk):
 #endregion MANAGING RECIPES
 
 
-#region Manual Recipe Creation
-
-################## Create Recipe Manually ######### #########
+#region MANUAL RECIPE CREATION
+##################  MANUAL RECIPE CREATION ##################
 @login_required
 def create_recipe(request):
     use_llm = False  # default for GET or manual
@@ -206,7 +245,9 @@ def create_recipe(request):
         "instruction_formset": instruction_formset
     })
 
-    
+##################  MANUAL RECIPE CREATION ##################  
+#endregion
+
 
 #region AI Data Retrieval
 ################## AI DATA RETRIEVAL ##################
@@ -356,7 +397,7 @@ def copy_recipe(request, recipe_id):
         return HttpResponseForbidden("Not allowed to copy this recipe.")
     
     copied = Recipe.objects.create(
-        title=f"{original.title} (Copy)",
+        title=original.title,
         cook_time=original.cook_time,
         portions=original.portions,
         image=original.image,
@@ -365,7 +406,12 @@ def copy_recipe(request, recipe_id):
         visibility='private',
     )
     for ing in original.ingredients.all():
-        copied.ingredients.create(name=ing.name, quantity=ing.quantity, category=ing.category)
+        copied.ingredients.create(
+            name=ing.name,
+            quantity=ing.quantity,
+            unit=ing.unit,               # <-- This line fixes the issue
+            category=ing.category
+        )
     for inst in original.instructions.all():
         copied.instructions.create(description=inst.description, step_number=inst.step_number)
     
@@ -373,4 +419,3 @@ def copy_recipe(request, recipe_id):
     return redirect('recipes:friends_recipes', friend_id=original.user_id)
 
 ###################### /FRIEND MANAGEMENT #####################
-#endregion FRIEND MANAGEMENT

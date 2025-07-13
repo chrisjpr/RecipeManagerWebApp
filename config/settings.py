@@ -129,6 +129,7 @@ INSTALLED_APPS = [
     'storages',         # AWS S3
     'accounts',         # your user app
     'recipes',          # your core app
+    'emails',
 ]
 
 MIDDLEWARE = [

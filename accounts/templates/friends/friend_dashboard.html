@@ -11,29 +11,74 @@
   {% endfor %}
 {% endif %}
 
+<!-- Current Friends Table -->
+{% if friends %}
+  <div class="card">
+    <h3>✅ Your Friends</h3>
+    <table style="width: 100%; border-collapse: collapse;">
+      <thead>
+        <tr>
+          <th style="text-align: left; padding: 0.5rem;">Username</th>
+          <th style="text-align: center;">View Recipes</th>
+          <th style="text-align: center;">Delete Friend</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for friend in friends %}
+        <tr>
+          <td style="padding: 0.5rem;">{{ friend.username }}</td>
+          <td style="text-align: center;">
+            <a href="{% url 'recipes:friends_recipes' friend.id %}" style="text-decoration: none; color: inherit;">📖</a>
+          </td>
+          <td style="text-align: center;">
+            <form method="post" action="{% url 'accounts:delete_friend' friend.id %}" onsubmit="return confirm('Are you sure you want to remove {{ friend.username }} as a friend?');">
+              {% csrf_token %}
+              <button type="submit" style="background-color: #dc3545; color: white; border: none; padding: 0.3rem 0.7rem; border-radius: 6px;">🗑️</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% else %}
+  <p class="subtitle">You have no friends yet. 😢</p>
+{% endif %}
+
 <!-- Send Friend Request -->
 <div class="card">
   <h3>➕ Send Friend Request</h3>
-  <form method="get" action="{% url 'accounts:friend_search' %}">
+  <form method="get" action="{% url 'accounts:friend_search' %}" style="display: flex; gap: 1rem;">
     <input type="text" name="q" placeholder="Search username" required>
     <button type="submit">🔍 Search</button>
   </form>
 </div>
 
+<!-- Search Results -->
 {% if results %}
   <div class="card">
-    <h4>Search Results</h4>
-    <ul>
-      {% for user in results %}
-        <li>
-          {{ user.username }}
-          <form method="post" action="{% url 'accounts:send_friend_request' user.id %}" style="display:inline;">
-            {% csrf_token %}
-            <button type="submit">Send Request</button>
-          </form>
-        </li>
-      {% endfor %}
-    </ul>
+    <h4>🔎 Search Results</h4>
+    <table style="width: 100%; border-collapse: collapse;">
+      <thead>
+        <tr>
+          <th style="text-align: left; padding: 0.5rem;">Username</th>
+          <th style="text-align: center;">Send Request</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for user in results %}
+        <tr>
+          <td style="padding: 0.5rem;">{{ user.username }}</td>
+          <td style="text-align: center;">
+            <form method="post" action="{% url 'accounts:send_friend_request' user.id %}">
+              {% csrf_token %}
+              <button type="submit">➕</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
   </div>
 {% endif %}
 
@@ -41,21 +86,34 @@
 {% if received_requests %}
   <div class="card">
     <h3>📩 Friend Requests (Received)</h3>
-    <ul>
-      {% for request in received_requests %}
-        <li>
-          {{ request.from_user.username }}
-          <form method="post" action="{% url 'accounts:accept_friend_request' request.id %}" style="display:inline;">
-            {% csrf_token %}
-            <button type="submit">✅ Accept</button>
-          </form>
-          <form method="post" action="{% url 'accounts:decline_friend_request' request.id %}" style="display:inline;">
-            {% csrf_token %}
-            <button type="submit">❌ Decline</button>
-          </form>
-        </li>
-      {% endfor %}
-    </ul>
+    <table style="width: 100%; border-collapse: collapse;">
+      <thead>
+        <tr>
+          <th style="text-align: left; padding: 0.5rem;">Username</th>
+          <th style="text-align: center;">Accept</th>
+          <th style="text-align: center;">Decline</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for request in received_requests %}
+        <tr>
+          <td style="padding: 0.5rem;">{{ request.from_user.username }}</td>
+          <td style="text-align: center;">
+            <form method="post" action="{% url 'accounts:accept_friend_request' request.id %}">
+              {% csrf_token %}
+              <button type="submit" style="background-color: #28a745; color: white; border: none; padding: 0.3rem 0.7rem; border-radius: 6px;">✅</button>
+            </form>
+          </td>
+          <td style="text-align: center;">
+            <form method="post" action="{% url 'accounts:decline_friend_request' request.id %}">
+              {% csrf_token %}
+              <button type="submit" style="background-color: #dc3545; color: white; border: none; padding: 0.3rem 0.7rem; border-radius: 6px;">❌</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
   </div>
 {% endif %}
 
@@ -63,29 +121,23 @@
 {% if sent_requests %}
   <div class="card">
     <h3>📤 Friend Requests (Sent)</h3>
-    <ul>
-      {% for request in sent_requests %}
-        <li>{{ request.to_user.username }} (pending)</li>
-      {% endfor %}
-    </ul>
+    <table style="width: 100%; border-collapse: collapse;">
+      <thead>
+        <tr>
+          <th style="text-align: left; padding: 0.5rem;">Username</th>
+          <th style="text-align: center;">Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for request in sent_requests %}
+        <tr>
+          <td style="padding: 0.5rem;">{{ request.to_user.username }}</td>
+          <td style="text-align: center;">Pending ⏳</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
   </div>
-{% endif %}
-
-<!-- Current Friends -->
-{% if friends %}
-  <div class="card">
-    <h3>✅ Your Friends</h3>
-    <ul>
-      {% for friend in friends %}
-        <li>
-          {{ friend.username }}
-          <a href="{% url 'recipes:friends_recipes' friend.id %}">📖 View Recipes</a>
-        </li>
-      {% endfor %}
-    </ul>
-  </div>
-{% else %}
-  <p>You have no friends yet.</p>
 {% endif %}
 
 {% endblock %}
