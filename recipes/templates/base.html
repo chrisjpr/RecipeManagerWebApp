@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <title>{% block title %}Recipe Manager{% endblock %}</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
+
   <!-- Google Fonts for a modern aesthetic -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
@@ -46,6 +46,18 @@
 
     header h1 {
       font-size: 1.75rem;
+      margin: 0;
+    }
+
+    .brand-link {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
     }
 
     nav a {
@@ -57,6 +69,13 @@
 
     nav a:hover {
       text-decoration: underline;
+    }
+
+    .username-label {
+      margin-left: 1.5rem;
+      font-weight: 500;
+      color: #f1f1f1;
+      font-size: 0.95rem;
     }
 
     main {
@@ -128,26 +147,50 @@
         margin-left: 0;
         margin-right: 1rem;
       }
+
+      .username-label {
+        margin-left: 0;
+        margin-top: 0.5rem;
+      }
     }
+
+    .user-box {
+  background-color: rgba(255, 255, 255, 0.15);
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  margin-left: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.username-label {
+  font-weight: 500;
+  color: #f1f1f1;
+  font-size: 0.95rem;
+}
   </style>
 </head>
 <body>
   <header>
-    <h1>🍳 Recipe Manager</h1>
-    <nav>
-      <a href="{% url 'recipes:home' %}">🏠 Home</a>
-      <a href="{% url 'recipes:recipe_list' %}">📖 All Recipes</a>
-      <a href="{% url 'recipes:create_recipe' %}">👽 Add Recipe Manually</a>
-      <a href="{% url 'recipes:add_recipe_from_url' %}">🤖 Import from URL</a>
-      <a href="{% url 'recipes:add_recipe_from_image' %}">📷 Import from Image</a>
+    <a href="{% url 'recipes:home' %}" class="brand-link"><h1>🍳 Recipe Manager</h1></a>
+      <nav>
+        <a href="{% url 'recipes:home' %}">🏠 Home</a>
+        <a href="{% url 'recipes:recipe_list' %}">📖 All Recipes</a>
+        <a href="{% url 'recipes:create_recipe' %}">👽 Add Recipe Manually</a>
+        <a href="{% url 'recipes:add_recipe_from_url' %}">🤖 Import from URL</a>
+        <a href="{% url 'recipes:add_recipe_from_image' %}">📷 Import from Image</a>
 
-      {% if user.is_authenticated %}
-        <a href="{% url 'accounts:friend_dashboard' %}">👥 Friends</a>
-        <a href="{% url 'accounts:logout' %}">🚪 Logout</a>
-      {% else %}
-        <a href="{% url 'accounts:login' %}">🔑 Login</a>
-      {% endif %}
-    </nav>
+        <div class="user-box">
+          {% if user.is_authenticated %}
+            <span class="username-label">👤 {{ user.username }}</span>
+            <a href="{% url 'accounts:friend_dashboard' %}">👥 Friends</a>
+            <a href="{% url 'accounts:logout' %}">🚪 Logout</a>
+          {% else %}
+            <a href="{% url 'accounts:login' %}">🔑 Login</a>
+          {% endif %}
+        </div>
+      </nav>
   </header>
 
   <main>
@@ -158,8 +201,7 @@
     {% endif %}
 
     <section class="card">
-      {% block content %}
-      {% endblock %}
+      {% block content %}{% endblock %}
     </section>
   </main>
 

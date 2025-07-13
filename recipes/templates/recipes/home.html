@@ -1,54 +1,199 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <div style="text-align: center; margin-bottom: 2rem;">
-    <h2 style="font-size: 2rem;">👋 Welcome to RecipeManager, {{ user.username|default:"Guest" }}!</h2>
-    <p class="subtitle">Your personal assistant for delicious, organized, and AI-powered recipes.</p>
-  </div>
+<div class="home-header">
+  <h2>👋 Welcome to RecipeManager, {{ user.username|default:"Guest" }}!</h2>
+  <p class="subtitle">Your personal assistant for delicious, organized, and AI-powered recipes.</p>
+</div>
 
-  {% if user.is_authenticated %}
-    <div style="text-align: center; margin-bottom: 1rem;">
-      <form method="post" action="{% url 'accounts:logout' %}">
-        {% csrf_token %}
-        <button class="btn btn-danger" style="background-color: #dc3545; color: white; border: none; padding: 8px 16px; border-radius: 6px;">Logout</button>
-      </form>
-    </div>
+{% if user.is_authenticated %}
+  <form method="post" action="{% url 'accounts:logout' %}" class="logout-form">
+    {% csrf_token %}
+    <button class="logout-btn">🚪 Logout</button>
+  </form>
+{% else %}
+  <div class="auth-links">
+    <a href="{% url 'accounts:login' %}" class="btn-auth">🔑 Login</a>
+    <a href="{% url 'accounts:register' %}" class="btn-auth">📝 Register</a>
+  </div>
+{% endif %}
+
+<!-- 🔄 Random Image Gallery -->
+<div class="card">
+  <h3 class="section-title">🍽️ Featured Recipes</h3>
+  <div id="image-showcase" class="image-grid">
+    {% for recipe in random_images|slice:":6" %}
+      <a href="{% url 'recipes:recipe_detail' recipe.recipe_id %}">
+        <img src="{{ recipe.image.url }}" alt="{{ recipe.title }}" class="recipe-thumb" loading="lazy">
+      </a>
+    {% endfor %}
+  </div>
+</div>
+
+<!-- 🧰 Toolbox -->
+<div class="card">
+  <h3 class="section-title">🧰 Toolbox</h3>
+  <p class="subtitle">Create or import recipes using AI assistance:</p>
+  <div class="toolbox">
+    <a href="{% url 'recipes:create_recipe' %}" class="tool-btn">👽 Create Recipe</a>
+    <a href="{% url 'recipes:add_recipe_from_url' %}" class="tool-btn">🤖 Import from URL</a>
+    <a href="{% url 'recipes:add_recipe_from_image' %}" class="tool-btn">📷 Import from Image</a>
+  </div>
+</div>
+
+<!-- 🕓 Recent Recipes -->
+<div class="card">
+  <h3 class="section-title">📋 Recent Recipes</h3>
+  {% if recipes %}
+    <ul class="recent-list">
+      {% for recipe in recipes %}
+        <li>
+          <a href="{% url 'recipes:recipe_detail' recipe.recipe_id %}" class="recent-link">
+            {{ recipe.title }}
+          </a>
+          <span class="subtitle">• {{ recipe.portions }} servings • {{ recipe.cook_time }} min</span>
+        </li>
+      {% endfor %}
+    </ul>
   {% else %}
-    <div style="text-align: center; margin-bottom: 2rem;">
-      <a href="{% url 'accounts:login' %}" class="btn btn-primary">🔑 Login</a> |
-      <a href="{% url 'accounts:register' %}" class="btn btn-secondary">📝 Register</a>
-    </div>
+    <p>No recipes yet. Be the first to add one! 🍲</p>
   {% endif %}
-
-  <div class="card" style="margin-top: 2rem;">
-    <h3 class="section-title">🧰 Toolbox</h3>
-    <p class="subtitle">Create recipes manually or let AI help you extract them from various sources:</p>
-    <div style="display: flex; flex-wrap: wrap; gap: 1rem;">
-      <a href="{% url 'recipes:create_recipe' %}" class="adjust-button"> 👽 Create Recipe Manually</a>
-      <a href="{% url 'recipes:add_recipe_from_url' %}" class="adjust-button">🤖 Import From URL</a>
-      <a href="{% url 'recipes:add_recipe_from_image' %}" class="adjust-button">📷 Import From Image</a>
-    </div>
+  <div style="margin-top: 1rem;">
+    <a href="{% url 'recipes:recipe_list' %}" class="adjust-button">📚 View All Recipes</a>
   </div>
+</div>
 
-  <div class="card">
-    <h3 class="section-title">📋 Recent Recipes</h3>
-    {% if recipes %}
-      <ul style="list-style: none; padding-left: 0;">
-        {% for recipe in recipes %}
-          <li style="margin-bottom: 1rem;">
-            <a href="{% url 'recipes:recipe_detail' recipe.recipe_id %}" style="text-decoration: none; color: var(--primary-color); font-weight: 600;">
-              {{ recipe.title }}
-            </a>
-            <span class="subtitle">• {{ recipe.portions }} servings • {{ recipe.cook_time }} min</span>
-          </li>
-        {% endfor %}
-      </ul>
-    {% else %}
-      <p>No recipes yet. Be the first to add a delicious one! 🍲</p>
-    {% endif %}
-    <div style="margin-top: 1rem;">
-      <a href="{% url 'recipes:recipe_list' %}" class="adjust-button">📚 View All Recipes</a>
-    </div>
-  </div>
+<!-- 🔁 Image rotator script -->
+
+<script id="link-data" type="application/json">
+  [
+    {% for r in random_images %}
+      "{% url 'recipes:recipe_detail' r.recipe_id %}"{% if not forloop.last %},{% endif %}
+    {% endfor %}
+  ]
+</script>
+ 
+<script>
+  const images = JSON.parse(document.getElementById('image-data').textContent);
+  const links = JSON.parse(document.getElementById('link-data').textContent);
+
+  let index = 0;
+  setInterval(() => {
+    const container = document.getElementById('image-showcase');
+    container.innerHTML = '';
+    for (let i = 0; i < 6 && i < images.length; i++) {
+      const img = document.createElement('img');
+      img.src = images[(index + i) % images.length];
+      img.className = 'recipe-thumb';
+      img.loading = 'lazy';
+
+      const a = document.createElement('a');
+      a.href = links[(index + i) % links.length];
+      a.appendChild(img);
+      container.appendChild(a);
+    }
+    index = (index + 6) % images.length;
+  }, 10000);
+</script>
+
+<style>
+  .home-header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .auth-links {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .btn-auth {
+    padding: 0.5rem 1rem;
+    margin: 0 0.5rem;
+    background: var(--primary-color);
+    color: white;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .logout-form {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .logout-btn {
+    background: #dc3545;
+    color: white;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+  }
+
+  .image-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  .recipe-thumb {
+    width: 100%;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 2px solid #ddd;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    transition: transform 0.2s;
+  }
+
+  .recipe-thumb:hover {
+    transform: scale(1.05);
+  }
+
+  .toolbox {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  .tool-btn {
+    flex: 1;
+    padding: 0.75rem;
+    background-color: #f5f5f5;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    text-align: center;
+    text-decoration: none;
+    font-weight: 600;
+    color: #333;
+    transition: background-color 0.2s;
+  }
+
+  .tool-btn:hover {
+    background-color: #e0e0e0;
+  }
+
+  .recent-list {
+    list-style: none;
+    padding-left: 0;
+    margin-top: 1rem;
+  }
+
+  .recent-list li {
+    margin-bottom: 0.8rem;
+  }
+
+  .recent-link {
+    font-weight: 600;
+    color: var(--primary-color);
+    text-decoration: none;
+  }
+
+  .recent-link:hover {
+    text-decoration: underline;
+  }
+</style>
 {% endblock %}
-

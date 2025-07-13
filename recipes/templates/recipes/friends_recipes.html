@@ -1,84 +1,40 @@
-{% extends 'base.html' %}
-{% block title %}Friends' Recipes | Recipe Manager{% endblock %}
-
-{% block content %}
-<h2>👩‍🍳 Friends' Shared Recipes</h2>
-
-{% if recipes %}
-  <table class="recipe-table">
-    <thead>
-      <tr>
-        <th>Title</th>
-        <th>Portions</th>
-        <th>Cook Time</th>
-        <th>Visibility</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for recipe in recipes %}
-        <tr>
-          <td>
-            <a href="{% url 'recipe_detail' recipe.recipe_id %}" class="title-link">
-              {{ recipe.title }}
-            </a>
-          </td>
-          <td>{{ recipe.portions }}</td>
-          <td>{{ recipe.cook_time }} min</td>
-          <td>{{ recipe.get_visibility_display }}</td>
-          <td>
-            <a href="{% url 'recipes:copy_recipe' recipe.recipe_id %}" class="copy-btn">📋 Copy</a>
-          </td>
-        </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-{% else %}
-  <p>No visible recipes from friends yet. Encourage them to share something delicious! 🍲</p>
-{% endif %}
-{% endblock %}
-
 <style>
-  h2 {
-    text-align: center;
-    margin-bottom: 2rem;
-  }
-
-  .recipe-table {
+  #recipe-table {
     width: 100%;
-    max-width: 900px;
-    margin: 0 auto;
     border-collapse: collapse;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
-    background: #fff;
-    border-radius: 8px;
+    margin-top: 1rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    border-radius: 6px;
     overflow: hidden;
   }
 
-  .recipe-table th,
-  .recipe-table td {
-    padding: 1rem;
+  #recipe-table th, 
+  #recipe-table td {
+    border: 1px solid #ddd;
+    padding: 0.8rem;
     text-align: center;
-    border-bottom: 1px solid #e0e0e0;
   }
 
-  .recipe-table th {
-    background-color: #f9f9f9;
-    font-weight: bold;
-  }
-
-  .recipe-table td:last-child {
+  #recipe-table th:first-child,
+  #recipe-table td:first-child {
+    text-align: left;
     white-space: nowrap;
   }
 
-  .title-link {
-    font-weight: bold;
-    color: #007bff;
-    text-decoration: none;
+  #recipe-table th {
+    background-color: #f9f9f9;
   }
 
-  .title-link:hover {
-    text-decoration: underline;
+  .title-cell a {
+    text-decoration: none;
+    color: black;
+  }
+
+  .title-cell a:visited,
+  .title-cell a:hover,
+  .title-cell a:active {
+    color: black;
+    text-decoration: none;
   }
 
   .copy-btn {
@@ -88,10 +44,49 @@
     border-radius: 6px;
     text-decoration: none;
     font-weight: bold;
-    transition: background-color 0.2s;
+    display: inline-block;
   }
 
   .copy-btn:hover {
     background-color: #0056b3;
   }
 </style>
+
+{% extends 'base.html' %}
+{% block title %}Friends' Recipes | Recipe Manager{% endblock %}
+
+{% block content %}
+<h2>👩‍🍳 Friends' Shared Recipes</h2>
+
+{% if recipes %}
+  <table id="recipe-table">
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Portions</th>
+        <th>Cook Time</th>
+        <th>Visibility</th>
+        <th>Copy</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for recipe in recipes %}
+        <tr>
+          <td class="title-cell">
+            <a href="{% url 'recipes:recipe_detail' recipe.recipe_id %}">{{ recipe.title }}</a>
+          </td>
+          <td>{{ recipe.portions }}</td>
+          <td>{{ recipe.cook_time }}</td>
+          <td>{{ recipe.get_visibility_display }}</td>
+          <td>
+            <a href="{% url 'recipes:copy_recipe' recipe.recipe_id %}" class="copy-btn">📋 Copy</a>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% else %}
+  <p class="subtitle">No visible recipes from friends yet. Encourage them to share something delicious! 🍲</p>
+{% endif %}
+{% endblock %}
+
