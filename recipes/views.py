@@ -37,6 +37,13 @@ def home(request):
 
 #region MANAGING RECIPES
 ########################## MANAGING RECIPES ##########################
+
+# landing page for creating a recipe
+@login_required
+def create_recipe_landing(request):
+    return render(request, "recipes/create_recipe_landing.html")
+
+
 # Render a Recipe Template
 def recipe_detail(request, recipe_id):
     recipe = get_object_or_404(Recipe, recipe_id=recipe_id)
@@ -126,7 +133,7 @@ def recipe_edit(request, pk):
             recipe_form.save()
             ingredient_formset.save()
             instruction_formset.save()
-            return redirect('recipe_detail', recipe_id=recipe.recipe_id)
+            return redirect('recipes:recipe_detail', recipe_id=recipe.recipe_id)
         else:
             print("Recipe form errors:", recipe_form.errors)
             print("Ingredient formset errors:", ingredient_formset.errors)
@@ -210,7 +217,7 @@ def create_recipe(request):
                         )
 
                     messages.success(request, f"✅ Recipe '{recipe.title}' created via LLM.")
-                    return redirect('recipe_detail', recipe_id=recipe.recipe_id)
+                    return redirect('recipes:recipe_detail', recipe_id=recipe.recipe_id)
 
                 except Exception as e:
                     print("❌ LLM error:", repr(e))
@@ -230,7 +237,7 @@ def create_recipe(request):
                 instruction_formset.save()
 
                 messages.success(request, f"✅ Recipe '{recipe.title}' created.")
-                return redirect('recipe_detail', recipe_id=recipe.recipe_id)
+                return redirect('recipes:recipe_detail', recipe_id=recipe.recipe_id)
 
             messages.error(request, "Please correct the errors below.")
 
@@ -281,7 +288,7 @@ def add_recipe_from_url(request):
             )
 
             messages.success(request, f"🎉 Recipe '{recipe.title}' created from URL!")
-            return redirect('recipe_detail', recipe_id=recipe.recipe_id)
+            return redirect('recipes:recipe_detail', recipe_id=recipe.recipe_id)
 
         except Exception as e:
             print("❌ Error in add_recipe_from_url:", e)
@@ -319,7 +326,7 @@ def add_recipe_from_image(request):
             )
 
             messages.success(request, f"📷 Recipe '{recipe.title}' created from image!")
-            return redirect('recipe_detail', recipe_id=recipe.recipe_id)
+            return redirect('recipes:recipe_detail', recipe_id=recipe.recipe_id)
 
         except Exception as e:
             print("❌ Error in add_recipe_from_image:", e)
@@ -341,7 +348,7 @@ def add_recipe_from_text(request):
 
             try:
                 if use_llm:
-                    structured_data = organize_recipe_with_llm(
+                    structured_data = organize_with_llm(
                         recipe_input=raw_text,
                         custom_instruction=custom_instruction,
                         api_key=settings.OPENAI_KEY
@@ -362,7 +369,7 @@ def add_recipe_from_text(request):
                 )
 
                 messages.success(request, f"✅ Recipe '{recipe.title}' created!")
-                return redirect('recipe_detail', recipe_id=recipe.recipe_id)
+                return redirect('recipes:recipe_detail', recipe_id=recipe.recipe_id)
 
             except Exception as e:
                 print("❌ Error in add_recipe_from_text:", e)

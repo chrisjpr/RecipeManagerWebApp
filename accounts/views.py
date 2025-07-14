@@ -11,10 +11,18 @@ from django.contrib.auth.decorators import login_required
 from .models import FriendRequest, Friendship, CustomUser
 from django.contrib.auth.models import User
 from django.db.models import Q
-from emails.utils import send_verification_email
+from emails.utils import custom_send_verification_email
 from django.contrib.auth import get_user_model
 import uuid
 from django.contrib.auth import authenticate
+from django.contrib.auth.tokens import default_token_generator
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.encoding import force_bytes, force_str
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
+from django.conf import settings
+from django.urls import reverse
+from emails.utils import custom_send_password_reset_email
 
 
 User = get_user_model()
@@ -33,7 +41,7 @@ def register_view(request):
                 user.verification_code = uuid.uuid4()
             user.save()
 
-            send_verification_email(user, request)
+            custom_send_verification_email(user, request)
             messages.success(request, "✅ Registration successful! Please check your email to verify your account.")
             return redirect('accounts:login')
     else:
@@ -59,7 +67,7 @@ def resend_verification(request):
     else:
         request.user.verification_code = uuid.uuid4()
         request.user.save()
-        send_verification_email(request.user)
+        custom_send_verification_email(request.user)
         messages.success(request, "📧 A new verification email has been sent.")
     return redirect('home')
 def unverified_view(request):
@@ -67,7 +75,7 @@ def unverified_view(request):
     user = User.objects.filter(id=user_id).first()
 
     if request.method == 'POST' and user:
-        send_verification_email(user)
+        custom_send_verification_email(user)
         messages.success(request, f"A new verification link was sent to {user.email}.")
 
     return render(request, 'registration/unverified.html', {'user': user})
@@ -80,30 +88,43 @@ def unverified_view(request):
 ####################### LOGIN/LOGOUT #####################
 
 def login_view(request):
+    form = CustomLoginForm(request, data=request.POST or None)
+
     if request.method == 'POST':
-        form = CustomLoginForm(request, data=request.POST)
         if form.is_valid():
             user = form.get_user()
 
-            # Log in the user if verified
+            if not user.is_verified:
+                if not user.verification_code:
+                    user.verification_code = uuid.uuid4()
+                    user.save()
+
+                custom_send_verification_email(user, request)
+                return render(request, 'registration/custom_unverified.html', {'email': user.email})
+
+            # Log in verified users
             login(request, user)
-            return redirect('home')
+            return redirect('recipes:home')
+
         else:
-            # If the form raised our custom unverified error, resend the email
             username = request.POST.get('username')
             try:
                 user = CustomUser.objects.get(username=username)
                 if not user.is_verified:
-                    from emails.utils import send_verification_email
-                    send_verification_email(user, request)
-                    messages.success(request, f"📧 Your account is not yetverified. A new verification link has been sent to {user.email}.")
+                    # Resend verification email
+                    if not user.verification_code:
+                        user.verification_code = uuid.uuid4()
+                        user.save()
 
+                    custom_send_verification_email(user, request)
+                    return render(request, 'registration/custom_unverified.html', {'email': user.email})
             except CustomUser.DoesNotExist:
-                pass  # do nothing for non-existent users
-    else:
-        form = CustomLoginForm()
+                pass  # fall through to invalid login message
+
+            messages.error(request, "❌ Invalid username or password.")
 
     return render(request, 'registration/login.html', {'form': form})
+
 
 def logout_view(request):
     logout(request)
@@ -196,3 +217,56 @@ def friend_search(request):
 
 ###################### FRIEND MANAGEMENT #####################
 #endregion
+
+
+
+#region PASSWORD RESET
+###################### PASSWORD RESET #####################
+
+
+User = get_user_model()
+
+def password_reset_request(request):
+    print("DEBUG 1: IS THIS VIEW REACHED1?")
+    if request.method == 'POST':
+        print("DEBUG 2: IS THIS VIEW REACHED2?")
+        email = request.POST.get('email')
+        associated_users = User.objects.filter(email=email)
+        if associated_users.exists():
+            for user in associated_users:
+                print(f"User found: {user.username} with email {user.email}")
+                # Generate password reset link
+                uid = urlsafe_base64_encode(force_bytes(user.pk))
+                token = default_token_generator.make_token(user)
+                reset_url = request.build_absolute_uri(
+                    reverse('accounts:custom_password_reset_confirm', kwargs={'uidb64': uid, 'token': token})
+                )
+
+                custom_send_password_reset_email(user, reset_url)
+            messages.success(request, "✅ If an account with that email exists, a reset link was sent.")
+            return redirect('accounts:login')
+        else:
+            messages.success(request, "✅ If an account with that email exists, a reset link was sent.")
+    return render(request, 'registration/custom_password_reset_form.html')
+
+def password_reset_confirm(request, uidb64, token):
+    try:
+        uid = force_str(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(pk=uid)
+    except Exception:
+        user = None
+
+    if user and default_token_generator.check_token(user, token):
+        if request.method == 'POST':
+            password = request.POST.get('password')
+            confirm_password = request.POST.get('confirm_password')
+            if password == confirm_password:
+                user.set_password(password)
+                user.save()
+                messages.success(request, "✅ Your password has been reset. You can log in now.")
+                return redirect('accounts:login')
+            else:
+                messages.error(request, "❌ Passwords do not match.")
+        return render(request, 'registration/custom_password_reset_confirm.html', {'validlink': True})
+    else:
+        return render(request, 'registration/custom_password_reset_confirm.html', {'validlink': False})
