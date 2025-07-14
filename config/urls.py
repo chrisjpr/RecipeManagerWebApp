@@ -23,9 +23,7 @@ from django.core.mail import send_mail
 from django.http import HttpResponse
 from django.conf import settings
 from django.conf.urls.static import static
-from django.contrib.auth import views as auth_views
 from django.views.generic import RedirectView
-
 
 # Import Own Templates / Views
 from recipes.views import home
@@ -69,12 +67,11 @@ urlpatterns = [
     path("test-email/", test_email_view),
     
     # API and App URLs
-    path("recipe_api/", include("recipes.urls")),
+
     path("recipemanager/", include(("recipes.urls", 'recipes')), name='recipes'),  # ✅ THIS LINE
 
     # Authentication
     path('accounts/', include(('accounts.urls', 'accounts')), name = 'accounts'),  # ✅ THIS LINE
-
 ]
 
 if settings.DEBUG:

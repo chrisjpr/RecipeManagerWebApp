@@ -3,9 +3,11 @@
 from django.core.mail import send_mail
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
+from django.template.loader import render_to_string
 
 
-def send_verification_email(user, request):
+
+def custom_send_verification_email(user, request):
     current_site = get_current_site(request)
     domain = current_site.domain
     scheme = 'https' if request.is_secure() else 'http'
@@ -25,4 +27,13 @@ If you didn’t register, you can ignore this email.
 
 – Your RecipeManager Team
 """
+    send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [user.email])
+
+
+def custom_send_password_reset_email(user, reset_url):
+    subject = "🔐 Reset Your RecipeManager Password"
+    message = render_to_string('registration/custom_password_reset_email.html', {
+        'user': user,
+        'reset_url': reset_url,
+    })
     send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [user.email])

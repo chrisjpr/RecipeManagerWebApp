@@ -3,7 +3,7 @@
   <div class="card" style="max-width: 500px; margin: auto; padding: 2rem;">
     <h2>📧 Email Verification Required</h2>
     <p>Your account is not verified yet. A verification link was sent to:</p>
-    <p><strong>{{ user.email }}</strong></p>
+    <p><strong>{{ email }}</strong></p>
 
     <form method="post" style="margin-top: 1rem;">
       {% csrf_token %}

@@ -9,6 +9,7 @@ from recipe_scrapers import scrape_me
 from rembg import remove
 import openai
 import io
+import numpy as np
 
 # ------------------------- UTILS -------------------------
 
@@ -72,19 +73,27 @@ Instructions:
 {data["instructions"]}
 
 Please fulfill the following requirements precisely:
-- {custom_instructions}
 - Translate to german.
+- Provide cook time in minutes.
 - Split dressings/sauces/.. into extra groups when applicable.
 - Convert fractions and ranges to decimal.
 - Split quantity and unit (unit can be an empty string).
 - Only in the instructions: 
     - ALWAYS: Add the required quantities to the respective ingredients, like Meat [500g] or Lettuce [1 Head]. DO NOT FORGET!
     - ALWAYS: For ingredients mentioned add bold formatting, such that it is correctly identified as bold in html code by using <b> tags!
+    - NEVER ADD step numbers to the instructions, just write the steps in order.
 - Output the result as raw JSON only (no Markdown formatting, no commentary, no "```json" wrappers, no text before or after the JSON).
 - Do NOT include any extraneous information.
 
 Expected output format:
+
 {{ "ingredients": [{{"category": "string", "items": [{{"name": "string", "quantity": "string", "unit": "string"}}]}}], "instructions": ["string"] }}
+
+Here is one more custom instruction, which comes from the user.
+Give your best to follow it, as it is very important! Even if it interferes /overwrites other instructions. 
+But never overwrite the output JSON format, even if stated in the following:
+{custom_instructions}
+
 """
 
     client = openai.OpenAI(api_key=api_key)
@@ -149,19 +158,26 @@ Return JSON:
 "instructions": ["step 1", "step 2", ...]
 }}
 Please fulfill the following requirements precisely:
-- {custom_instruction}
 - Translate to german.
+- Provide cook time in minutes.
 - Split dressings/sauces/.. into extra groups when applicable.
 - Convert fractions and ranges to decimal.
 - Split quantity and unit (unit can be an empty string).
 - Only in the instructions: 
     - ALWAYS: Add the required quantities to the respective ingredients, like Meat [500g] or Lettuce [1 Head]. DO NOT FORGET!
-    - ALWAYS: For ingredients mentioned add bold formatting, such that it is correctly identified as bold in html code by using <b> tags!
+    - ALWAYS: For ingredients mentioned add bold formatting, such that it is correctly identified as bold in html code by using <b> tags! Do not forget to do this for every ingredient!
+    - NEVER ADD step numbers to the instructions, just write the steps in order.
 - Output the result as raw JSON only (no Markdown formatting, no commentary, no "```json" wrappers, no text before or after the JSON).
 - Do NOT include any extraneous information.
   
 Expected output format:
 {{ "ingredients": [{{"category": "string", "items": [{{"name": "string", "quantity": "string", "unit": "string"}}]}}], "instructions": ["string"] }}
+
+Here is one more custom instruction, which comes from the user.
+Give your best to follow it, as it is very important! Even if it interferes /overwrites other instructions. 
+But never overwrite the output JSON format, even if stated in the following:
+{custom_instruction}
+
 """
 
     try:
@@ -175,28 +191,30 @@ Expected output format:
         if custom_title:
             data["title"] = custom_title
 
-        # Step 2: Process best image (first one for simplicity)
+        # Step 2: Process best image using GPT-4 vision scoring
         if original_images:
-            raw_img = Image.open(BytesIO(original_images[0])).convert("RGBA")
-            fg_only = remove(raw_img)
+            best_result, best_bytes = identify_best_dish_image(original_images, api_key)
 
-            bbox = fg_only.getbbox()
-            if bbox:
-                cropped = fg_only.crop(bbox)
+            if best_bytes:
+                # Step 3: Background removal
+                raw_img = Image.open(BytesIO(best_bytes)).convert("RGBA")
+                fg_only = remove(raw_img)
+
+                # Step 4: Strict crop of transparent + white space
+                buffer = BytesIO()
+                fg_only.save(buffer, format="PNG")
+                buffer.seek(0)
+
+                cropped_bytes = crop_image_to_visible_area(
+                    image_bytes=buffer.getvalue(),
+                    white_threshold=240,
+                    alpha_threshold=10,
+                    margin=2
+                )
+
+                data["image_bytes"] = cropped_bytes
             else:
-                cropped = fg_only  # fallback
-
-            # Remove alpha for JPG compatibility
-            white_bg = Image.new("RGB", cropped.size, (255, 255, 255))
-            white_bg.paste(cropped, mask=cropped.split()[3])
-
-            buffer = BytesIO()
-            white_bg.save(buffer, format="PNG")
-            buffer.seek(0)
-
-            # 🟩 Crop the visible content to avoid transparent boundaries
-            cropped_bytes = crop_image_to_visible_area(buffer.getvalue())
-            data["image_bytes"] = cropped_bytes
+                print("❌ No valid dish image identified.")
 
         return data
 
@@ -206,34 +224,46 @@ Expected output format:
     
 
 #---------------------- IMAGE PROCESSING FUNCTIONS -----------------------#
-def crop_image_to_visible_area(image_bytes):
+def crop_image_to_visible_area(image_bytes: bytes, white_threshold: int = 240, alpha_threshold: int = 10, margin: int = 2) -> bytes:
     """
-    Crops an image to its visible (non-transparent) area.
-
-    Args:
-        image_bytes (bytes): PNG image with possible transparency
-
-    Returns:
-        bytes: Cropped image as PNG
+    Crops away both transparent and nearly-white areas from image.
+    Works on RGBA input and returns a tightly cropped RGB image.
     """
-    image = Image.open(io.BytesIO(image_bytes)).convert("RGBA")
+    image = Image.open(BytesIO(image_bytes)).convert("RGBA")
+    rgba = np.array(image)
 
-    # Create a mask from alpha channel
-    alpha = image.split()[3]
-    bbox = alpha.getbbox()
+    r, g, b, a = rgba[:, :, 0], rgba[:, :, 1], rgba[:, :, 2], rgba[:, :, 3]
 
-    if bbox:
-        cropped = image.crop(bbox)
-    else:
-        cropped = image  # fallback if bbox fails
+    # Define visibility mask: pixel is visible if:
+    # - Alpha is sufficiently high
+    # - OR it's not nearly white
+    visible = ((a > alpha_threshold) & ~((r > white_threshold) & (g > white_threshold) & (b > white_threshold)))
 
-    # Optionally: convert to RGB on white background (for JPEG-like output)
-    white_bg = Image.new("RGB", cropped.size, (255, 255, 255))
-    white_bg.paste(cropped, mask=cropped.split()[3])  # use alpha as mask
+    if not np.any(visible):
+        print("⚠️ Image appears fully white/transparent.")
+        return image_bytes  # fallback
 
-    buffer = io.BytesIO()
-    white_bg.save(buffer, format="PNG")
-    return buffer.getvalue()
+    coords = np.argwhere(visible)
+    y0, x0 = coords.min(axis=0)
+    y1, x1 = coords.max(axis=0) + 1
+
+    # Optional margin
+    y0 = max(0, y0 - margin)
+    x0 = max(0, x0 - margin)
+    y1 = min(rgba.shape[0], y1 + margin)
+    x1 = min(rgba.shape[1], x1 + margin)
+
+    cropped_rgba = image.crop((x0, y0, x1, y1))
+
+    # Paste onto white background to remove alpha
+    white_bg = Image.new("RGB", cropped_rgba.size, (255, 255, 255))
+    white_bg.paste(cropped_rgba, mask=cropped_rgba.split()[3])
+
+    output = BytesIO()
+    white_bg.save(output, format="PNG")
+    return output.getvalue()
+
+
 
 
 def download_image_from_url(image_url):
@@ -244,6 +274,93 @@ def download_image_from_url(image_url):
     except Exception as e:
         print("❌ Error downloading image:", e)
         return None
+    
+
+
+def identify_best_dish_image(image_bytes_list, api_key):
+    import base64, json
+    import openai
+    from PIL import Image
+    from io import BytesIO
+
+    client = openai.OpenAI(api_key=api_key)
+    best_result = None
+    best_confidence = -1
+    best_bytes = None
+
+    print(f"🧠 Evaluating {len(image_bytes_list)} image(s)...")
+    for idx, image_bytes in enumerate(image_bytes_list):
+        try:
+            img = Image.open(BytesIO(image_bytes)).convert("RGB")
+            width, height = img.size
+            print(f"📐 Image {idx}: dimensions {width}x{height}")
+        except Exception as e:
+            print(f"❌ Failed to open image {idx}: {e}")
+            continue
+
+        b64 = base64.b64encode(image_bytes).decode("utf-8")
+        image_url = f"data:image/png;base64,{b64}"
+
+        try:
+            response = client.chat.completions.create(
+                model="gpt-4o",
+                messages=[
+                    {
+                        "role": "user",
+                        "content": [
+                            {
+                                "type": "text",
+                                "text": (
+                                    "You are a vision model trained to identify food images.\n"
+                                    "Does this image show a clearly plated dish (not ingredients or packaging)? "
+                                    "If yes, return bounding box of dish as JSON like:\n"
+                                    '{"confidence": float, "bounding_box": [x, y, width, height]}.\n'
+                                    "x, y, width, height must be relative percentages (0.0 - 1.0).\n"
+                                    "If not a clean dish, return: {\"confidence\": 0, \"bounding_box\": null}"
+                                )
+                            },
+                            {
+                                "type": "image_url",
+                                "image_url": {"url": image_url}
+                            }
+                        ]
+                    }
+                ]
+            )
+
+            content = response.choices[0].message.content.strip().strip("`").strip()
+            if content.startswith("json"):
+                content = content[len("json"):].strip()  # handles ```json
+            print(f"📨 Image {idx} model response:", content)
+            if not content:
+                print(f"⚠️ Empty content from API for image {idx}")
+                continue
+
+            content = content.strip("`")  # remove markdown ticks if any
+            result = json.loads(content)
+
+            if result.get("confidence", 0) > best_confidence and result.get("bounding_box"):
+                # Convert relative bbox to absolute pixel coordinates
+                x, y, w, h = result["bounding_box"]
+                scaled_box = [
+                    int(x * width),
+                    int(y * height),
+                    int(w * width),
+                    int(h * height)
+                ]
+                result["bounding_box"] = scaled_box
+                best_result = result
+                best_bytes = image_bytes
+                best_confidence = result["confidence"]
+                print(f"🏆 Image {idx} selected with confidence {best_confidence}")
+
+        except json.JSONDecodeError as jde:
+            print(f"⚠️ Skipping image {idx}: Failed to parse JSON: {jde}")
+        except Exception as e:
+            print(f"⚠️ Skipping image {idx}: {e}")
+
+    return best_result, best_bytes
+
 
 ##################### EXTRACT RECIPE FROM IMAGES #####################
 #endregion

@@ -26,6 +26,20 @@
       box-sizing: border-box;
     }
 
+  .nav-links a {
+    text-decoration: none;
+    color: #333;
+    font-weight: 600;
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    transition: background-color 0.2s;
+  }
+
+  .nav-links a:hover {
+    background-color: #f0f0f0;
+  }
+
+
     html, body {
       font-family: 'Inter', sans-serif;
       background-color: var(--background-color);
@@ -175,16 +189,17 @@
   <header>
     <a href="{% url 'recipes:home' %}" class="brand-link"><h1>🍳 Recipe Manager</h1></a>
       <nav>
-        <a href="{% url 'recipes:home' %}">🏠 Home</a>
-        <a href="{% url 'recipes:recipe_list' %}">📖 All Recipes</a>
-        <a href="{% url 'recipes:create_recipe' %}">👽 Add Recipe Manually</a>
-        <a href="{% url 'recipes:add_recipe_from_url' %}">🤖 Import from URL</a>
-        <a href="{% url 'recipes:add_recipe_from_image' %}">📷 Import from Image</a>
+        <div style="display: flex; justify-content: center; gap: 1.5rem; margin: 1rem 0;">
+          <a href="{% url 'recipes:home' %}">🏠 Home</a>
+          <a href="{% url 'recipes:recipe_list' %}">📖 My Recipes</a>
+          <a href="{% url 'recipes:create_recipe_landing' %}">➕ Create Recipe</a>
+          <a href="{% url 'accounts:friend_dashboard' %}">👥 Friends</a>
+        </div>
 
         <div class="user-box">
           {% if user.is_authenticated %}
             <span class="username-label">👤 {{ user.username }}</span>
-            <a href="{% url 'accounts:friend_dashboard' %}">👥 Friends</a>
+            
             <a href="{% url 'accounts:logout' %}">🚪 Logout</a>
           {% else %}
             <a href="{% url 'accounts:login' %}">🔑 Login</a>
@@ -192,6 +207,7 @@
         </div>
       </nav>
   </header>
+
 
   <main>
     {% if messages %}
@@ -209,4 +225,4 @@
     &copy; {{ year|default:"2025" }} RecipeManager. Crafted with ❤️.
   </footer>
 </body>
-</html>
+<

@@ -2,6 +2,9 @@ from django.urls import path
 from . import views
 
 
+
+app_name = 'accounts'
+
 urlpatterns = [
     path("login/", views.login_view, name="login"),
     path("logout/", views.logout_view, name="logout"),
@@ -14,5 +17,6 @@ urlpatterns = [
     path('friends/delete/<int:user_id>/', views.delete_friend, name='delete_friend'),
     path('verify/<uuid:code>/', views.verify_email, name='verify_email'),
     path('resend-verification/', views.resend_verification, name='resend_verification'),
-
+    path('password-reset/', views.password_reset_request, name='password_reset'),
+    path('reset/<uidb64>/<token>/', views.password_reset_confirm, name='custom_password_reset_confirm'),
 ]

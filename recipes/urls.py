@@ -21,6 +21,7 @@ urlpatterns = [
     path('friends/recipes/<int:friend_id>/', views.friends_recipes, name='friends_recipes'),
     path('copy/<int:recipe_id>/', views.copy_recipe, name='copy_recipe'),
     path('update-visibility/', views.update_visibility_ajax, name='update_visibility'),
+    path('create-options/', views.create_recipe_landing, name='create_recipe_landing'),
 
 
 ]
