@@ -14,6 +14,9 @@ from accounts.models import Friendship
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
+from django.core.paginator import Paginator
+from django.contrib.auth import get_user_model 
+
 
 from .functions.pipelines import *  
 from .functions.data_acquisition import *
@@ -35,7 +38,7 @@ def home(request):
     })
 
 
-#region MANAGING RECIPES
+#region MANAGE RECIPES
 ########################## MANAGING RECIPES ##########################
 
 # landing page for creating a recipe
@@ -54,39 +57,57 @@ def recipe_detail(request, recipe_id):
 # Render all Recipes
 @login_required
 def recipe_list(request):
-    recipes = Recipe.objects.filter(user=request.user)
-
+    recipes_qs = Recipe.objects.filter(user=request.user)
+    # Determine sorting field and direction from query params (default: created_at desc)
+    sort_field = request.GET.get('sort')
+    direction = request.GET.get('dir', 'asc')
+    if not sort_field:
+        sort_field = 'created_at'
+        direction = 'desc'
+    order_by_expr = sort_field if direction == 'asc' else f'-{sort_field}'
+    recipes_qs = recipes_qs.order_by(order_by_expr).prefetch_related('ingredients')
+    # Get all ingredient names for this user's recipes (for dynamic suggestions)
+    all_names = Ingredient.objects.filter(recipe__user=request.user).values_list('name', flat=True).distinct()
+    all_names = sorted({name.lower() for name in all_names})
+    # Paginate the recipes queryset (e.g., 10 per page)
+    paginator = Paginator(recipes_qs, 10)  # :contentReference[oaicite:10]{index=10}
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)  # returns a Page object for the given page
+    # Attach a comma-separated ingredients list to each recipe (for data-ingredients attribute)
+    for recipe in page_obj:
+        ingredient_list = [ing.name for ing in recipe.ingredients.all()]
+        recipe.ingredients_csv = ", ".join(ingredient_list)
+    # Handle bulk visibility update if form submitted
     if request.method == 'POST':
         recipe_ids = request.POST.getlist("recipe_ids")
-        updated_count = 0
-
         if not recipe_ids:
             messages.error(request, "No recipes found for update.")
             return redirect('recipes:recipe_list')
-
+        updated_count = 0
         for rid in recipe_ids:
             visibility = request.POST.get(f'visibility_{rid}')
             if visibility:
                 try:
-                    recipe = get_object_or_404(Recipe, recipe_id=int(rid), user=request.user)
+                    recipe = Recipe.objects.get(recipe_id=int(rid), user=request.user)
                     recipe.visibility = visibility
                     recipe.save()
                     updated_count += 1
-                except (ValueError, Recipe.DoesNotExist):
-                    messages.warning(request, f"Failed to update recipe with ID {rid}.")
+                except Recipe.DoesNotExist:
+                    messages.warning(request, f"Failed to update recipe ID {rid}.")
             else:
                 messages.warning(request, f"No visibility selected for recipe ID {rid}.")
-
         if updated_count:
             messages.success(request, f"✅ Updated visibility for {updated_count} recipe(s).")
         else:
             messages.info(request, "No recipes were updated.")
-
         return redirect('recipes:recipe_list')
-
-    return render(request, 'recipes/recipe_list.html', {'recipes': recipes})
-
-    return render(request, 'recipes/recipe_list.html', {'recipes': recipes})
+    # Render template with all needed context
+    return render(request, 'recipes/recipe_list.html', {
+        'page_obj': page_obj,
+        'current_sort': sort_field,
+        'current_dir': direction,
+        'all_ing_json': json.dumps(all_names)
+    })
 
 @require_POST
 @login_required
@@ -114,7 +135,7 @@ def recipe_delete(request, pk):
         return HttpResponseForbidden()
     if request.method == 'POST':
         recipe.delete()
-        return redirect('recipe_list')
+        return redirect('recipes:recipe_list')
     return render(request, 'recipes/recipe_confirm_delete.html', {'recipe': recipe})
 
 
@@ -126,8 +147,13 @@ def recipe_edit(request, pk):
 
     if request.method == 'POST':
         recipe_form = RecipeForm(request.POST, request.FILES, instance=recipe)
-        ingredient_formset = IngredientFormSet(request.POST, instance=recipe, prefix="ingredients")
+        ingredient_formset = IngredientFormSet(request.POST, instance=recipe, prefix="ingredients", user=request.user)
         instruction_formset = InstructionFormSet(request.POST, instance=recipe, prefix="instructions")
+
+        # ✅ Skip empty instruction forms
+        for form in instruction_formset.forms:
+            if not form.data.get(form.add_prefix('description')) and not form.data.get(form.add_prefix('step_number')):
+                form.empty_permitted = True
 
         if recipe_form.is_valid() and ingredient_formset.is_valid() and instruction_formset.is_valid():
             recipe_form.save()
@@ -141,7 +167,7 @@ def recipe_edit(request, pk):
             messages.error(request, "Please correct the errors below.")
     else:
         recipe_form = RecipeForm(instance=recipe)
-        ingredient_formset = IngredientFormSet(instance=recipe, prefix="ingredients")
+        ingredient_formset = IngredientFormSet(instance=recipe, prefix="ingredients", user=request.user)
         instruction_formset = InstructionFormSet(instance=recipe, prefix="instructions")
 
     return render(request, 'recipes/edit_recipe.html', {
@@ -168,6 +194,11 @@ def create_recipe(request):
         use_llm = request.POST.get("use_llm") == "ai"
         transform_vegan = request.POST.get("transform_vegan") == "on"
         custom_instruction = request.POST.get("custom_instruction", "")
+
+        # ✅ Skip empty instruction forms
+        for form in instruction_formset.forms:
+            if not form.data.get(form.add_prefix('description')) and not form.data.get(form.add_prefix('step_number')):
+                form.empty_permitted = True
 
         if use_llm:
             ingredients_text = request.POST.get('ingredients_text', '')
@@ -202,7 +233,7 @@ def create_recipe(request):
                     for group in structured_data.get("ingredients", []):
                         for item in group.get("items", []):
                             Ingredient.objects.create(
-                                recipe_id=recipe,
+                                recipe=recipe,
                                 name=item.get("name", ""),
                                 quantity=float(item.get("quantity") or 0),
                                 unit=item.get("unit", ""),
@@ -252,12 +283,13 @@ def create_recipe(request):
         "instruction_formset": instruction_formset
     })
 
+
 ##################  MANUAL RECIPE CREATION ##################  
 #endregion
 
 
-#region AI Data Retrieval
-################## AI DATA RETRIEVAL ##################
+#region AI RECIPES
+################## AI RECIPE FEATURES ##################
 
 @login_required
 def add_recipe_from_url(request):
@@ -380,9 +412,9 @@ def add_recipe_from_text(request):
 
     return render(request, 'recipes/add_recipe_from_text.html', {"form": form})
 
-################## /AI DATA RETRIEVAL ##################
+################## /AI RECIPE FEATURES ##################
 
-#endregion AI Data Retrieval
+#endregion
 
 
 
@@ -390,12 +422,42 @@ def add_recipe_from_text(request):
 ###################### FRIEND MANAGEMENT #####################
 @login_required
 def friends_recipes(request, friend_id):
-    # Only allow if they are actually friends
     if not Friendship.objects.filter(user=request.user, friend_id=friend_id).exists():
         return HttpResponseForbidden("You are not friends with this user.")
-    
-    recipes = Recipe.objects.filter(user_id=friend_id, visibility__in=['friends', 'public'])
-    return render(request, 'recipes/friends_recipes.html', {'recipes': recipes})
+
+    # Fetch the full User object for display
+    friend = get_object_or_404(get_user_model(), id=friend_id)
+
+    sort_field = request.GET.get('sort') or 'created_at'
+    direction = request.GET.get('dir') or 'desc'
+    order_expr = sort_field if direction == 'asc' else f'-{sort_field}'
+
+    recipes_qs = Recipe.objects.filter(
+        user_id=friend_id,
+        visibility__in=['friends', 'public']
+    ).order_by(order_expr).prefetch_related('ingredients')
+
+    all_ingredients = Ingredient.objects.filter(
+        recipe__in=recipes_qs
+    ).values_list('name', flat=True).distinct()
+    all_ingredients = sorted({name.lower() for name in all_ingredients})
+
+    paginator = Paginator(recipes_qs, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    for recipe in page_obj:
+        ingredient_list = [ing.name for ing in recipe.ingredients.all()]
+        recipe.ingredients_csv = ", ".join(ingredient_list)
+
+    return render(request, 'recipes/friends_recipes.html', {
+        'page_obj': page_obj,
+        'current_sort': sort_field,
+        'current_dir': direction,
+        'all_ing_json': json.dumps(all_ingredients),
+        'friend_id': friend_id,
+        'friend': friend  # ✅ Now passed to the template
+    })
 
 @login_required
 def copy_recipe(request, recipe_id):

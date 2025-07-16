@@ -9,10 +9,10 @@ from django.core.files.storage import default_storage
 
 class IngredientInline(admin.TabularInline):
     model = Ingredient
+    fk_name = 'recipe'  # ✅ Tells Django which FK to use for this inline
     extra = 1
     fields = ['name', 'quantity', 'unit', 'category']
     autocomplete_fields = []  # Optional: disable to show dropdown with labels
-
 
     # Provide recipe object to formfield_for_foreignkey
     def get_formset(self, request, obj=None, **kwargs):
@@ -64,7 +64,7 @@ class RecipeAdmin(admin.ModelAdmin):
 @admin.register(Ingredient)
 class IngredientAdmin(admin.ModelAdmin):
 
-    list_display = ('recipe_id', 'name', 'quantity', 'unit', 'category')
+    list_display = ('recipe', 'name', 'quantity', 'unit', 'category')
     search_fields = ('name',)
 
 @admin.register(Instruction)

@@ -1,6 +1,7 @@
 from django import forms
 from .models import Recipe, Ingredient, Instruction
 from django.forms import inlineformset_factory
+from django.forms import BaseInlineFormSet
 
 
 class RecipeForm(forms.ModelForm):
@@ -28,11 +29,37 @@ class RecipeForm(forms.ModelForm):
         model = Recipe
         fields = ['title', 'cook_time', 'portions', 'image', 'notes']
 
+class IngredientForm(forms.ModelForm):
+    class Meta:
+        model = Ingredient
+        fields = ['name', 'quantity', 'unit', 'category', 'linked_recipe']
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)  # get user from view
+        super().__init__(*args, **kwargs)
+
+        if user is not None:
+            # limit linked_recipe choices to the current user's own recipes
+            self.fields['linked_recipe'].queryset = Recipe.objects.filter(user=user)
+        else:
+            # fallback: no recipe options
+            self.fields['linked_recipe'].queryset = Recipe.objects.none()
+
+
+class BaseIngredientFormSet(BaseInlineFormSet):
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user', None)
+        super().__init__(*args, **kwargs)
+        for form in self.forms:
+            if self.user and 'linked_recipe' in form.fields:
+                form.fields['linked_recipe'].queryset = Recipe.objects.filter(user=self.user)
 
 IngredientFormSet = inlineformset_factory(
-    Recipe,
-    Ingredient,
-    fields=["name", "quantity", "unit", "category"],
+    parent_model=Recipe,
+    model=Ingredient,
+    form=IngredientForm,             # ✅ custom form
+    formset=BaseIngredientFormSet,   # ✅ custom formset (handles user logic)
+    fk_name='recipe',                # or 'recipe_id' depending on your model
     exclude=['ingredient_id'],
     extra=1,
     can_delete=True

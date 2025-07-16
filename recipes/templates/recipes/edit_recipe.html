@@ -16,29 +16,34 @@
     {{ recipe_form.notes.label_tag }} {{ recipe_form.notes }}
   </div>
 
-  <div class="card">
-    <h3>🥦 Ingredients</h3>
-    {{ ingredient_formset.management_form }}
-    <div id="ingredients-formset">
-      {% for form in ingredient_formset %}
-        <div class="form-inline entry">
-          {% for hidden in form.hidden_fields %}
-            {{ hidden }}
-          {% endfor %}
-          {% for field in form.visible_fields %}
-            {% if field.name != 'DELETE' %}
-              <div class="form-group">
-                {{ field.label_tag }} {{ field }}
-              </div>
-            {% endif %}
-          {% endfor %}
-          <input type="hidden" name="{{ form.prefix }}-DELETE" id="id_{{ form.prefix }}-DELETE">
-          <button type="button" class="delete-row">❌</button>
-        </div>
-      {% endfor %}
-    </div>
-    <button type="button" class="add-row" data-prefix="ingredients">➕ Add Ingredient</button>
+<div class="card">
+  <h3>🥦 Ingredients</h3>
+  {{ ingredient_formset.management_form }}
+  <div id="ingredients-formset">
+    {% for form in ingredient_formset %}
+      <div class="form-inline entry">
+        {% for hidden in form.hidden_fields %}
+          {{ hidden }}
+        {% endfor %}
+        {% for field in form.visible_fields %}
+          {% if field.name != 'DELETE' %}
+            <div class="form-group">
+              {{ field.label_tag }}
+              {{ field }}
+              {% if field.name == 'linked_recipe' %}
+                <small style="color: #888;">(Optional link to another recipe)</small>
+              {% endif %}
+            </div>
+          {% endif %}
+        {% endfor %}
+        <input type="hidden" name="{{ form.prefix }}-DELETE" id="id_{{ form.prefix }}-DELETE">
+        <button type="button" class="delete-row">❌</button>
+      </div>
+    {% endfor %}
   </div>
+  <button type="button" class="add-row" data-prefix="ingredients">➕ Add Ingredient</button>
+</div>
+
 
   <div class="card">
     <h3>📋 Instructions</h3>

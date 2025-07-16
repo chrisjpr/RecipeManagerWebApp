@@ -39,11 +39,25 @@ class Recipe(models.Model):
 class Ingredient(models.Model):
     ingredient_id = models.AutoField(primary_key=True, unique=True, editable=False)
     category = models.CharField(max_length=255, blank=True, null=True)
-    recipe_id = models.ForeignKey(Recipe, related_name='ingredients', on_delete=models.CASCADE, null=True, blank=True)
+
+    recipe = models.ForeignKey(
+        Recipe,
+        related_name='ingredients',
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True
+    )
 
     name = models.CharField(max_length=255)
     quantity = models.FloatField(max_length=50, blank=True, null=True)
     unit = models.CharField(max_length=50, blank=True, null=True)
+
+    linked_recipe = models.ForeignKey(
+        Recipe, null=True, blank=True,
+        on_delete=models.SET_NULL,
+        related_name='linked_ingredients',
+        help_text="Optionally link this ingredient to another recipe."
+    )
 
     def __str__(self):
         return f"{self.quantity or ''} {self.unit or ''} {self.name}"
