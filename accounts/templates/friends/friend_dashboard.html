@@ -4,140 +4,241 @@
 {% block content %}
 <h2>👥 Friends Dashboard</h2>
 
-<!-- Flash messages -->
 {% if messages %}
   {% for message in messages %}
     <div class="message {{ message.tags }}">{{ message }}</div>
   {% endfor %}
 {% endif %}
 
-<!-- Current Friends Table -->
 {% if friends %}
-  <div class="card">
-    <h3>✅ Your Friends</h3>
-    <table style="width: 100%; border-collapse: collapse;">
-      <thead>
-        <tr>
-          <th style="text-align: left; padding: 0.5rem;">Username</th>
-          <th style="text-align: center;">View Recipes</th>
-          <th style="text-align: center;">Delete Friend</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for friend in friends %}
-        <tr>
-          <td style="padding: 0.5rem;">{{ friend.username }}</td>
-          <td style="text-align: center;">
-            <a href="{% url 'recipes:friends_recipes' friend.id %}" style="text-decoration: none; color: inherit;">📖</a>
-          </td>
-          <td style="text-align: center;">
-            <form method="post" action="{% url 'accounts:delete_friend' friend.id %}" onsubmit="return confirm('Are you sure you want to remove {{ friend.username }} as a friend?');">
-              {% csrf_token %}
-              <button type="submit" style="background-color: #dc3545; color: white; border: none; padding: 0.3rem 0.7rem; border-radius: 6px;">🗑️</button>
-            </form>
-          </td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+<div class="card">
+  <h3>✅ Your Friends</h3>
+
+  <div class="search-group" style="margin-bottom: 1rem;">
+  <label for="friend-search"><strong>Search Friends:</strong></label>
+  <input type="text" id="friend-search" placeholder="Type to filter..." style="margin-left: 1rem; padding: 0.4rem; border-radius: 6px; border: 1px solid #ccc;">
   </div>
+  <table class="styled-table">
+    <thead>
+      <tr>
+        <th>Username</th>
+        <th>View Recipes</th>
+        <th>Delete Friend</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for friend in friends %}
+      <tr>
+        <td>{{ friend.username }}</td>
+        <td>
+          <a href="{% url 'recipes:friends_recipes' friend.id %}" class="action-icon">📖</a>
+        </td>
+        <td>
+          <form method="post" action="{% url 'accounts:delete_friend' friend.id %}" onsubmit="return confirm('Remove {{ friend.username }} as a friend?');">
+            {% csrf_token %}
+            <button type="submit" class="btn danger">🗑️</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
 {% else %}
-  <p class="subtitle">You have no friends yet. 😢</p>
+<p class="subtitle">You have no friends yet. 😢</p>
 {% endif %}
 
 <!-- Send Friend Request -->
 <div class="card">
   <h3>➕ Send Friend Request</h3>
-  <form method="get" action="{% url 'accounts:friend_search' %}" style="display: flex; gap: 1rem;">
+  <form method="get" action="{% url 'accounts:friend_search' %}" class="inline-form">
     <input type="text" name="q" placeholder="Search username" required>
-    <button type="submit">🔍 Search</button>
+    <button type="submit" class="btn primary">🔍 Search</button>
   </form>
 </div>
 
 <!-- Search Results -->
 {% if results %}
-  <div class="card">
-    <h4>🔎 Search Results</h4>
-    <table style="width: 100%; border-collapse: collapse;">
-      <thead>
-        <tr>
-          <th style="text-align: left; padding: 0.5rem;">Username</th>
-          <th style="text-align: center;">Send Request</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for user in results %}
-        <tr>
-          <td style="padding: 0.5rem;">{{ user.username }}</td>
-          <td style="text-align: center;">
-            <form method="post" action="{% url 'accounts:send_friend_request' user.id %}">
-              {% csrf_token %}
-              <button type="submit">➕</button>
-            </form>
-          </td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
+<div class="card">
+  <h4>🔎 Search Results</h4>
+  <table class="styled-table">
+    <thead>
+      <tr>
+        <th>Username</th>
+        <th>Send Request</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for user in results %}
+      <tr>
+        <td>{{ user.username }}</td>
+        <td>
+          <form method="post" action="{% url 'accounts:send_friend_request' user.id %}">
+            {% csrf_token %}
+            <button type="submit" class="btn">➕</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
 {% endif %}
 
-<!-- Incoming Friend Requests -->
+<!-- Incoming Requests -->
 {% if received_requests %}
-  <div class="card">
-    <h3>📩 Friend Requests (Received)</h3>
-    <table style="width: 100%; border-collapse: collapse;">
-      <thead>
-        <tr>
-          <th style="text-align: left; padding: 0.5rem;">Username</th>
-          <th style="text-align: center;">Accept</th>
-          <th style="text-align: center;">Decline</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for request in received_requests %}
-        <tr>
-          <td style="padding: 0.5rem;">{{ request.from_user.username }}</td>
-          <td style="text-align: center;">
-            <form method="post" action="{% url 'accounts:accept_friend_request' request.id %}">
-              {% csrf_token %}
-              <button type="submit" style="background-color: #28a745; color: white; border: none; padding: 0.3rem 0.7rem; border-radius: 6px;">✅</button>
-            </form>
-          </td>
-          <td style="text-align: center;">
-            <form method="post" action="{% url 'accounts:decline_friend_request' request.id %}">
-              {% csrf_token %}
-              <button type="submit" style="background-color: #dc3545; color: white; border: none; padding: 0.3rem 0.7rem; border-radius: 6px;">❌</button>
-            </form>
-          </td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
+<div class="card">
+  <h3>📩 Friend Requests (Received)</h3>
+  <table class="styled-table">
+    <thead>
+      <tr>
+        <th>Username</th>
+        <th>Accept</th>
+        <th>Decline</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for request in received_requests %}
+      <tr>
+        <td>{{ request.from_user.username }}</td>
+        <td>
+          <form method="post" action="{% url 'accounts:accept_friend_request' request.id %}">
+            {% csrf_token %}
+            <button type="submit" class="btn success">✅</button>
+          </form>
+        </td>
+        <td>
+          <form method="post" action="{% url 'accounts:decline_friend_request' request.id %}">
+            {% csrf_token %}
+            <button type="submit" class="btn danger">❌</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
 {% endif %}
 
-<!-- Sent Friend Requests -->
+<!-- Sent Requests -->
 {% if sent_requests %}
-  <div class="card">
-    <h3>📤 Friend Requests (Sent)</h3>
-    <table style="width: 100%; border-collapse: collapse;">
-      <thead>
-        <tr>
-          <th style="text-align: left; padding: 0.5rem;">Username</th>
-          <th style="text-align: center;">Status</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for request in sent_requests %}
-        <tr>
-          <td style="padding: 0.5rem;">{{ request.to_user.username }}</td>
-          <td style="text-align: center;">Pending ⏳</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
+<div class="card">
+  <h3>📤 Friend Requests (Sent)</h3>
+  <table class="styled-table">
+    <thead>
+      <tr>
+        <th>Username</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for request in sent_requests %}
+      <tr>
+        <td>{{ request.to_user.username }}</td>
+        <td>⏳ Pending</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
 {% endif %}
+
+<!-- Additional Styling -->
+<style>
+  .styled-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+  }
+
+  .styled-table th, .styled-table td {
+    border: 1px solid #ddd;
+    padding: 0.6rem;
+    text-align: center;
+  }
+
+  .styled-table th {
+    background-color: #f9f9f9;
+    font-weight: 600;
+  }
+
+  .styled-table td:first-child {
+    text-align: left;
+  }
+
+  .inline-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: center;
+  }
+
+  .inline-form input[type="text"] {
+    flex-grow: 1;
+    padding: 0.5rem;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+  }
+
+  .btn {
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    font-weight: 500;
+    border: none;
+    cursor: pointer;
+  }
+
+  .btn.primary {
+    background-color: var(--primary-color);
+    color: white;
+  }
+
+  .btn.success {
+    background-color: #28a745;
+    color: white;
+  }
+
+  .btn.danger {
+    background-color: #dc3545;
+    color: white;
+  }
+
+  .btn:hover {
+    opacity: 0.9;
+  }
+
+  .action-icon {
+    font-size: 1.2rem;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .action-icon:hover {
+    opacity: 0.7;
+  }
+
+  @media (max-width: 768px) {
+    .inline-form {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .styled-table {
+      font-size: 0.9rem;
+    }
+  }
+</style>
+
+
+<script>
+  document.getElementById('friend-search').addEventListener('input', function () {
+    const term = this.value.toLowerCase();
+    const rows = document.querySelectorAll('.card table tbody tr');
+    rows.forEach(row => {
+      const name = row.querySelector('td').textContent.toLowerCase();
+      row.style.display = name.includes(term) ? '' : 'none';
+    });
+  });
+</script>
+
 
 {% endblock %}

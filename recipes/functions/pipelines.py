@@ -145,7 +145,7 @@ def save_structured_recipe_to_db(data, user, image_bytes=None):
         category = group.get("category", "")
         for item in group.get("items", []):
             Ingredient.objects.create(
-                recipe_id=recipe,
+                recipe=recipe,
                 category=category,
                 name=item.get("name", "").strip(),
                 quantity=clean_quantity(item.get("quantity")),
