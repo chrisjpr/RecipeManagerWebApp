@@ -1,0 +1,2999 @@
+[
+  {
+    "title": "Muhammara Dip",
+    "cook_time": "30",
+    "portions": "1",
+    "ingredients": [
+      {
+        "category": "Main",
+        "items": [
+          {
+            "name": "red bell peppers",
+            "quantity": 2.0,
+            "unit": ""
+          },
+          {
+            "name": "walnuts",
+            "quantity": 100.0,
+            "unit": "g"
+          },
+          {
+            "name": "garlic cloves",
+            "quantity": 2.0,
+            "unit": ""
+          },
+          {
+            "name": "olive oil",
+            "quantity": 2.0,
+            "unit": "EL"
+          },
+          {
+            "name": "breadcrumbs",
+            "quantity": 3.0,
+            "unit": "EL"
+          },
+          {
+            "name": "harissa",
+            "quantity": 1.0,
+            "unit": "TL"
+          },
+          {
+            "name": "lemon juice",
+            "quantity": 3.0,
+            "unit": "EL"
+          },
+          {
+            "name": "cumin",
+            "quantity": 0.5,
+            "unit": "TL"
+          },
+          {
+            "name": "salt",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "pepper",
+            "quantity": "",
+            "unit": ""
+          }
+        ]
+      }
+    ],
+    "instructions": [
+      "Wash the <b>red bell peppers</b> [2], quarter, deseed and cut into small pieces.",
+      "Optional: You can roast the <b>red bell peppers</b> [2] in the oven or on the grill / grill pan at about 250 \u00b0C for about 15 minutes.",
+      "Peel the <b>garlic cloves</b> [2].",
+      "Squeeze the lemon for <b>lemon juice</b> [3 EL].",
+      "Roughly chop the <b>walnuts</b> [100 g].",
+      "Put all ingredients into a blender and blend until a cream is formed.",
+      "Let the Muhammara sit for at least 30 minutes and then stir. (Does not apply if you are making a pesto)."
+    ],
+    "image_path": "html_contents\\recipe_images\\muhammaradip.png",
+    "image_url": "html_contents/recipe_images/muhammaradip.png",
+    "template_name": ""
+  },
+  {
+    "title": "Mexikanische (Taco) Gew\u00fcrzmischung",
+    "cook_time": "3",
+    "portions": "1",
+    "ingredients": [
+      {
+        "category": "Gew\u00fcrze",
+        "items": [
+          {
+            "name": "Kreuzk\u00fcmmelpulver",
+            "quantity": 2.0,
+            "unit": "EL"
+          },
+          {
+            "name": "Knoblauchpulver",
+            "quantity": 1.5,
+            "unit": "EL"
+          },
+          {
+            "name": "Oregano",
+            "quantity": 1.0,
+            "unit": "EL"
+          },
+          {
+            "name": "R\u00e4ucherpaprika-Pulver",
+            "quantity": 1.5,
+            "unit": "EL"
+          },
+          {
+            "name": "Salz",
+            "quantity": 1.0,
+            "unit": "bisschen"
+          },
+          {
+            "name": "Pfeffer",
+            "quantity": 1.0,
+            "unit": "bisschen"
+          },
+          {
+            "name": "Paprika-Edels\u00fc\u00df",
+            "quantity": 2.0,
+            "unit": "EL"
+          }
+        ]
+      }
+    ],
+    "instructions": [
+      "alles mahlen",
+      "alles vermischen",
+      "<b>genie\u00dfen</b>"
+    ],
+    "image_path": "/data/html_contents/Chris/recipe_images/mexikanischetacogewrzmischung.png",
+    "image_url": "html_contents/recipe_images/mexikanischetacogewrzmischung.png",
+    "template_name": "Funky"
+  },
+  {
+    "title": "Knoblauch-Naan (vegan)",
+    "cook_time": "60",
+    "portions": "1",
+    "ingredients": [
+      {
+        "category": "Vegan Naan",
+        "items": [
+          {
+            "name": "warmes Wasser",
+            "quantity": 120.0,
+            "unit": "ml"
+          },
+          {
+            "name": "Trockenhefe",
+            "quantity": 3.5,
+            "unit": "g"
+          },
+          {
+            "name": "Zucker",
+            "quantity": 1.0,
+            "unit": "TL"
+          },
+          {
+            "name": "Oliven\u00f6l",
+            "quantity": 1.0,
+            "unit": "EL"
+          },
+          {
+            "name": "Sojajoghurt",
+            "quantity": 60.0,
+            "unit": "g"
+          },
+          {
+            "name": "Salz",
+            "quantity": 0.5,
+            "unit": "TL"
+          },
+          {
+            "name": "Weizen- oder Dinkelmehl oder glutenfreies Mehl",
+            "quantity": 300.0,
+            "unit": "g"
+          }
+        ]
+      },
+      {
+        "category": "Vegane Knoblauchbutter (optional zum Servieren)",
+        "items": [
+          {
+            "name": "vegane Butter",
+            "quantity": 2.0,
+            "unit": "EL"
+          },
+          {
+            "name": "Knoblauchzehen",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Salz und Pfeffer",
+            "quantity": "",
+            "unit": ""
+          }
+        ]
+      }
+    ],
+    "instructions": [
+      "Zuerst das <b>warmes Wasser [120 ml]</b>, <b>Trockenhefe [3.5 g]</b> und <b>Zucker [1 TL]</b> in einer gro\u00dfen Sch\u00fcssel verr\u00fchren. Etwa 10 Minuten beiseite stellen, bis es zu sch\u00e4umen beginnt.",
+      "Das <b>Oliven\u00f6l [1 EL]</b>, <b>Sojajoghurt [60 g]</b>, <b>Salz [0.5 TL]</b> und <b>Mehl [300 g]</b> hinzuf\u00fcgen. Alles mit einem Holzl\u00f6ffel oder einer Gabel vermischen. Dann auf eine leicht bemehlte Fl\u00e4che geben und mit den H\u00e4nden 5-10 Minuten kneten, bis ein glatter, weicher Teig entsteht. (Alternativ kann auch eine K\u00fcchenmaschine mit Knethaken verwendet werden.)",
+      "Den Teig in eine leicht gefettete Sch\u00fcssel legen. Mit einem feuchten K\u00fcchentuch oder Folie abdecken und an einem warmen Ort etwa 1 Stunde gehen lassen, bis sich das Volumen verdoppelt hat.",
+      "Nach der Ruhezeit den Teig in 6 St\u00fccke teilen. Auf einer leicht bemehlten Fl\u00e4che jedes St\u00fcck zu einem 0.5 cm dicken ovalen oder runden Fladen ausrollen (wie auf den Bildern im Blogbeitrag gezeigt).",
+      "Eine gusseiserne Pfanne (oder eine Antihaftpfanne) bei mittlerer Hitze erhitzen und mit etwas <b>Oliven\u00f6l</b> bestreichen. Jeden Fladen etwa 2-3 Minuten backen, bis Blasen entstehen und die R\u00e4nder etwas trocken aussehen. Dann wenden und weitere 2-3 Minuten backen, bis sie goldbraun sind. (W\u00e4hrend Sie die restlichen Fladen backen, empfehle ich, die fertigen Naan-Brote mit einem sauberen K\u00fcchentuch abzudecken, um sie warm zu halten.)",
+      "Vegane Knoblauchbutter",
+      "Die <b>zimmerwarme vegane Butter [2 EL]</b> auf einen Teller geben. Den fein gehackten <b>Knoblauch [1-2 Zehen]</b> sowie <b>Salz und Pfeffer</b> nach Geschmack hinzuf\u00fcgen und mit einer Gabel zerdr\u00fccken.",
+      "Die frisch gebackenen Naan-Brote nach Belieben mit veganer Knoblauchbutter (oder einfach etwas Kokos\u00f6l) bestreichen. Mit Sesam und anderen frischen Kr\u00e4utern wie Thymian, Koriander oder Petersilie bestreuen. Guten Appetit!"
+    ],
+    "image_path": "/data/html_contents/Chris/recipe_images/knoblauchnaanvegan.png",
+    "image_url": "recipe_images/knoblauchnaanvegan.png",
+    "template_name": "",
+    "notes": ""
+  },
+  {
+    "title": "Erdnusssauce",
+    "cook_time": "3",
+    "portions": "4 servings",
+    "ingredients": [
+      {
+        "category": "Erdnusssauce",
+        "items": [
+          {
+            "name": "cremige Erdnussbutter",
+            "quantity": 65.0,
+            "unit": "g"
+          },
+          {
+            "name": "Sojasauce",
+            "quantity": 2.0,
+            "unit": "EL"
+          },
+          {
+            "name": "Ahornsirup",
+            "quantity": 2.0,
+            "unit": "EL"
+          },
+          {
+            "name": "Reisessig",
+            "quantity": 1.5,
+            "unit": "EL"
+          },
+          {
+            "name": "Sesam\u00f6l",
+            "quantity": 1.0,
+            "unit": "EL"
+          },
+          {
+            "name": "Knoblauch",
+            "quantity": 1.0,
+            "unit": "gro\u00dfe Zehe"
+          },
+          {
+            "name": "frischer Ingwer",
+            "quantity": 1.0,
+            "unit": "TL"
+          },
+          {
+            "name": "Sriracha",
+            "quantity": 2.0,
+            "unit": "TL"
+          },
+          {
+            "name": "Limettensaft",
+            "quantity": 1.5,
+            "unit": "EL"
+          },
+          {
+            "name": "Wasser oder Kokosmilch",
+            "quantity": 1.0,
+            "unit": "nach Bedarf"
+          }
+        ]
+      }
+    ],
+    "instructions": [
+      "*Hinweis: Schau dir gerne das Rezept-Video oben im Beitrag an!",
+      "Einfache alle Zutaten f\u00fcr die <b>Erdnusssauce</b> in ein Mixgef\u00e4\u00df (oder in ein Glas oder eine Sch\u00fcssel) geben und dann im Mixer oder mit dem P\u00fcrierstab cremig mixen (oder verschlossen sch\u00fctteln oder verr\u00fchren), bis eine glatte Sauce entsteht. Bei Bedarf etwas <b>Wasser oder Kokosmilch</b> zugeben, bis die gew\u00fcnschte Konsistenz erreicht ist. (Verwende wenig <b>Wasser oder Kokosmilch</b>, wenn du die <b>Erdnuss-Sauce</b> als Dip servierst oder mehr, wenn du sie als Salat-Dressing servierst).",
+      "Passt perfekt zu Sommerrollen, Sat\u00e9-Spie\u00dfen, oder einem Thai-Nudelsalat. Guten Appetit!"
+    ],
+    "image_path": "/data/html_contents/Chris/recipe_images/erdnusssauce.png",
+    "image_url": "recipe_images/erdnusssauce.png",
+    "template_name": ""
+  },
+  {
+    "title": "Teriyaki Fried Rice (vegan)",
+    "cook_time": "30",
+    "portions": "1",
+    "ingredients": [
+      {
+        "category": "Ingredients",
+        "items": [
+          {
+            "name": "Fr\u00fchlingszwiebeln",
+            "quantity": 4.0,
+            "unit": ""
+          },
+          {
+            "name": "wei\u00dfe Zwiebel",
+            "quantity": 1.0,
+            "unit": ""
+          },
+          {
+            "name": "Tofu",
+            "quantity": 300.0,
+            "unit": "g"
+          },
+          {
+            "name": "Knoblauchzehen",
+            "quantity": 2.0,
+            "unit": ""
+          },
+          {
+            "name": "Ingwer",
+            "quantity": 1.0,
+            "unit": "Daumenbreit"
+          },
+          {
+            "name": "Champignons",
+            "quantity": 250.0,
+            "unit": "g"
+          },
+          {
+            "name": "Reis",
+            "quantity": 250.0,
+            "unit": "g"
+          },
+          {
+            "name": "Sesam",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Salz & Pfeffer",
+            "quantity": "",
+            "unit": ""
+          }
+        ]
+      },
+      {
+        "category": "Gew\u00fcrze/\u00d6le",
+        "items": [
+          {
+            "name": "Sojasauce",
+            "quantity": 6.0,
+            "unit": "EL"
+          },
+          {
+            "name": "Sesam\u00f6l",
+            "quantity": 2.0,
+            "unit": "TL"
+          },
+          {
+            "name": "Zucker",
+            "quantity": 1.5,
+            "unit": "EL"
+          },
+          {
+            "name": "Mirin",
+            "quantity": 1.0,
+            "unit": "TL"
+          }
+        ]
+      },
+      {
+        "category": "Teriyaki Sauce",
+        "items": [
+          {
+            "name": "Sojasauce",
+            "quantity": 6.0,
+            "unit": "EL"
+          },
+          {
+            "name": "Sesam\u00f6l",
+            "quantity": 2.0,
+            "unit": "TL"
+          },
+          {
+            "name": "Knoblauchzehen",
+            "quantity": 1.5,
+            "unit": ""
+          },
+          {
+            "name": "Ingwer",
+            "quantity": 1.0,
+            "unit": "Daumenbreit"
+          },
+          {
+            "name": "Zucker",
+            "quantity": 1.5,
+            "unit": "EL"
+          },
+          {
+            "name": "Mirin",
+            "quantity": 1.0,
+            "unit": "TL"
+          }
+        ]
+      }
+    ],
+    "instructions": [
+      "<b>Teriyaki Sauce</b> anr\u00fchren (10 min)",
+      "<b>Tofu</b> [300g] ausdr\u00fccken & kleinw\u00fcrfeln & in 1/3 der <b>Teriyaki Sauce</b> + 2EL <b>Sesam</b> einlegen",
+      "<b>Reis</b> [250g] kochen (~20 min)",
+      "<b>wei\u00dfe Zwiebel</b> [1] in Quadrate hacken & in die Pfanne geben (2-3 min)",
+      "<b>Tofu</b> abtropfen (~5 min anbraten)",
+      "<b>Champignons</b> [250g] in (kleine) W\u00fcrfel hacken & mit restlicher <b>Teriyaki Sauce</b> + 4EL <b>Sesam</b> in Pfanne geben (3 min)",
+      "<b>Reis</b> & ggf. zus\u00e4tzliche <b>Sojasauce</b> in die Pfanne geben (~3 min)",
+      "<b>Fr\u00fchlingszwiebeln</b> in Scheiben schneiden & in die Pfanne geben (1 min)",
+      "Aufessen"
+    ],
+    "image_path": "/data/html_contents/Chris/recipe_images/teriyakifriedricevegan.png",
+    "image_url": "html_contents/Chris/recipe_images/teriyakifriedricevegan.png",
+    "template_name": ""
+  },
+  {
+    "title": "Teriyaki Sauce",
+    "cook_time": "1",
+    "portions": "5",
+    "ingredients": [
+      {
+        "category": "Basis",
+        "items": [
+          {
+            "name": "Tamari (reduzierte Sojasauce)",
+            "quantity": 600,
+            "unit": "ml"
+          },
+          {
+            "name": "Wasser",
+            "quantity": 600,
+            "unit": "ml"
+          },
+          {
+            "name": "Ahornsirup",
+            "quantity": 400,
+            "unit": "ml"
+          },
+          {
+            "name": "Reisessig (wei\u00dfer Essig)",
+            "quantity": 50,
+            "unit": "ml"
+          },
+          {
+            "name": "Ingwer",
+            "quantity": 10,
+            "unit": "TL"
+          },
+          {
+            "name": "Knoblauchzehen",
+            "quantity": 30,
+            "unit": ""
+          }
+        ]
+      },
+      {
+        "category": "Slurry",
+        "items": [
+          {
+            "name": "Maisst\u00e4rke",
+            "quantity": 5,
+            "unit": "TL"
+          },
+          {
+            "name": "Wasser",
+            "quantity": 5,
+            "unit": "TL"
+          }
+        ]
+      }
+    ],
+    "instructions": [
+      "Gib die <b>Basiszutaten</b> in einen gro\u00dfen Topf und lasse sie bei mittlerer Temperatur k\u00f6cheln.",
+      "Vermische die <b>Slurry</b> durch R\u00fchren von <b>Wasser [5 TL]</b> und <b>Maisst\u00e4rke [5 TL]</b>.",
+      "F\u00fcge die <b>Slurry</b> hinzu, sobald die <b>Basis</b> k\u00f6chelt.",
+      "R\u00fchre kontinuierlich, bis die Sauce die gew\u00fcnschte Konsistenz hat.",
+      "Lasse die Sauce abk\u00fchlen und dann lagern.",
+      "H\u00e4lt 1-2 Wochen im K\u00fchlschrank."
+    ],
+    "image_url": "html_contents/Chris/recipe_images/teriyakisauce.png",
+    "image_path": "/data/html_contents/Chris/recipe_images/teriyakisauce.png"
+  },
+  {
+    "title": "Pulled-Oyster Mushroom Burger",
+    "cook_time": "85",
+    "portions": "4",
+    "ingredients": [
+      {
+        "category": "Ingredients",
+        "items": [
+          {
+            "name": "Austernpilze",
+            "quantity": "450.0",
+            "unit": "g"
+          },
+          {
+            "name": "Brioche Br\u00f6tchen",
+            "quantity": "4.0",
+            "unit": ""
+          },
+          {
+            "name": "Essiggurken",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Veganer Schmelzk\u00e4se",
+            "quantity": "100.0",
+            "unit": "g"
+          },
+          {
+            "name": "Eisbergsalat",
+            "quantity": "100.0",
+            "unit": "g"
+          },
+          {
+            "name": "Rotkohl",
+            "quantity": "100.0",
+            "unit": "g"
+          },
+          {
+            "name": "Karotte",
+            "quantity": "50.0",
+            "unit": "g"
+          },
+          {
+            "name": "Vegane Aioli Mayo",
+            "quantity": "70.0",
+            "unit": "g"
+          },
+          {
+            "name": "Apfelessig",
+            "quantity": "3.5",
+            "unit": "EL"
+          },
+          {
+            "name": "Veganer Joghurt",
+            "quantity": "80.0",
+            "unit": "g"
+          }
+        ]
+      },
+      {
+        "category": "BBQ Sauce",
+        "items": [
+          {
+            "name": "Tomatenmark",
+            "quantity": "2.0",
+            "unit": "EL"
+          },
+          {
+            "name": "\u00d6l",
+            "quantity": "2.0",
+            "unit": "EL"
+          },
+          {
+            "name": "Ger\u00e4uchertes Paprikapulver",
+            "quantity": "2.0",
+            "unit": "TL"
+          },
+          {
+            "name": "Apfelessig",
+            "quantity": "2.0",
+            "unit": "EL"
+          },
+          {
+            "name": "Agavendicksaft",
+            "quantity": "2.0",
+            "unit": "EL"
+          },
+          {
+            "name": "Knoblauchzehe",
+            "quantity": "1",
+            "unit": ""
+          },
+          {
+            "name": "Sojasauce",
+            "quantity": "4.0",
+            "unit": "EL"
+          },
+          {
+            "name": "Wasser",
+            "quantity": "4.0",
+            "unit": "EL"
+          },
+          {
+            "name": "Chili/Cayennepulver",
+            "quantity": "0.25",
+            "unit": "TL"
+          }
+        ]
+      },
+      {
+        "category": "Eingelegte Zwiebeln",
+        "items": [
+          {
+            "name": "Rote Zwiebeln",
+            "quantity": "3.5",
+            "unit": ""
+          },
+          {
+            "name": "Wasser",
+            "quantity": "300.0",
+            "unit": "ml"
+          },
+          {
+            "name": "Wei\u00dfweinessig",
+            "quantity": "250.0",
+            "unit": "ml"
+          },
+          {
+            "name": "Zucker",
+            "quantity": "1",
+            "unit": "TL"
+          },
+          {
+            "name": "Salz",
+            "quantity": "0.5",
+            "unit": "TL"
+          },
+          {
+            "name": "Senfk\u00f6rner",
+            "quantity": "2.0",
+            "unit": "TL"
+          }
+        ]
+      }
+    ],
+    "instructions": [
+      "F\u00fcr die <b>BBQ Sauce</b>: Alle Zutaten mischen -> fertig.",
+      "F\u00fcr den <b>Coleslaw Salat</b>: <b>Kohl</b> [100g] und <b>Salat</b> [100g] in kleine St\u00fccke schneiden. <b>Karotte</b> [50g] reiben. Dressing mischen (alles kombinieren).",
+      "F\u00fcr die <b>Austernpilz Patties</b>: <b>Austernpilze</b> [450g] entlang der Fasern ziehen (~0.5cm ~ Pulled Pork). Pilze in einer Pfanne anbraten. 2/3 der <b>BBQ Sauce</b> [2 EL Tomatenmark, 2 EL \u00d6l, 2 TL Ger\u00e4uchertes Paprikapulver, 2 EL Apfelessig, 2 EL Agavendicksaft, 1 Knoblauchzehe, 4 EL Sojasauce, 4 EL Wasser, 0.25 TL Chili/Cayennepulver] in die Pfanne geben und die Pilze marinieren (3-5min). Pfanne abdecken und <b>veganen Schmelzk\u00e4se</b> [100g] bei mittlerer Hitze schmelzen lassen (3-4min).",
+      "F\u00fcr die <b>eingelegten Zwiebeln</b>: 3-4 <b>rote Zwiebeln</b> in feine Streifen schneiden. 300ml <b>Wasser</b>, 250ml <b>Wei\u00dfweinessig</b>, 1 TL <b>Zucker</b>, 0.5 TL <b>Salz</b> & 2 TL <b>Senfk\u00f6rner</b> in einem Topf erhitzen & 2min zum Kochen bringen. Topfinhalt \u00fcber die Zwiebeln gie\u00dfen!",
+      "Genie\u00dfen!"
+    ],
+    "image_url": "html_contents/Chris/recipe_images/pulledoystermushroomburger.png",
+    "image_path": "/data/html_contents/Chris/recipe_images/pulledoystermushroomburger.png"
+  },
+  {
+    "title": "Couscous-Geilsalat",
+    "cook_time": "1",
+    "portions": "5",
+    "ingredients": [
+      {
+        "category": "Hauptzutaten",
+        "items": [
+          {
+            "name": "Couscous",
+            "quantity": 300.0,
+            "unit": "g"
+          },
+          {
+            "name": "Gurke",
+            "quantity": 1.0,
+            "unit": ""
+          },
+          {
+            "name": "Kirschtomaten",
+            "quantity": 300.0,
+            "unit": "g"
+          },
+          {
+            "name": "Mais",
+            "quantity": 150.0,
+            "unit": "g"
+          },
+          {
+            "name": "Fr\u00fchlingszwiebeln",
+            "quantity": 3.0,
+            "unit": ""
+          },
+          {
+            "name": "Rote Zwiebeln",
+            "quantity": 2.0,
+            "unit": ""
+          },
+          {
+            "name": "Sultaninen",
+            "quantity": 125.0,
+            "unit": "g"
+          },
+          {
+            "name": "Petersilie",
+            "quantity": 0.5,
+            "unit": "Bund"
+          }
+        ]
+      },
+      {
+        "category": "Dressing",
+        "items": [
+          {
+            "name": "Gelbe Currypaste",
+            "quantity": 2.0,
+            "unit": "EL"
+          },
+          {
+            "name": "Zucker",
+            "quantity": 1.0,
+            "unit": "TL"
+          },
+          {
+            "name": "Salz",
+            "quantity": 0.0,
+            "unit": ""
+          },
+          {
+            "name": "Pfeffer",
+            "quantity": 0.0,
+            "unit": ""
+          },
+          {
+            "name": "Oliven\u00f6l",
+            "quantity": 6.0,
+            "unit": "EL"
+          },
+          {
+            "name": "Reisessig",
+            "quantity": 4.0,
+            "unit": "EL"
+          },
+          {
+            "name": "Kreuzk\u00fcmmel",
+            "quantity": 2.0,
+            "unit": "TL"
+          },
+          {
+            "name": "Gem\u00fcsebr\u00fche",
+            "quantity": 300.0,
+            "unit": "ml"
+          },
+          {
+            "name": "Paprikapulver",
+            "quantity": 1.0,
+            "unit": "TL"
+          },
+          {
+            "name": "Sojasauce",
+            "quantity": 2.0,
+            "unit": "EL"
+          },
+          {
+            "name": "Tomatenmark",
+            "quantity": 2.0,
+            "unit": "EL"
+          },
+          {
+            "name": "Chilipulver",
+            "quantity": 0.0,
+            "unit": ""
+          }
+        ]
+      }
+    ],
+    "instructions": [
+      "Wasser kochen, mit <b>Gem\u00fcsebr\u00fche [300ml]</b> mischen und den <b>Couscous [300g]</b> darin quellen lassen (optional mit Wei\u00dfweinessig w\u00fcrzen).",
+      "Das Dressing mischen und mit dem <b>Couscous</b> kombinieren.",
+      "Die restlichen Zutaten klein schneiden und dann in die Sch\u00fcssel geben: <b>Gurke [1]</b>, <b>Kirschtomaten [300g]</b>, <b>Mais [150g]</b>, <b>Fr\u00fchlingszwiebeln [3]</b>, <b>Rote Zwiebeln [2]</b>, <b>Sultaninen [125g]</b>.",
+      "Kr\u00e4ftig umr\u00fchren und optional mit mehr <b>Petersilie [0.5 Bund]</b> garnieren."
+    ],
+    "image_path": "/data/html_contents/Chris/recipe_images/couscousgeilsalat.png",
+    "image_url": "recipe_images/couscousgeilsalat.png",
+    "template_name": "",
+    "notes": "Special Creation by Matze & Quiz"
+  },
+  {
+    "title": "Hooms - Kichererbsensalat",
+    "cook_time": "25",
+    "portions": "4",
+    "ingredients": [
+      {
+        "category": "Zutaten",
+        "items": [
+          {
+            "name": "Oliven\u00f6l",
+            "quantity": "5.0",
+            "unit": "EL"
+          },
+          {
+            "name": "Balsamico-Dressing",
+            "quantity": "2.5",
+            "unit": "EL"
+          },
+          {
+            "name": "Kreuzk\u00fcmmelpulver",
+            "quantity": "2.0",
+            "unit": "EL"
+          },
+          {
+            "name": "Harissa-Pulver",
+            "quantity": "1.0",
+            "unit": "EL"
+          },
+          {
+            "name": "Oregano",
+            "quantity": "1.0",
+            "unit": "EL"
+          },
+          {
+            "name": "Salz",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Pfeffer",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Tomatenmark",
+            "quantity": "3.0",
+            "unit": "EL"
+          },
+          {
+            "name": "Knoblauchzehen",
+            "quantity": "3.0",
+            "unit": ""
+          },
+          {
+            "name": "Gro\u00dfe rote Zwiebel",
+            "quantity": "1.0",
+            "unit": ""
+          },
+          {
+            "name": "Gurken",
+            "quantity": "7.0",
+            "unit": ""
+          },
+          {
+            "name": "Kirschtomaten",
+            "quantity": "250.0",
+            "unit": "g"
+          },
+          {
+            "name": "R\u00e4uchertofu",
+            "quantity": "200.0",
+            "unit": "g"
+          },
+          {
+            "name": "Eisbergsalat",
+            "quantity": "0.5",
+            "unit": ""
+          },
+          {
+            "name": "Dosen Kichererbsen",
+            "quantity": "2.0",
+            "unit": "Dosen"
+          },
+          {
+            "name": "Fr\u00fchlingszwiebeln",
+            "quantity": "3.0",
+            "unit": ""
+          }
+        ]
+      }
+    ],
+    "instructions": [
+      "Dr\u00fccke den <b>Knoblauch</b> und mische ihn mit den restlichen <b>Dressing</b>-Zutaten.",
+      "Schneide die restlichen Zutaten in kleine St\u00fccke und lege sie in eine Sch\u00fcssel mit den <b>Kichererbsen</b> [2 Dosen].",
+      "Mische das <b>Dressing</b> und die Salatkomponenten."
+    ],
+    "image_url": "/images/Chris/hoomskichererbsensalat.png"
+  },
+  {
+    "title": "Kichererbsensalat mit getrockneten Tomaten und Feta",
+    "cook_time": "15",
+    "portions": "2 servings",
+    "ingredients": [
+      {
+        "category": "Hauptzutaten",
+        "items": [
+          {
+            "name": "Kichererbsen",
+            "quantity": 1.0,
+            "unit": "kl. Dose/n"
+          },
+          {
+            "name": "Zwiebel",
+            "quantity": 1.0,
+            "unit": "kleine"
+          },
+          {
+            "name": "Tomate",
+            "quantity": 1.0,
+            "unit": "Handvoll"
+          },
+          {
+            "name": "Feta-K\u00e4se",
+            "quantity": 70.0,
+            "unit": "g"
+          },
+          {
+            "name": "Petersilie",
+            "quantity": 1.0,
+            "unit": "Handvoll"
+          },
+          {
+            "name": "Spinat / Feldsalat (optional)",
+            "quantity": 1.0,
+            "unit": "Handvoll"
+          }
+        ]
+      },
+      {
+        "category": "Dressing",
+        "items": [
+          {
+            "name": "Oliven\u00f6l",
+            "quantity": 4.0,
+            "unit": "EL"
+          },
+          {
+            "name": "Zitrone",
+            "quantity": 1.0,
+            "unit": "Bio-"
+          },
+          {
+            "name": "Knoblauch",
+            "quantity": 1.0,
+            "unit": "Zehe/n"
+          },
+          {
+            "name": "Sambal Oelek",
+            "quantity": 1.0,
+            "unit": "TL"
+          }
+        ]
+      },
+      {
+        "category": "W\u00fcrzmittel",
+        "items": [
+          {
+            "name": "Salz",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Pfeffer",
+            "quantity": "",
+            "unit": ""
+          }
+        ]
+      }
+    ],
+    "instructions": [
+      "Kichererbsen in einem Sieb abtropfen lassen und absp\u00fclen. In einer Sch\u00fcssel die <b>Kichererbsen</b>, <b>Zwiebel</b>, <b>getrocknete Tomaten</b>, den <b>Feta</b> und die <b>Petersilie</b> vermischen. Etwas Schale der <b>Bio-Zitrone</b> dazu reiben. Die <b>Zitrone</b> danach aufschneiden und auspressen.",
+      "<b>\u00d6l</b>, 2.5-3 EL <b>Zitronensaft</b> und <b>Knoblauch</b> zu einem Dressing vermischen. Unter den Salat mischen und diesen dann mit <b>Sambal</b>, <b>Salz</b> und <b>Pfeffer</b> abschmecken. Den Salat mindestens 30 Minuten ziehen lassen.",
+      "Danach eventuell nochmal nachw\u00fcrzen."
+    ],
+    "image_path": "/data/html_contents/Chris/recipe_images/kichererbsensalatmitgetrocknetentomatenundfeta.png",
+    "image_url": "https://img.chefkoch-cdn.de/rezepte/1287271234164583/bilder/967333/crop-960x540/kichererbsensalat-mit-getrockneten-tomaten-und-feta.jpg",
+    "template_name": ""
+  },
+  {
+    "title": "Vegane K\u00e4se-Lauch-Suppe",
+    "cook_time": "25",
+    "portions": "4 servings",
+    "image_url": "https://biancazapatka.com/wp-content/uploads/2023/10/lauch-hack-suppe.jpg",
+    "image_path": "/data/html_contents/Chris/recipe_images/veganekselauchsuppe.png",
+    "ingredients": [
+      {
+        "category": "Hauptzutaten",
+        "items": [
+          {
+            "name": "Lauch",
+            "quantity": "2",
+            "unit": "mittlere Stangen"
+          },
+          {
+            "name": "Zwiebel",
+            "quantity": "1",
+            "unit": "gro\u00dfe"
+          },
+          {
+            "name": "Knoblauchzehen",
+            "quantity": "2",
+            "unit": ""
+          },
+          {
+            "name": "veganes Hack",
+            "quantity": "250",
+            "unit": "g"
+          },
+          {
+            "name": "Gem\u00fcsebr\u00fche",
+            "quantity": "500",
+            "unit": "ml"
+          },
+          {
+            "name": "pflanzliche Sahne",
+            "quantity": "250",
+            "unit": "ml"
+          },
+          {
+            "name": "Creme Vega",
+            "quantity": "150",
+            "unit": "g"
+          },
+          {
+            "name": "Baguette",
+            "quantity": "",
+            "unit": ""
+          }
+        ]
+      },
+      {
+        "category": "Gew\u00fcrze und \u00d6le",
+        "items": [
+          {
+            "name": "Pflanzen\u00f6l",
+            "quantity": "2",
+            "unit": "EL"
+          },
+          {
+            "name": "Tamari",
+            "quantity": "1",
+            "unit": "EL"
+          },
+          {
+            "name": "Kr\u00e4utermischung",
+            "quantity": "1.5",
+            "unit": "TL"
+          },
+          {
+            "name": "Muskat",
+            "quantity": "1",
+            "unit": "Prise"
+          },
+          {
+            "name": "Hefeflocken",
+            "quantity": "3",
+            "unit": "EL"
+          },
+          {
+            "name": "Salz und Pfeffer",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Frische Petersilie",
+            "quantity": "",
+            "unit": ""
+          }
+        ]
+      }
+    ],
+    "instructions": [
+      "*Hinweis: Schau dir das Rezept-Video sowie die Tipps + Schritt-f\u00fcr-Schritt Bilder oben im Beitrag an!",
+      "Zun\u00e4chst den <b>Lauch [2 mittlere Stangen]</b> l\u00e4ngs halbieren, in Streifen schneiden und gr\u00fcndlich waschen. <b>Zwiebel [1 gro\u00dfe]</b> und <b>Knoblauch [2 Zehen]</b> abziehen und hacken.",
+      "Das <b>\u00d6l [2 EL]</b> in einem gro\u00dfen Topf oder einer tiefen Pfanne erhitzen. Das <b>vegane Hack [250 g]</b> ca. 3 Minuten scharf anbraten. <b>Zwiebel</b> und <b>Knoblauch</b> hinzugeben und 2-3 Minuten anbraten. Dann den <b>Lauch</b> hinzugeben und kurz mitbraten. Mit <b>Salz, Pfeffer, Kr\u00e4utern [1.5 TL], Muskat [1 Prise]</b> und <b>Hefeflocken [3 EL]</b> w\u00fcrzen.",
+      "Nun mit <b>Tamari [1 EL]</b>, <b>Gem\u00fcsebr\u00fche [500 ml]</b> und <b>Sahne [250 ml]</b> abl\u00f6schen und zugedeckt ca. 10 Min. k\u00f6cheln lassen.",
+      "Anschlie\u00dfend die <b>Creme Vega [150 g]</b> unterr\u00fchren und nochmals aufkochen lassen. Abschmecken und bei Bedarf nachw\u00fcrzen.",
+      "Die Suppe in Schalen servieren und mit <b>Petersilie</b> bestreuen. Nach Belieben mit frischem <b>Baguette</b> servieren. Weitere Serviervorschl\u00e4ge findest du hier.",
+      "Guten Appetit!"
+    ]
+  },
+  {
+    "title": "Pesto Rosso (vegan)",
+    "cook_time": "15 Minuten",
+    "portions": "6",
+    "ingredients": [
+      {
+        "category": "Zutaten",
+        "items": [
+          {
+            "name": "getrocknete Tomaten",
+            "quantity": 180.0,
+            "unit": "g"
+          },
+          {
+            "name": "Pinienkerne",
+            "quantity": 50.0,
+            "unit": "g"
+          },
+          {
+            "name": "Balsamico-Essig",
+            "quantity": 1.0,
+            "unit": "TL"
+          },
+          {
+            "name": "N\u00e4hrhefe-Flocken",
+            "quantity": 3.0,
+            "unit": "EL"
+          },
+          {
+            "name": "Oliven\u00f6l/getrocknetes Tomaten\u00f6l",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Salz",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Pfeffer",
+            "quantity": "",
+            "unit": ""
+          }
+        ]
+      }
+    ],
+    "instructions": [
+      "R\u00f6ste die <b>Pinienkerne</b> [50g] ohne \u00d6l, bis sie goldbraun sind.",
+      "F\u00fcge die <b>getrockneten Tomaten</b> [180g], \u00d6l, Knoblauch, <b>Balsamico-Essig</b> [1 TL], <b>Salz</b> und <b>Pfeffer</b> hinzu und mixe.",
+      "F\u00fcge die ger\u00f6steten <b>Pinienkerne</b> hinzu und mixe noch etwas mehr."
+    ],
+    "image_path": "/data/html_contents/Chris/recipe_images/pestorossovegan.png",
+    "image_url": "recipe_images/pestorossovegan.png",
+    "template_name": ""
+  },
+  {
+    "title": "Indisches Butter Chicken (Vegan)",
+    "cook_time": "20",
+    "portions": "4 servings",
+    "ingredients": [
+      {
+        "category": "Hauptzutaten",
+        "items": [
+          {
+            "name": "Tofu",
+            "quantity": 400.0,
+            "unit": "g"
+          },
+          {
+            "name": "\u00d6l",
+            "quantity": 2.0,
+            "unit": "EL"
+          },
+          {
+            "name": "Speisest\u00e4rke",
+            "quantity": 1.0,
+            "unit": "EL"
+          },
+          {
+            "name": "Currypulver",
+            "quantity": 1.0,
+            "unit": "TL"
+          },
+          {
+            "name": "Salz",
+            "quantity": 0.5,
+            "unit": "TL"
+          },
+          {
+            "name": "Vegane Butter",
+            "quantity": 2.0,
+            "unit": "EL"
+          },
+          {
+            "name": "Zwiebel",
+            "quantity": 1.0,
+            "unit": "gro\u00dfe"
+          },
+          {
+            "name": "Knoblauchzehen",
+            "quantity": 2.0,
+            "unit": ""
+          },
+          {
+            "name": "Ingwer",
+            "quantity": 1.0,
+            "unit": "EL"
+          },
+          {
+            "name": "Garam Masala",
+            "quantity": 1.0,
+            "unit": "EL"
+          },
+          {
+            "name": "Currypulver",
+            "quantity": 1.0,
+            "unit": "TL"
+          },
+          {
+            "name": "Salz",
+            "quantity": 1.0,
+            "unit": "TL"
+          },
+          {
+            "name": "Cayennepfeffer",
+            "quantity": 0.5,
+            "unit": "TL"
+          },
+          {
+            "name": "Tomatenmark",
+            "quantity": 90.0,
+            "unit": "g"
+          },
+          {
+            "name": "Kokosmilch",
+            "quantity": 400.0,
+            "unit": "g"
+          }
+        ]
+      },
+      {
+        "category": "Beilagen",
+        "items": [
+          {
+            "name": "Reis",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Naan",
+            "quantity": "",
+            "unit": ""
+          }
+        ]
+      },
+      {
+        "category": "Garnierung",
+        "items": [
+          {
+            "name": "Koriander",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Limetten",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Sesam",
+            "quantity": "",
+            "unit": ""
+          }
+        ]
+      }
+    ],
+    "instructions": [
+      "Den <b>Tofu [400g]</b> in Papiert\u00fccher einwickeln und so gut es geht trocken pressen (*siehe Tipp). Anschlie\u00dfend auswickeln und den Tofu zun\u00e4chst in Scheiben schneiden und dann in w\u00fcrfelgro\u00dfe St\u00fccke rei\u00dfen (man kann ihn auch einfach in W\u00fcrfel schneiden, aber durch das Rei\u00dfen bekommt er eine bessere Textur).",
+      "Die Tofuw\u00fcrfel in eine Sch\u00fcssel geben. Die <b>Speisest\u00e4rke [1 EL]</b> und die Gew\u00fcrze hinzuf\u00fcgen und vermengen, bis alle St\u00fccke bedeckt sind.",
+      "Das <b>\u00d6l [2 EL]</b> in einer Pfanne erhitzen. Die Tofust\u00fccke hineingeben und anbraten, bis alle Seiten leicht gebr\u00e4unt und knusprig sind. Den Tofu herausnehmen und beiseite stellen.",
+      "Die Pfanne mit einem Papiertuch kurz auswischen. Die <b>vegane Butter [2 EL]</b> hineingeben und erhitzen. Die <b>Zwiebeln [1 gro\u00dfe]</b> hinzuf\u00fcgen und 3-4 Minuten glasig braten. Dann den <b>Knoblauch [2 Knoblauchzehen]</b> und den <b>Ingwer [1 EL]</b> hinzugeben und 1 Minute anr\u00f6sten. Die Gew\u00fcrze und das <b>Tomatenmark [90g]</b> hinzugeben und kurz anr\u00f6sten. Dann die <b>Kokosmilch [400g]</b> hinzuf\u00fcgen, umr\u00fchren und ca. 5 Minuten k\u00f6cheln lassen.",
+      "Den Tofu in die So\u00dfe geben und vorsichtig umr\u00fchren, bis alle St\u00fccke bedeckt sind.",
+      "Das Vegane Butter Chicken mit <b>Reis</b> und veganem <b>Naan</b> servieren. Nach Belieben mit frischem <b>Koriander</b>, <b>Limetten</b> und <b>Sesam</b> garnieren. Guten Appetit!"
+    ],
+    "image_path": "/data/html_contents/Chris/recipe_images/indischesbutterchickenvegan.png",
+    "image_url": "https://biancazapatka.com/wp-content/uploads/2024/10/butter-chicken.jpg",
+    "template_name": "",
+    "notes": ""
+  },
+  {
+    "title": "Veganes Basilikum-Pesto mit Pasta",
+    "cook_time": "20",
+    "portions": "6 servings",
+    "image_url": "https://biancazapatka.com/wp-content/uploads/2021/06/basilikum-pesto-pasta.jpg",
+    "image_path": "/data/html_contents/Chris/recipe_images/veganesbasilikumpestomitpasta.png",
+    "ingredients": [
+      {
+        "category": "Kr\u00e4uter",
+        "items": [
+          {
+            "name": "frische Basilikumbl\u00e4tter",
+            "quantity": "2.5",
+            "unit": "Tassen"
+          }
+        ]
+      },
+      {
+        "category": "N\u00fcsse/Samen",
+        "items": [
+          {
+            "name": "Pinienkerne",
+            "quantity": "35",
+            "unit": "g"
+          },
+          {
+            "name": "Cashewkerne",
+            "quantity": "50",
+            "unit": "g"
+          }
+        ]
+      },
+      {
+        "category": "Gew\u00fcrze",
+        "items": [
+          {
+            "name": "Knoblauchzehen",
+            "quantity": "2",
+            "unit": ""
+          },
+          {
+            "name": "Salz",
+            "quantity": "1",
+            "unit": "TL"
+          },
+          {
+            "name": "Pfeffer",
+            "quantity": "0.25",
+            "unit": "TL"
+          }
+        ]
+      },
+      {
+        "category": "Andere",
+        "items": [
+          {
+            "name": "Hefeflocken",
+            "quantity": "2",
+            "unit": "EL"
+          },
+          {
+            "name": "Oliven\u00f6l",
+            "quantity": "80",
+            "unit": "ml"
+          },
+          {
+            "name": "frischer Zitronensaft",
+            "quantity": "1",
+            "unit": "EL"
+          },
+          {
+            "name": "Nudeln",
+            "quantity": "500",
+            "unit": "g"
+          }
+        ]
+      }
+    ],
+    "instructions": [
+      "*Hinweis: Schau dir gerne das Rezept-Video + die Schritt-f\u00fcr-Schritt Anleitung oben im Beitrag an!",
+      "Die <b>Nudeln [500 g]</b> in einem Topf mit Salzwasser nach Packungsanweisung 'al dente' kochen. Dann abgie\u00dfen.",
+      "<b>Pinienkerne [35 g]</b> und <b>Cashewkerne [50 g]</b> in eine Pfanne geben und 2-3 Minuten r\u00f6sten, dabei oft umr\u00fchren oder die Pfanne schwenken.",
+      "<b>Basilikum [2.5 Tassen]</b>, <b>Pinienkerne [35 g]</b>, <b>Knoblauch [2 Zehen]</b> und <b>Hefeflocken [2 EL]</b> in eine K\u00fcchenmaschine oder einen Mixer geben und pulsieren*, bis sie gut zerkleinert sind, dabei zwischendurch die Seiten abschaben. (*Pulsieren bedeutet den Mixer im Wechsel an und ausschalten, aber nicht komplett in einer Tour durchmixen, sonst wird es zu P\u00fcree).",
+      "Bei laufender K\u00fcchenmaschine das <b>Oliven\u00f6l [80 ml]</b> und den <b>Zitronensaft [1 EL]</b> langsam eingie\u00dfen. So lange pulsieren, bis alles gut vermischt und relativ glatt ist. Mit <b>Salz [1 TL]</b> und <b>Pfeffer [0.25 TL]</b> abschmecken.",
+      "Das Pesto sofort mit <b>Nudeln [500 g]</b> servieren oder in einem luftdicht verschlossenen Glas bis zu 1 Woche im K\u00fchlschrank aufbewahren.",
+      "Guten Appetit!"
+    ]
+  },
+  {
+    "title": "Vegane Bolognese",
+    "cook_time": "70",
+    "portions": "6",
+    "ingredients": [
+      {
+        "category": "Soffritto",
+        "items": [
+          {
+            "name": "Karotten",
+            "quantity": 300.0,
+            "unit": "g"
+          },
+          {
+            "name": "Sellerie",
+            "quantity": 300.0,
+            "unit": "g"
+          },
+          {
+            "name": "Zwiebeln",
+            "quantity": 300.0,
+            "unit": "g"
+          }
+        ]
+      },
+      {
+        "category": "Hauptgericht",
+        "items": [
+          {
+            "name": "Rotwein",
+            "quantity": 400.0,
+            "unit": "ml"
+          },
+          {
+            "name": "Naturtofu",
+            "quantity": 400.0,
+            "unit": "g"
+          },
+          {
+            "name": "R\u00e4uchertofu",
+            "quantity": 400.0,
+            "unit": "g"
+          },
+          {
+            "name": "Tomatenmark",
+            "quantity": 4.0,
+            "unit": "EL"
+          },
+          {
+            "name": "Knoblauchzehen",
+            "quantity": 6.0,
+            "unit": ""
+          },
+          {
+            "name": "Pasta",
+            "quantity": 1.0,
+            "unit": "kg"
+          }
+        ]
+      },
+      {
+        "category": "Gew\u00fcrze/\u00d6le",
+        "items": [
+          {
+            "name": "Oregano",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Rosmarin",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Bohnenkraut",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Basilikumpulver",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Salz",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Pfeffer",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Cayennepfeffer",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Paprika-edels\u00fc\u00df",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Lorbeerbl\u00e4tter",
+            "quantity": 3.0,
+            "unit": ""
+          },
+          {
+            "name": "Oliven\u00f6l",
+            "quantity": 100.0,
+            "unit": "ml"
+          },
+          {
+            "name": "Veganer Parmesan",
+            "quantity": 100.0,
+            "unit": "g"
+          },
+          {
+            "name": "frischer Basilikum",
+            "quantity": "",
+            "unit": ""
+          }
+        ]
+      }
+    ],
+    "instructions": [
+      "Die <b>Soffritto-Zutaten</b> (<b>Karotten</b> [300g], <b>Zwiebeln</b> [300g], <b>Sellerie</b> [300g]) alle in gleiche, kleine W\u00fcrfel hacken",
+      "Die <b>Knoblauchzehen</b> [6] fein hacken",
+      "<b>Naturtofu</b> [400g] mit der Hand zerbr\u00f6seln",
+      "<b>R\u00e4uchertofu</b> [400g] raspeln (mittelgro\u00df)",
+      "guten Schuss <b>Oliven\u00f6l</b> [100ml] in einen gro\u00dfen Topf geben, <b>R\u00e4uchertofu</b> dazugeben und scharf anbraten",
+      "<b>Zwiebeln</b> dazugeben, kurz sp\u00e4ter dann auch <b>Karotten</b> und <b>Sellerie</b> dazugeben und weiter <b>Oliven\u00f6l</b> dazugeben",
+      "<b>Tomatenmark</b> [4EL] und Gew\u00fcrze (au\u00dfer <b>Lorbeerbl\u00e4tter</b>) sowie <b>gehackte Knoblauchzehen</b> dazugeben und kurz braten lassen",
+      "mit erstem Schuss <b>Rotwein</b> [100ml] abl\u00f6schen und dann den zerbr\u00f6selten <b>Naturtofu</b> dazugeben",
+      "<b>Lorbeerbl\u00e4tter</b> [3] hinzugeben",
+      "alles f\u00fcr etwa 40 Minuten ohne Deckel k\u00f6cheln und eindicken lassen und hin und wieder mit <b>Rotwein</b>, Gew\u00fcrzen und ggf <b>Oliven\u00f6l</b> nachw\u00fcrzen",
+      "zwischendrin die <b>Pasta</b> [1kg] kochen",
+      "<b>Lorbeerbl\u00e4tter</b> wieder rausnehmen",
+      "<b>Pasta</b> und vegane Bolognese mit <b>frischem Basilikum</b> und <b>veganem Parmesan</b> [100g] anrichten (ggf noch frisch pfeffern)"
+    ],
+    "image_path": "/data/html_contents/Chris/recipe_images/veganebolognese.png",
+    "image_url": "html_contents/recipe_images/veganebolognese.png",
+    "template_name": "Funky"
+  },
+  {
+    "title": "Chili Sin Carne",
+    "cook_time": "45",
+    "portions": "6 Portionen",
+    "ingredients": [
+      {
+        "category": "Hauptgericht",
+        "items": [
+          {
+            "name": "Naturtofu",
+            "quantity": 400.0,
+            "unit": "g"
+          },
+          {
+            "name": "R\u00e4uchertofu",
+            "quantity": 200.0,
+            "unit": "g"
+          },
+          {
+            "name": "passierte Tomaten",
+            "quantity": 400.0,
+            "unit": "ml"
+          },
+          {
+            "name": "gehackte Tomaten",
+            "quantity": 400.0,
+            "unit": "ml"
+          },
+          {
+            "name": "Knoblauchzehen",
+            "quantity": 6.0,
+            "unit": ""
+          },
+          {
+            "name": "gro\u00dfe Zwiebeln",
+            "quantity": 2.0,
+            "unit": ""
+          },
+          {
+            "name": "Kidneybohnen",
+            "quantity": 1.0,
+            "unit": "Dose"
+          },
+          {
+            "name": "Mais",
+            "quantity": 1.0,
+            "unit": "Dose"
+          },
+          {
+            "name": "Reis",
+            "quantity": 400.0,
+            "unit": "g"
+          }
+        ]
+      },
+      {
+        "category": "Gew\u00fcrze/\u00d6le",
+        "items": [
+          {
+            "name": "mexikanische Gew\u00fcrzmischung",
+            "quantity": 30.0,
+            "unit": "g"
+          },
+          {
+            "name": "Oliven\u00f6l",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "veganer Parmesan",
+            "quantity": "",
+            "unit": "optional"
+          },
+          {
+            "name": "Koriander",
+            "quantity": "",
+            "unit": "optional"
+          },
+          {
+            "name": "Chiliflocken/Chilipulver",
+            "quantity": "",
+            "unit": ""
+          }
+        ]
+      }
+    ],
+    "instructions": [
+      "<b>R\u00e4uchertofu</b> [200g] raspeln (mittelgro\u00df)",
+      "<b>gro\u00dfe Zwiebeln</b> [2] und <b>Knoblauchzehen</b> [6] fein hacken",
+      "<b>Naturtofu</b> [400g] mit der Hand zerbr\u00f6seln und mit der H\u00e4lfte der <b>mexikanischen Gew\u00fcrzmischung</b> [15g] und <b>Oliven\u00f6l</b> marinieren",
+      "<b>Reis</b> [400g] kochen",
+      "<b>R\u00e4uchertofu</b> kurz scharf anbraten bis goldgelb",
+      "<b>Zwiebeln</b>, <b>Knoblauch</b> und marinierten <b>Naturtofu</b> dazugeben und auch anbraten",
+      "schlie\u00dflich <b>Mais</b> [1 Dose] und <b>Kidneybohnen</b> [1 Dose] dazugeben",
+      "<b>passierte</b> [400ml] und <b>gehackte Tomaten</b> [400ml] mit restlicher <b>mexikanischer Gew\u00fcrzmischung</b> [15g] dazugeben",
+      "Chiliflocken nach ermessen hinzugeben und alles etwa 15 Minuten k\u00f6cheln lassen",
+      "<b>Reis</b> mit Chili sin Carne servieren und ggf. mit <b>veganem Parmesan</b> und <b>Koriander</b> bestreuen"
+    ],
+    "image_path": "/data/html_contents/Chris/recipe_images/chilisincarne.png",
+    "image_url": "html_contents/recipe_images/chilisincarne.png",
+    "template_name": "Funky",
+    "notes": ""
+  },
+  {
+    "title": "Chrissis Bananen Muffins",
+    "cook_time": "1",
+    "portions": "12",
+    "ingredients": [
+      {
+        "category": "Zutaten",
+        "items": [
+          {
+            "name": "Mehl",
+            "quantity": 200.0,
+            "unit": "g"
+          },
+          {
+            "name": "Backpulver",
+            "quantity": 2.0,
+            "unit": "TL"
+          },
+          {
+            "name": "Natron",
+            "quantity": 0.5,
+            "unit": "TL"
+          },
+          {
+            "name": "Zimt",
+            "quantity": 0.25,
+            "unit": "TL"
+          },
+          {
+            "name": "Kakao",
+            "quantity": 3.0,
+            "unit": "TL"
+          },
+          {
+            "name": "Brauner Zucker",
+            "quantity": 125.0,
+            "unit": "g"
+          },
+          {
+            "name": "Ei",
+            "quantity": 1.0,
+            "unit": ""
+          },
+          {
+            "name": "Neutrales \u00d6l",
+            "quantity": 100.0,
+            "unit": "ml"
+          },
+          {
+            "name": "Buttermilch",
+            "quantity": 125.0,
+            "unit": "g"
+          },
+          {
+            "name": "Reife Bananen",
+            "quantity": 3.0,
+            "unit": ""
+          }
+        ]
+      }
+    ],
+    "instructions": [
+      "Heize den Ofen vor.",
+      "Mische <b>Mehl</b> [200g], <b>Backpulver</b> [2 TL], <b>Natron</b> [0.5 TL], <b>Zimt</b> [0.25 TL] und <b>Kakao</b> [3 TL] in einer Sch\u00fcssel.",
+      "In einer anderen Sch\u00fcssel, schlage das <b>Ei</b> [1] und f\u00fcge <b>braunen Zucker</b> [125g] hinzu.",
+      "F\u00fcge <b>neutrales \u00d6l</b> [100ml] und <b>Buttermilch</b> [125g] zur Ei-Zucker-Mischung hinzu.",
+      "Zerdr\u00fccke die <b>reifen Bananen</b> [3] und mische sie unter die feuchten Zutaten.",
+      "Kombiniere die trockenen und feuchten Zutaten und r\u00fchre, bis alles gut vermischt ist.",
+      "F\u00fclle den Teig in Muffinf\u00f6rmchen.",
+      "Backe die Muffins, bis sie goldbraun sind."
+    ],
+    "image_path": "/data/html_contents/Chris/recipe_images/chrissisbananenmuffins.png",
+    "image_url": "html_contents/Chris/recipe_images/chrissisbananenmuffins.png",
+    "template_name": ""
+  },
+  {
+    "title": "Vegane Hackr\u00f6llchen in Auberginenmantel",
+    "cook_time": "60",
+    "portions": "1.5",
+    "image_url": "html_contents/Chris/recipe_images/veganehackrllcheninauberginenmantel.png",
+    "image_path": "/data/html_contents/Chris/recipe_images/veganehackrllcheninauberginenmantel.png",
+    "ingredients": [
+      {
+        "category": "Hackr\u00f6llchen",
+        "items": [
+          {
+            "name": "Auberginen",
+            "quantity": "2",
+            "unit": ""
+          },
+          {
+            "name": "veganes M\u00fchlen Hack",
+            "quantity": "200",
+            "unit": "g"
+          },
+          {
+            "name": "kleine Zwiebel",
+            "quantity": "1",
+            "unit": ""
+          },
+          {
+            "name": "ger\u00e4ucherte Paprika",
+            "quantity": "2",
+            "unit": "EL"
+          },
+          {
+            "name": "Salz",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Pfeffer",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Knoblauchpulver",
+            "quantity": "0.5",
+            "unit": "EL"
+          }
+        ]
+      },
+      {
+        "category": "Tomatensauce",
+        "items": [
+          {
+            "name": "passierte Tomate",
+            "quantity": "500",
+            "unit": "ml"
+          },
+          {
+            "name": "grosse Zwiebel",
+            "quantity": "1",
+            "unit": ""
+          },
+          {
+            "name": "Knoblauchzehen",
+            "quantity": "3",
+            "unit": ""
+          },
+          {
+            "name": "Basilikum",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Oregano",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Salz",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Pfeffer",
+            "quantity": "",
+            "unit": ""
+          }
+        ]
+      }
+    ],
+    "instructions": [
+      "Die <b>Zwiebeln</b> ganz fein hacken.",
+      "<b>Knoblauch</b> fein hacken.",
+      "<b>Auberginen</b> in etwa 0.5 cm d\u00fcnne Scheiben schneiden.",
+      "<b>Auberginen</b> gut mit <b>Salz</b> bedecken, dann 20 Minuten Wasser ziehen lassen und wieder abwaschen.",
+      "<b>Auberginen</b> danach f\u00fcr etwa 15 Minuten in Ofen bei 200 Grad Umluft vorbacken.",
+      "Veganes <b>Hackfleisch</b> mit dazugeh\u00f6rigen Gew\u00fcrzen und 1/3 der gehackten <b>Zwiebeln</b> vermengen.",
+      "Kleine R\u00f6llchen aus dem <b>Hackfleisch</b> bilden, sodass sie gut in die <b>Auberginen</b> passen",
+      "Restliche <b>Zwiebeln</b> f\u00fcr die <b>Tomatensauce</b> in Topf anschwitzen.",
+      "<b>Knoblauch</b> in Topf dazugeben",
+      "Restliche Gew\u00fcrze f\u00fcr <b>Tomatensauce</b> hinzuf\u00fcgen und mit <b>passierten Tomaten</b> aufgie\u00dfen.",
+      "Die <b>Tomatensauce</b> etwa 5 min k\u00f6cheln lassen",
+      "<b>Tomatensauce</b> in eine Backform umf\u00fcllen",
+      "geformtes <b>Hackfleisch</b> <b>Auberginenscheiben</b> ummanteln und in die <b>Tomatensauce</b> geben",
+      "Das gesamte nochmal f\u00fcr etwa 30-35 Minuten backen."
+    ],
+    "notes": "Super lecker!"
+  },
+  {
+    "title": "Lasagne mit Linsen und Zucchini (Bianca Zapatka)",
+    "cook_time": "55",
+    "portions": "4 servings",
+    "ingredients": [
+      {
+        "category": "Hauptzutaten",
+        "items": [
+          {
+            "name": "Oliven\u00f6l",
+            "quantity": 1.0,
+            "unit": "EL"
+          },
+          {
+            "name": "Zwiebel",
+            "quantity": 1.0,
+            "unit": ""
+          },
+          {
+            "name": "Karotten",
+            "quantity": 2.0,
+            "unit": ""
+          },
+          {
+            "name": "Knoblauchzehen",
+            "quantity": 2.0,
+            "unit": ""
+          },
+          {
+            "name": "rote Linsen",
+            "quantity": 150.0,
+            "unit": "g"
+          },
+          {
+            "name": "Tomatenmark",
+            "quantity": 2.0,
+            "unit": "EL"
+          },
+          {
+            "name": "Gem\u00fcsebr\u00fche",
+            "quantity": 0.3,
+            "unit": "l"
+          },
+          {
+            "name": "passierte Tomaten",
+            "quantity": 500.0,
+            "unit": "g"
+          },
+          {
+            "name": "Lasagne-Bl\u00e4tter",
+            "quantity": 7.0,
+            "unit": ""
+          },
+          {
+            "name": "Zucchini",
+            "quantity": 1.0,
+            "unit": "gro\u00dfe"
+          },
+          {
+            "name": "Tomaten",
+            "quantity": 2.5,
+            "unit": "mittlere"
+          }
+        ]
+      },
+      {
+        "category": "Saucen",
+        "items": [
+          {
+            "name": "Cashewkerne",
+            "quantity": 160.0,
+            "unit": "g"
+          },
+          {
+            "name": "Wasser",
+            "quantity": 240.0,
+            "unit": "ml"
+          },
+          {
+            "name": "Hefeflocken",
+            "quantity": 2.0,
+            "unit": "EL"
+          },
+          {
+            "name": "Salz",
+            "quantity": 0.5,
+            "unit": "TL"
+          },
+          {
+            "name": "schwarzer Pfeffer",
+            "quantity": 0.5,
+            "unit": "TL"
+          },
+          {
+            "name": "getrocknete Kr\u00e4uter",
+            "quantity": 2.0,
+            "unit": "TL"
+          }
+        ]
+      },
+      {
+        "category": "Toppings",
+        "items": [
+          {
+            "name": "Oliven\u00f6l",
+            "quantity": 1.0,
+            "unit": "TL"
+          },
+          {
+            "name": "Veganer K\u00e4se",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "ger\u00f6stete Pinienkerne",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Veganer Parmesan",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "frischer Basilikum",
+            "quantity": "",
+            "unit": ""
+          }
+        ]
+      }
+    ],
+    "instructions": [
+      "Linsen-Tomatensauce: Das <b>\u00d6l</b> [1 EL] in einer Pfanne erhitzen. Die <b>Zwiebel</b> [1] und <b>Karotten</b> [2] hinzugeben und unter gelegentlichem R\u00fchren ca. 4 Minuten d\u00fcnsten. Dann den <b>Knoblauch</b> [2 Zehen] hinzuf\u00fcgen und f\u00fcr eine weitere Minute unter st\u00e4ndigem R\u00fchren braten, bis er gut duftet.",
+      "Nun das <b>Tomatenmark</b> [2 EL], <b>Gem\u00fcsebr\u00fche</b> [0.3 l], p\u00fcrierte <b>Tomaten</b> [500 g] und <b>rote Linsen</b> [150 g] hinzugeben und ca. 15 Minuten unter gelegentlichem R\u00fchren kochen lassen, bis es gut eingedickt ist. Anschlie\u00dfend beiseitestellen und etwas abk\u00fchlen lassen.",
+      "Den Backofen auf 180\u00b0C vorheizen. Eine Auflaufform mit ein wenig <b>\u00d6l</b> bepinseln.",
+      "Cashew-Sauce: Alle Zutaten f\u00fcr die Cashew-Sauce in einem Hochleistungsmixer (oder in einer K\u00fcchenmaschine) glatt und cremig mixen.",
+      "Die Lasagne schichten: Zuerst 1/4 Portion von der Linsen-Tomatensauce auf den Boden der Auflaufform geben. Dann <b>Zucchini</b>-Scheiben [1 gro\u00dfe] auf die Sauce legen, 1/3 Portion der Cashew-Sauce dar\u00fcber tr\u00e4ufeln und 3-4 Lasagne-Platten darauf legen. Nun eine weitere Schicht Linsensauce darauf geben, gefolgt von einer weiteren Schicht <b>Zucchini</b>-Scheiben und wieder Cashew-Sauce. Diesen Vorgang auch f\u00fcr die n\u00e4chste Schicht wiederholen, also erst eine Schicht Lasagne-Platten, dann die restliche Linsensauce und zum Schluss die restliche Cashew-Sauce darauf klecksen. Optional kann man dann noch ein paar <b>Tomaten</b>-Scheiben [2-3 mittlere] darauf legen und mit etwas <b>Oliven\u00f6l</b> [1 TL] betr\u00e4ufeln, damit sie nicht austrocknen.",
+      "Die Lasagne etwa 30-40 Minuten lang backen (wenn die Oberfl\u00e4che beim Backen zu schnell br\u00e4unt, kann man den Auflauf mit Alufolie abdecken).",
+      "Optional: Ich habe meine Lasagne nicht mit zus\u00e4tzlichem veganen K\u00e4se belegt, aber wenn man es k\u00e4siger mag, kann man nach 25 Minuten Backzeit etwas Cashew-Ricotta oder veganen Mozzarella oder einen anderen beliebigen K\u00e4se dar\u00fcber geben. Dann noch weitere ca. 10 Minuten backen, bis der vegane K\u00e4se geschmolzen ist und die Lasagne gut aussieht.",
+      "Nach dem Backen sollte die Lasagne etwas abk\u00fchlen damit sie sich setzen kann und schnittfester wird.",
+      "Die Lasagne mit ger\u00f6steten <b>Pinienkernen</b>, veganem <b>Parmesan</b>, frischem <b>Basilikum</b> oder anderen Toppings nach Belieben servieren und genie\u00dfen!",
+      "Tipp: Dazu passt ein frischer Salat!"
+    ],
+    "image_path": "/data/html_contents/Chris/recipe_images/lasagnemitlinsenundzucchinibiancazapatka.png",
+    "image_url": "recipe_images/lasagnemitlinsenundzucchinibiancazapatka.png",
+    "template_name": "",
+    "notes": ""
+  },
+  {
+    "title": "Lasagne (Bianca Zapatka)",
+    "cook_time": "75",
+    "portions": "6 servings",
+    "ingredients": [
+      {
+        "category": "Bolognese-Sauce",
+        "items": [
+          {
+            "name": "Oliven\u00f6l",
+            "quantity": 2.5,
+            "unit": "EL"
+          },
+          {
+            "name": "endori veggie hack",
+            "quantity": 500.0,
+            "unit": "g"
+          },
+          {
+            "name": "Knoblauchzehen",
+            "quantity": 3.0,
+            "unit": ""
+          },
+          {
+            "name": "gro\u00dfe Zwiebel",
+            "quantity": 1.0,
+            "unit": "(gehackt)"
+          },
+          {
+            "name": "Karotten",
+            "quantity": 2.0,
+            "unit": "(gehackt)"
+          },
+          {
+            "name": "Stangen Sellerie",
+            "quantity": 2.0,
+            "unit": "(gehackt)"
+          },
+          {
+            "name": "Rotwein",
+            "quantity": 120.0,
+            "unit": "ml"
+          },
+          {
+            "name": "passierte Tomaten",
+            "quantity": 400.0,
+            "unit": "g"
+          },
+          {
+            "name": "gehackte Tomaten",
+            "quantity": 400.0,
+            "unit": "g"
+          },
+          {
+            "name": "Tomatenmark",
+            "quantity": 2.0,
+            "unit": "EL"
+          },
+          {
+            "name": "Italienische Kr\u00e4uter",
+            "quantity": 1.0,
+            "unit": "EL"
+          },
+          {
+            "name": "Salz und Pfeffer",
+            "quantity": "",
+            "unit": ""
+          }
+        ]
+      },
+      {
+        "category": "B\u00e9chamelsauce",
+        "items": [
+          {
+            "name": "Vegane Butter",
+            "quantity": 30.0,
+            "unit": "g"
+          },
+          {
+            "name": "Mehl",
+            "quantity": 30.0,
+            "unit": "g"
+          },
+          {
+            "name": "Sojamilch",
+            "quantity": 500.0,
+            "unit": "ml"
+          },
+          {
+            "name": "Salz und Pfeffer",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Muskatnuss",
+            "quantity": 1.0,
+            "unit": "Prise"
+          },
+          {
+            "name": "Hefeflocken",
+            "quantity": 2.0,
+            "unit": "EL"
+          }
+        ]
+      },
+      {
+        "category": "Lasagne",
+        "items": [
+          {
+            "name": "Lasagne-Platten ohne Vorkochen",
+            "quantity": 10.5,
+            "unit": ""
+          },
+          {
+            "name": "Veganer K\u00e4se",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Veganer Parmesan",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "frisches Basilikum",
+            "quantity": "",
+            "unit": ""
+          }
+        ]
+      }
+    ],
+    "instructions": [
+      "<b>Bolognese-Sauce</b>: Zun\u00e4chst 1-2 EL <b>\u00d6l</b> in einer Antihaft-Pfanne erhitzen und das <b>veggie hack [500g]</b> nach Packungsanweisung kr\u00fcmelig braten. Anschlie\u00dfend beiseitestellen.",
+      "Das restliche <b>\u00d6l</b> in einer gro\u00dfen tiefen Pfanne oder einem Topf erhitzen. <b>Zwiebeln [1 gro\u00dfe, gehackt]</b>, <b>Karotten [2, gehackt]</b> und <b>Sellerie [2 Stangen, gehackt]</b> hinzugeben und 2-3 Minuten anbraten, bis die Zwiebeln glasig sind. Dann den <b>Knoblauch [3 Zehen]</b> hinzugeben und 30 Sekunden anr\u00f6sten. Danach <b>Tomatenmark [2 EL]</b> und <b>italienische Kr\u00e4uter [1 EL]</b> hinzuf\u00fcgen und kurz Sekunden anschwitzen.",
+      "Nun das <b>veggie hack</b> unterr\u00fchren. Dann das Ganze mit <b>Rotwein [120 ml]</b> abl\u00f6schen und kurz einkochen lassen. Jetzt <b>passierte [400 g]</b> und <b>gehackte Tomaten [400 g]</b> unterr\u00fchren, mit etwas <b>Salz und Pfeffer</b> w\u00fcrzen und die Bolognese-Sauce ca. 15 Minuten mit Deckel drauf k\u00f6cheln lassen, bis sie gut eingedickt ist. Anschlie\u00dfend nochmal abschmecken und etwas abk\u00fchlen lassen.",
+      "<b>B\u00e9chamelsauce</b>: Zun\u00e4chst die <b>vegane Butter [30g]</b> in einem Topf bei mittlerer Hitze schmelzen lassen. Dann das <b>Mehl [30g]</b> hinzuf\u00fcgen und unter st\u00e4ndigem R\u00fchren 1 Minute anschwitzen. Nun langsam die <b>Sojamilch [500 ml]</b> zugeben und aufkochen lassen, dabei immer weiter R\u00fchren, bis die So\u00dfe andickt. Mit <b>Salz, Pfeffer</b>, <b>Muskat [1 Prise]</b> und <b>Hefeflocken [2 EL]</b> abschmecken. Anschlie\u00dfend vom Herd nehmen und beiseitestellen.",
+      "<b>Lasagne schichten</b>: Den Backofen auf 200 \u00b0C Ober-/Unterhitze (180 \u00b0C Umluft) vorheizen. Eine Auflaufform mit ein wenig <b>\u00d6l</b> bepinseln.",
+      "Zuerst etwas <b>Bolognese-Sauce</b> d\u00fcnn auf den Boden der Auflaufform verteilen. Dann abwechselnd <b>Lasagne-Platten [10.5]</b>, <b>Bolognese</b> und <b>B\u00e9chamel</b> darauf schichten. Mit einer dicken Schicht <b>B\u00e9chamelsauce</b> abschlie\u00dfen. Zum Schluss mit etwas <b>veganem K\u00e4se</b> und/oder <b>veganem Parmesan</b> bestreuen und die Lasagne etwa 45 Minuten im vorgeheizten Ofen backen (wenn die Oberfl\u00e4che zu schnell br\u00e4unt, kann man den Auflauf mit Backpapier oder Alufolie abdecken).",
+      "Anschlie\u00dfend etwas abk\u00fchlen lassen, damit die Lasagne schnittfester wird. Dann mit <b>frischem Basilikum</b> garnieren und genie\u00dfen!"
+    ],
+    "image_path": "/data/html_contents/Chris/recipe_images/lasagnebiancazapatka.png",
+    "image_url": "recipe_images/lasagnebiancazapatka.png",
+    "template_name": "",
+    "notes": ""
+  },
+  {
+    "title": "Kartoffelsalat mit Linsen und Senf-Dill Sauce (vegan)",
+    "cook_time": "60",
+    "portions": "8-12",
+    "ingredients": [
+      {
+        "category": "Zutaten",
+        "items": [
+          {
+            "name": "festkochende Kartoffeln",
+            "quantity": 1,
+            "unit": "kg"
+          },
+          {
+            "name": "Tellerlinsen",
+            "quantity": 200,
+            "unit": "g"
+          },
+          {
+            "name": "rote Zwiebel",
+            "quantity": 1,
+            "unit": ""
+          },
+          {
+            "name": "Gurke",
+            "quantity": 1,
+            "unit": ""
+          },
+          {
+            "name": "Bund Radieschen",
+            "quantity": 1,
+            "unit": ""
+          },
+          {
+            "name": "Sonnenblumenkerne",
+            "quantity": 100,
+            "unit": "g"
+          },
+          {
+            "name": "IKEA HUVUDROLL Proteinb\u00e4llchen",
+            "quantity": 500,
+            "unit": "g"
+          },
+          {
+            "name": "veganer Feta",
+            "quantity": 150,
+            "unit": "g"
+          },
+          {
+            "name": "Schnittlauch",
+            "quantity": 25,
+            "unit": "g"
+          },
+          {
+            "name": "Dill",
+            "quantity": 25,
+            "unit": "g"
+          },
+          {
+            "name": "IKEA S\u00c5S SENAP & DILL So\u00dfe",
+            "quantity": 380,
+            "unit": "ml"
+          },
+          {
+            "name": "Oliven\u00f6l",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Salz",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Pfeffer",
+            "quantity": "",
+            "unit": ""
+          }
+        ]
+      }
+    ],
+    "instructions": [
+      "Den Backofen auf 200 \u00b0C (Umluft) vorheizen. Die <b>Kartoffeln [1 kg]</b> gr\u00fcndlich waschen, in Spalten schneiden und auf einem Backblech verteilen. Mit <b>Oliven\u00f6l</b> betr\u00e4ufeln und mit <b>Salz</b> und <b>Pfeffer</b> w\u00fcrzen. Die Kartoffeln bei 200 \u00b0C (Umluft) f\u00fcr 30 Minuten backen, bis sie gar, gebr\u00e4unt und leicht knusprig sind.",
+      "Die <b>Tellerlinsen [200 g]</b> nach Packungsanleitung zubereiten, bis sie gar sind. <b>Rote Zwiebel [1]</b> fein w\u00fcrfeln, <b>Gurke [1]</b> halbieren und in Scheiben schneiden und <b>Radieschen [1 Bund]</b> ebenfalls in Scheiben schneiden. <b>Sonnenblumenkerne [100 g]</b> in einer Pfanne ohne \u00d6l r\u00f6sten, bis sie leicht gebr\u00e4unt sind.",
+      "Die <b>veganen Fleischb\u00e4llchen [500 g]</b> nach Packungsanleitung zubereiten, den <b>veganen Feta [150 g]</b> zerbr\u00f6seln und die <b>Kr\u00e4uter</b> fein hacken. Alle Zutaten in einer gro\u00dfen Sch\u00fcssel miteinander vermischen und mit den <b>Kr\u00e4utern</b> und dem <b>veganen Feta</b> toppen. Mit der <b>So\u00dfe [380 ml]</b> vermischen und servieren."
+    ],
+    "image_url": "/images/Chris/kartoffelsalatmitlinsenundsenfdillsaucevegan.png",
+    "template_name": ""
+  },
+  {
+    "title": "Gegrillten-Oliven-Feta-Dip",
+    "cook_time": "1",
+    "portions": "1",
+    "ingredients": [
+      {
+        "category": "F\u00fcr die cremige Masse",
+        "items": [
+          {
+            "name": "veganer Feta",
+            "quantity": "150",
+            "unit": "g"
+          },
+          {
+            "name": "veganer Joghurt (unges\u00fc\u00dft)",
+            "quantity": "100",
+            "unit": "g"
+          },
+          {
+            "name": "Wasser",
+            "quantity": "25",
+            "unit": "ml"
+          },
+          {
+            "name": "frischer Rosmarin",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "wei\u00dfer Pfeffer",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Zitronensaft",
+            "quantity": "",
+            "unit": ""
+          }
+        ]
+      },
+      {
+        "category": "Au\u00dferdem",
+        "items": [
+          {
+            "name": "Pinienkerne",
+            "quantity": "30",
+            "unit": "g"
+          },
+          {
+            "name": "gr\u00fcne Oliven (entsteint)",
+            "quantity": "50",
+            "unit": "g"
+          },
+          {
+            "name": "schwarze Oliven (entsteint)",
+            "quantity": "50",
+            "unit": "g"
+          },
+          {
+            "name": "Orange (Schale)",
+            "quantity": "1",
+            "unit": ""
+          },
+          {
+            "name": "frischer Pfeffer",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "frischer Rosmarin",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Tasty Snack Crisps Rosmarin",
+            "quantity": "",
+            "unit": ""
+          }
+        ]
+      }
+    ],
+    "instructions": [
+      "1. <b>Pinienkerne [30g]</b> in einer fettfreien Pfanne anr\u00f6sten, bis sie braun sind. Anschlie\u00dfend aus der Pfanne nehmen und nun die <b>Oliven [50g gr\u00fcn, 50g schwarz]</b> in dieser Pfanne (jedoch mit \u00d6l) anbraten, bis sie leicht gebr\u00e4unt sind.",
+      "2. F\u00fcr den Dip <b>veganen Feta [150g]</b>, <b>veganen Joghurt [100g]</b>, <b>Wasser [25ml]</b>, <b>Rosmarin</b>, <b>wei\u00dfen Pfeffer</b> und <b>Zitronensaft</b> in einem Stand- oder mit einem Handmixer zu einer cremigen Masse mixen. Mit <b>Salz</b> und <b>Pfeffer</b> abschmecken.",
+      "3. Den Dip in eine Sch\u00fcssel geben und mit gebratenen <b>Oliven</b> und <b>Pinienkernen</b>, <b>Orangenschale</b>, gehacktem <b>Rosmarin</b> und frischem <b>Pfeffer</b> toppen."
+    ],
+    "image_url": "/images/Chris/gegrilltenolivenfetadip.png",
+    "template_name": ""
+  },
+  {
+    "title": "Vegane Fajitas mit Gem\u00fcse",
+    "cook_time": "40",
+    "portions": "4 servings",
+    "ingredients": [
+      {
+        "category": "Hauptzutaten",
+        "items": [
+          {
+            "name": "Paprikaschoten (rot, gelb oder gr\u00fcn)",
+            "quantity": 2.0,
+            "unit": ""
+          },
+          {
+            "name": "Austernpilze (oder Portobello-Pilze)",
+            "quantity": 200.0,
+            "unit": "g"
+          },
+          {
+            "name": "Zwiebel",
+            "quantity": 1.0,
+            "unit": ""
+          },
+          {
+            "name": "Knoblauchzehen",
+            "quantity": 2.0,
+            "unit": ""
+          },
+          {
+            "name": "Scharfe Chilisauce",
+            "quantity": "",
+            "unit": ""
+          }
+        ]
+      },
+      {
+        "category": "Marinade",
+        "items": [
+          {
+            "name": "Oliven\u00f6l",
+            "quantity": 3.0,
+            "unit": "EL"
+          },
+          {
+            "name": "Tamari (oder Sojasauce)",
+            "quantity": 2.0,
+            "unit": "EL"
+          },
+          {
+            "name": "Ahornsirup",
+            "quantity": 0.5,
+            "unit": "EL"
+          },
+          {
+            "name": "Limettensaft",
+            "quantity": 2.0,
+            "unit": "EL"
+          },
+          {
+            "name": "gemahlener Kreuzk\u00fcmme",
+            "quantity": 1.5,
+            "unit": "TL"
+          },
+          {
+            "name": "Paprikapulver",
+            "quantity": 1.0,
+            "unit": "TL"
+          },
+          {
+            "name": "Chilipulver",
+            "quantity": 1.0,
+            "unit": "TL"
+          },
+          {
+            "name": "Salz und Pfeffer",
+            "quantity": "",
+            "unit": ""
+          }
+        ]
+      },
+      {
+        "category": "Beilagen und Toppings",
+        "items": [
+          {
+            "name": "Tortillas",
+            "quantity": 7.0,
+            "unit": ""
+          },
+          {
+            "name": "Koriander-Limetten-Reis",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Avocado (oder Guacamole)",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Aioli (oder vegane Sour Cream)",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Koriander",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Sesam",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Limetten",
+            "quantity": "",
+            "unit": ""
+          }
+        ]
+      }
+    ],
+    "instructions": [
+      "*Hinweis: Schau dir das Rezept-Video + die Schritt-f\u00fcr-Schritt-Fotos oben im Beitrag an!",
+      "Den Ofen auf 200\u00b0 C Ober-/ Unterhitze vorheizen.",
+      "Die <b>Paprikaschoten</b> halbieren, entkernen und in Streifen schneiden. Die <b>Austernpilze</b> in Streifen zupfen (wie im Rezept-Video oder auf den Schritt-f\u00fcr-Schritt Bildern gezeigt). Die <b>Zwiebel</b> abziehen und ebenfalls in Streifen schneiden.",
+      "Anschlie\u00dfend das Gem\u00fcse auf ein gro\u00dfes, tiefes Backblech legen.",
+      "Alle Zutaten f\u00fcr die <b>Marinade</b> in einem Gef\u00e4\u00df verr\u00fchren und \u00fcber das Gem\u00fcse gie\u00dfen. Alles gut durchmischen und etwa 30 Minuten backen, bis das Gem\u00fcse weich ist, zwischendurch einmal durchmischen.",
+      "Die <b>Tortillas</b> kurz in einer Pfanne erw\u00e4rmen.",
+      "Dann die Fajitas zusammenstellen. Daf\u00fcr zun\u00e4chst etwas Gem\u00fcse-F\u00fcllung und <b>Koriander-Limetten-Reis</b> auf jede <b>Tortilla</b> geben. Mit <b>Avocado</b>, <b>Aioli</b>, frischem <b>Koriander</b>, <b> scharfer Chilisauce </b> und <b>Sesam</b> toppen und nach Belieben mit einem Spritzer <b>Limettensaft</b> betr\u00e4ufeln.",
+      "Guten Appetit!"
+    ],
+    "image_path": "/data/html_contents/Chris/recipe_images/veganefajitasmitgemse.png",
+    "image_url": "recipe_images/veganefajitasmitgemse.png",
+    "template_name": "",
+    "notes": "Hooms & Hums approved! \u2764\ufe0f 30.06.2025"
+  },
+  {
+    "title": "Limetten-Koriander-Reis",
+    "cook_time": "25",
+    "portions": "4 servings",
+    "ingredients": [
+      {
+        "category": "Hauptzutaten",
+        "items": [
+          {
+            "name": "Basmati-Reis",
+            "quantity": 200.0,
+            "unit": "g"
+          },
+          {
+            "name": "Wasser",
+            "quantity": 360.0,
+            "unit": "ml"
+          },
+          {
+            "name": "Salz",
+            "quantity": 0.5,
+            "unit": "TL"
+          },
+          {
+            "name": "Oliven\u00f6l",
+            "quantity": 1.5,
+            "unit": "EL"
+          }
+        ]
+      },
+      {
+        "category": "Gew\u00fcrze und Kr\u00e4uter",
+        "items": [
+          {
+            "name": "Knoblauchzehe",
+            "quantity": 1.5,
+            "unit": ""
+          },
+          {
+            "name": "gr\u00fcne Peperoni oder Jalape\u00f1o (optional)",
+            "quantity": 1.0,
+            "unit": ""
+          },
+          {
+            "name": "Fr\u00fchlingszwiebeln",
+            "quantity": 2.0,
+            "unit": ""
+          },
+          {
+            "name": "Koriander",
+            "quantity": 0.5,
+            "unit": "Bund"
+          },
+          {
+            "name": "Limettenschale",
+            "quantity": 1.5,
+            "unit": "TL"
+          },
+          {
+            "name": "Limettensaft",
+            "quantity": 2.5,
+            "unit": "EL"
+          },
+          {
+            "name": "Sesam",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Rote Paprikaflocken",
+            "quantity": "",
+            "unit": ""
+          }
+        ]
+      }
+    ],
+    "instructions": [
+      "<b>Reis</b> [200 g], <b>Wasser</b> [360 ml], <b>Salz</b> [0.5 TL] und <b>Oliven\u00f6l</b> [0.5 EL] in einen Topf geben und zum Kochen bringen. Einen Deckel auf den Topf setzen, die Hitze reduzieren und 20 Minuten k\u00f6cheln lassen (oder wie auf der Packung angegeben).",
+      "Anschlie\u00dfend den Deckel abnehmen, den <b>Reis</b> mit einem L\u00f6ffel vorsichtig auflockern und eine Minute abk\u00fchlen lassen.",
+      "W\u00e4hrenddessen die <b>gr\u00fcne Peperoni</b>, die <b>Fr\u00fchlingszwiebeln</b> und den <b>Koriander</b> fein hacken. Den <b>Knoblauch</b> fein reiben oder pressen. Das gehackte Gem\u00fcse mit etwas <b>Limettenschale</b>, <b>Limettensaft</b> [1.5 EL] und dem restlichen <b>Oliven\u00f6l</b> [1 EL] zum <b>Reis</b> geben und alles gut vermengen. Abschmecken und bei Bedarf nachw\u00fcrzen.",
+      "Nach Belieben mit <b>Sesam</b> und <b>roten Paprikaflocken</b> garnieren und als Beilage zu deinen Lieblingsgerichten servieren.",
+      "Guten Appetit!"
+    ],
+    "image_path": "/data/html_contents/Chris/recipe_images/limettenkorianderreis.png",
+    "image_url": "recipe_images/limettenkorianderreis.png",
+    "template_name": "",
+    "notes": "Perfekt zu Veganen Fajitas mit Gem\u00fcse!"
+  },
+  {
+    "title": "Maultaschensalat (vegan)",
+    "cook_time": "55",
+    "portions": "2",
+    "ingredients": [
+      {
+        "category": "Hauptgericht",
+        "items": [
+          {
+            "name": "vegane Maultaschen",
+            "quantity": 6.0,
+            "unit": ""
+          },
+          {
+            "name": "Tricolore-Salatk\u00f6pfe",
+            "quantity": 1.0,
+            "unit": ""
+          },
+          {
+            "name": "Ruccola",
+            "quantity": 50.0,
+            "unit": "g"
+          },
+          {
+            "name": "Kartoffelsalat",
+            "quantity": 100.0,
+            "unit": "ml"
+          },
+          {
+            "name": "kl. rote Zwiebel",
+            "quantity": 1.0,
+            "unit": ""
+          },
+          {
+            "name": "Radiesschen",
+            "quantity": 5.0,
+            "unit": ""
+          },
+          {
+            "name": "geschmorte Zwiebeln",
+            "quantity": 50.0,
+            "unit": "g"
+          }
+        ]
+      },
+      {
+        "category": "Bratensauce",
+        "items": [
+          {
+            "name": "vegane Bratensauce",
+            "quantity": 2.0,
+            "unit": "EL"
+          },
+          {
+            "name": "Wasser",
+            "quantity": 100.0,
+            "unit": "ml"
+          }
+        ]
+      },
+      {
+        "category": "Bohnensalat",
+        "items": [
+          {
+            "name": "Bohnen",
+            "quantity": 100.0,
+            "unit": "g"
+          },
+          {
+            "name": "Pfeffer",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Salz",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Wei\u00dfweinessig",
+            "quantity": 20.0,
+            "unit": "ml"
+          }
+        ]
+      },
+      {
+        "category": "Karottensalat",
+        "items": [
+          {
+            "name": "Karotten",
+            "quantity": 2.0,
+            "unit": ""
+          },
+          {
+            "name": "Salz",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Pfeffer",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Wei\u00dfweinessig",
+            "quantity": 20.0,
+            "unit": "ml"
+          },
+          {
+            "name": "Agavendicksaft",
+            "quantity": 10.0,
+            "unit": "ml"
+          }
+        ]
+      },
+      {
+        "category": "Dressing",
+        "items": [
+          {
+            "name": "Senf",
+            "quantity": 1.5,
+            "unit": "EL"
+          },
+          {
+            "name": "Oliven\u00f6l",
+            "quantity": 2.0,
+            "unit": "EL"
+          },
+          {
+            "name": "Wei\u00dfweinessig",
+            "quantity": 1.5,
+            "unit": "EL"
+          },
+          {
+            "name": "Agavendicksaft",
+            "quantity": 1.0,
+            "unit": "EL"
+          },
+          {
+            "name": "Salz",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Pfeffer",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "getrocknete Salatkr\u00e4uter",
+            "quantity": 1.0,
+            "unit": "EL"
+          }
+        ]
+      },
+      {
+        "category": "Topping",
+        "items": [
+          {
+            "name": "Granatapfelkerne",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Sonnenblumenkerne oder \u00c4hnliches",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Sojaprossen",
+            "quantity": "",
+            "unit": ""
+          }
+        ]
+      }
+    ],
+    "instructions": [
+      "Salate waschen und trocknen lassen",
+      "<b>Dressing</b> verr\u00fchren",
+      "<b>geschmorte Zwiebeln</b> herstellen",
+      "Karotten raspeln und mit den dazugeh\u00f6rigen Zutaten anmachen um den <b>Karottensalat</b> herzustellen",
+      "Bohnen mit den dazugeh\u00f6rigen Zutaten anmachen um den <b>Bohnensalat</b> herzustellen",
+      "beide Salate ziehen lassen",
+      "ggf <b>Kartoffelsalat</b> herstellen",
+      "rote Zwiebel und Radiesschen in feine Streifen schneiden",
+      "vegane <b>Bratensauce</b> anmischen und kurz k\u00f6cheln lassen",
+      "<b>Maultaschen</b> in Pfanne scharf anbraten",
+      "<b>Sonnenblumenkerne</b> leicht anbraten",
+      "Bohnen-, Kartoffel- und Karottensalat als Basis auf Teller legen",
+      "Salat Tricolore mit der Hand in kleine Teile zupfen und dr\u00fcber legen",
+      "<b>Ruccola</b> dr\u00fcber legen",
+      "rote Zwiebelstreifen dr\u00fcber legen",
+      "Radiesschen dr\u00fcber legen",
+      "Granatapfelkerne und Sojasprossen dr\u00fcber legen",
+      "<b>Maultaschen</b> auf Kartoffelsalat legen",
+      "geschmorte Zwiebeln \u00fcber <b>Maultaschen</b> legen",
+      "<b>Bratensauce</b> \u00fcber Maultaschen legen",
+      "<b>Dressing</b> \u00fcber Salat verteilen",
+      "<b>Sonnenblumenkerne</b> \u00fcber Salat verteilen"
+    ],
+    "image_path": "/data/html_contents/Chris/recipe_images/maultaschensalatvegan.png",
+    "image_url": "html_contents/Chris/recipe_images/maultaschensalatvegan.png",
+    "template_name": "",
+    "notes": "Neckarcamping Original Recipe"
+  },
+  {
+    "title": "Flammkuchen mit Champignons (vegan)",
+    "cook_time": "30",
+    "portions": "1 Flammkuchen",
+    "image_url": "html_contents/recipe_images/flammkuchenmitchampignonsvegan.png",
+    "image_path": "/data/html_contents/Chris/recipe_images/flammkuchenmitchampignonsvegan.png",
+    "ingredients": [
+      {
+        "category": "Teig",
+        "items": [
+          {
+            "name": "Flammkuchenteig",
+            "quantity": "1",
+            "unit": ""
+          }
+        ]
+      },
+      {
+        "category": "Gem\u00fcse",
+        "items": [
+          {
+            "name": "Fr\u00fchlingszwiebeln",
+            "quantity": "1-2",
+            "unit": ""
+          },
+          {
+            "name": "wei\u00dfe Zwiebel",
+            "quantity": "1",
+            "unit": "kleine"
+          },
+          {
+            "name": "Champignons",
+            "quantity": "5",
+            "unit": ""
+          }
+        ]
+      },
+      {
+        "category": "Vegane Produkte",
+        "items": [
+          {
+            "name": "vegane Speckw\u00fcrfel / R\u00e4uchertofu",
+            "quantity": "50",
+            "unit": "g"
+          },
+          {
+            "name": "veganer Schmelzk\u00e4se",
+            "quantity": "80",
+            "unit": "g"
+          },
+          {
+            "name": "veganer Schmand",
+            "quantity": "50-100",
+            "unit": "ml"
+          }
+        ]
+      },
+      {
+        "category": "Gew\u00fcrze und \u00d6le",
+        "items": [
+          {
+            "name": "Oliven\u00f6l",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Pfeffer",
+            "quantity": "",
+            "unit": ""
+          }
+        ]
+      },
+      {
+        "category": "Optionale Zutaten",
+        "items": [
+          {
+            "name": "Ruccola",
+            "quantity": "8",
+            "unit": "Bl\u00e4tter"
+          }
+        ]
+      }
+    ],
+    "instructions": [
+      "Backofen auf 220 Grad Umluft vorheizen",
+      "<b>wei\u00dfe Zwiebel</b> grob hacken",
+      "<b>Fr\u00fchlingszwiebeln</b> grob schneiden",
+      "Falls <b>R\u00e4uchertofu</b>, dann in kleine Speckw\u00fcrfel schneiden",
+      "<b>Champignon</b> in feine Scheiben schneiden",
+      "<b>veganen Schmand [50-100ml]</b> mit L\u00f6ffel auf <b>Flammkuchenteig [1]</b> verteilen und etwas pfeffern",
+      "Zuerst den <b>K\u00e4se [80g]</b> und dann die <b>wei\u00dfe Zwiebel</b> verteilen",
+      "<b>vegane Speckw\u00fcrfel/R\u00e4uchertofu-W\u00fcrfel [50g]</b> verteilen",
+      "<b>Champignonscheiben</b> dar\u00fcber und schlie\u00dflich <b>Fr\u00fchlingszwiebeln</b> dr\u00fcber geben",
+      "Mit ein wenig <b>Oliven\u00f6l</b> betr\u00e4ufeln",
+      "Flammkuchen 10-15 Minuten backen",
+      "Flammkuchen rausholen und optional mit <b>Ruccola [8 Bl\u00e4tter]</b> toppen"
+    ],
+    "notes": "\u00c1 la Neckarcamping T\u00fcbingen statt Champignons getrocknete Tomaten in d\u00fcnnen Scheiben und Schmelzzwiebeln \ud83e\udd78"
+  },
+  {
+    "title": "Mediterrane Flammkuchen-Creme & Brotaufstrich",
+    "cook_time": "5",
+    "portions": "2 Flammkuchen",
+    "image_url": "html_contents/recipe_images/mediterraneflammkuchencremebrotaufstrich.png",
+    "image_path": "/data/html_contents/Chris/recipe_images/mediterraneflammkuchencremebrotaufstrich.png",
+    "ingredients": [
+      {
+        "category": "Hauptzutaten",
+        "items": [
+          {
+            "name": "Veganer Schmand",
+            "quantity": "100",
+            "unit": "g"
+          },
+          {
+            "name": "Tomatenmark",
+            "quantity": "3",
+            "unit": "EL"
+          },
+          {
+            "name": "Knoblauchzehen",
+            "quantity": "2",
+            "unit": ""
+          },
+          {
+            "name": "Paprika-Edels\u00fc\u00df",
+            "quantity": "1",
+            "unit": "EL"
+          },
+          {
+            "name": "Oregano",
+            "quantity": "1",
+            "unit": "EL"
+          },
+          {
+            "name": "Salz",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Pfeffer",
+            "quantity": "",
+            "unit": ""
+          }
+        ]
+      },
+      {
+        "category": "Optionale Zutaten",
+        "items": [
+          {
+            "name": "Hafermilch",
+            "quantity": "",
+            "unit": "Schuss"
+          },
+          {
+            "name": "getrocknete Tomaten",
+            "quantity": "30",
+            "unit": "g"
+          },
+          {
+            "name": "veganer Feta",
+            "quantity": "50",
+            "unit": "g"
+          },
+          {
+            "name": "frischer Basilikum",
+            "quantity": "4",
+            "unit": "Bl\u00e4tter"
+          }
+        ]
+      }
+    ],
+    "instructions": [
+      "Knoblauchzehen pressen",
+      "getrocknete Tomaten und veganen Feta ggf. p\u00fcrieren",
+      "Knoblauch mit den restlichen Zutaten vermengen",
+      "Anstelle von <strong>Schmand</strong> [100g] f\u00fcr die Flammkuchenbasis verwenden"
+    ],
+    "notes": "Passt sehr gut mit Zucchini/Aubergine/Oliven/Feta auf dem Flammkuchen\r\n\r\nCreme \u00e1 la Collegium T\u00fcbi ist mit Feta, Hafermilch und getrockneten Tomaten als Basis \ud83d\udc69\ud83c\udffb\u200d\ud83c\udfa8\r\n\r\nAnsonsten auch sehr lecker mit Baguette"
+  },
+  {
+    "title": "Pizza Thunfisch-Mellanzane (vegan)",
+    "cook_time": "50",
+    "portions": "1 Pizza",
+    "ingredients": [
+      {
+        "category": "Hauptzutaten",
+        "items": [
+          {
+            "name": "Pizzateig",
+            "quantity": 1.0,
+            "unit": ""
+          },
+          {
+            "name": "Gardengourmet veganer Thunfisch",
+            "quantity": 0.5,
+            "unit": ""
+          },
+          {
+            "name": "gro\u00dfe wei\u00dfe/rote Zwiebel",
+            "quantity": 1.0,
+            "unit": ""
+          },
+          {
+            "name": "veganer K\u00e4se",
+            "quantity": 100.0,
+            "unit": "g"
+          },
+          {
+            "name": "Oliven",
+            "quantity": 20.0,
+            "unit": "optional"
+          }
+        ]
+      },
+      {
+        "category": "Tomatensauce",
+        "items": [
+          {
+            "name": "passierte Tomaten",
+            "quantity": 150.0,
+            "unit": "ml"
+          },
+          {
+            "name": "Zucker",
+            "quantity": 1.0,
+            "unit": "TL"
+          },
+          {
+            "name": "Salz",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Pfeffer",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Basilikum",
+            "quantity": 0.5,
+            "unit": "TL"
+          },
+          {
+            "name": "Oregano",
+            "quantity": 0.5,
+            "unit": "TL"
+          }
+        ]
+      },
+      {
+        "category": "Aubergine",
+        "items": [
+          {
+            "name": "Aubergine",
+            "quantity": 1.0,
+            "unit": ""
+          },
+          {
+            "name": "Salz",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Pfeffer",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Oregano",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Oliven\u00f6l",
+            "quantity": 2.0,
+            "unit": "EL"
+          }
+        ]
+      },
+      {
+        "category": "Knoblauch\u00f6l",
+        "items": [
+          {
+            "name": "Oliven\u00f6l",
+            "quantity": 2.0,
+            "unit": "EL"
+          },
+          {
+            "name": "Knoblauchzehen",
+            "quantity": 3.0,
+            "unit": ""
+          }
+        ]
+      }
+    ],
+    "instructions": [
+      "Aubergine in 0.5 cm dicke, runde Scheiben schneiden und mit <b>Salz</b> von beiden Seiten bestreuen",
+      "Auberginen 20 Minuten Wasser ziehen lassen und dann komplett abwaschen",
+      "Zwischendurch mit <b>Salz</b>, <b>Pfeffer</b>, <b>Oliven\u00f6l [2 EL]</b> und <b>Oregano</b> die Marinade f\u00fcr die Aubergine anr\u00fchren",
+      "Ofen auf 200 Grad Umluft vorheizen",
+      "Zwischendurch alle Zutaten f\u00fcr die <b>Tomatensauce</b> verr\u00fchren",
+      "Zwiebeln halbieren und in d\u00fcnne Scheiben schneiden",
+      "Auberginen marinieren und dann von beiden Seiten jeweils etwa 5 Minuten vorbraten",
+      "Nebenbei <b>Knoblauch\u00f6l</b> herstellen indem die <b>Knoblauchzehen [3]</b> gepresst werden und dann stark mit dem <b>Oliven\u00f6l [2 EL]</b> verr\u00fchrt werden",
+      "Dann <b>Tomatensauce</b> auf <b>Pizzateig [1]</b> verteilen",
+      "Als zweites den <b>veganen K\u00e4se [100g]</b> auf Pizza verteilen",
+      "Dann <b>Zwiebeln [1]</b>, <b>Auberginen</b> und <b>veganen Thunfisch [0.5]</b> auf Pizza verteilen",
+      "Ggf <b>Oliven [20]</b> auf Pizza verteilen",
+      "Schlie\u00dflich mit <b>Knoblauch\u00f6l</b> betr\u00e4ufeln und in den Ofen schieben"
+    ],
+    "image_path": "/data/html_contents/Chris/recipe_images/pizzathunfischmellanzanevegan.png",
+    "image_url": "recipe_images/pizzathunfischmellanzanevegan.png",
+    "template_name": "",
+    "notes": "GardenGourmet hat Stand 2025 die einzig gute vegane Thunfisch-Alternative in Deutschland. Must-Have f\u00fcr das Rezept!"
+  },
+  {
+    "title": "Besondere Titel ausp\u00e4\u00e4dj *.!?..__--_",
+    "cook_time": "1",
+    "portions": "1",
+    "image_url": "html_contents/recipe_images/besonderetitelauspdj.png",
+    "image_path": "/data/html_contents/Chris/recipe_images/besonderetitelauspdj.png",
+    "ingredients": [
+      {
+        "category": "Hauptzutaten",
+        "items": [
+          {
+            "name": "f",
+            "quantity": "",
+            "unit": ""
+          }
+        ]
+      }
+    ],
+    "instructions": [
+      "<b>f</b>"
+    ],
+    "notes": "f"
+  }
+]

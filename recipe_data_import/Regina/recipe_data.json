@@ -1,0 +1,1465 @@
+[
+  {
+    "title": "Teriyaki Fried Rice (vegan)",
+    "cook_time": "30",
+    "portions": "1",
+    "ingredients": [
+      {
+        "category": "Ingredients",
+        "items": [
+          {
+            "name": "Fr\u00fchlingszwiebeln",
+            "quantity": 4.0,
+            "unit": ""
+          },
+          {
+            "name": "wei\u00dfe Zwiebel",
+            "quantity": 1.0,
+            "unit": ""
+          },
+          {
+            "name": "Tofu",
+            "quantity": 300.0,
+            "unit": "g"
+          },
+          {
+            "name": "Knoblauchzehen",
+            "quantity": 2.0,
+            "unit": ""
+          },
+          {
+            "name": "Ingwer",
+            "quantity": 1.0,
+            "unit": "Daumenbreit"
+          },
+          {
+            "name": "Champignons",
+            "quantity": 250.0,
+            "unit": "g"
+          },
+          {
+            "name": "Reis",
+            "quantity": 250.0,
+            "unit": "g"
+          },
+          {
+            "name": "Sesam",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Salz & Pfeffer",
+            "quantity": "",
+            "unit": ""
+          }
+        ]
+      },
+      {
+        "category": "Gew\u00fcrze/\u00d6le",
+        "items": [
+          {
+            "name": "Sojasauce",
+            "quantity": 6.0,
+            "unit": "EL"
+          },
+          {
+            "name": "Sesam\u00f6l",
+            "quantity": 2.0,
+            "unit": "TL"
+          },
+          {
+            "name": "Zucker",
+            "quantity": 1.5,
+            "unit": "EL"
+          },
+          {
+            "name": "Mirin",
+            "quantity": 1.0,
+            "unit": "TL"
+          }
+        ]
+      },
+      {
+        "category": "Teriyaki Sauce",
+        "items": [
+          {
+            "name": "Sojasauce",
+            "quantity": 6.0,
+            "unit": "EL"
+          },
+          {
+            "name": "Sesam\u00f6l",
+            "quantity": 2.0,
+            "unit": "TL"
+          },
+          {
+            "name": "Knoblauchzehen",
+            "quantity": 1.5,
+            "unit": ""
+          },
+          {
+            "name": "Ingwer",
+            "quantity": 1.0,
+            "unit": "Daumenbreit"
+          },
+          {
+            "name": "Zucker",
+            "quantity": 1.5,
+            "unit": "EL"
+          },
+          {
+            "name": "Mirin",
+            "quantity": 1.0,
+            "unit": "TL"
+          }
+        ]
+      }
+    ],
+    "instructions": [
+      "<b>Teriyaki Sauce</b> anr\u00fchren (10 min)",
+      "<b>Tofu</b> [300g] ausdr\u00fccken & kleinw\u00fcrfeln & in 1/3 der <b>Teriyaki Sauce</b> + 2EL <b>Sesam</b> einlegen",
+      "<b>Reis</b> [250g] kochen (~20 min)",
+      "<b>wei\u00dfe Zwiebel</b> [1] in Quadrate hacken & in die Pfanne geben (2-3 min)",
+      "<b>Tofu</b> abtropfen (~5 min anbraten)",
+      "<b>Champignons</b> [250g] in (kleine) W\u00fcrfel hacken & mit restlicher <b>Teriyaki Sauce</b> + 4EL <b>Sesam</b> in Pfanne geben (3 min)",
+      "<b>Reis</b> & ggf. zus\u00e4tzliche <b>Sojasauce</b> in die Pfanne geben (~3 min)",
+      "<b>Fr\u00fchlingszwiebeln</b> in Scheiben schneiden & in die Pfanne geben (1 min)",
+      "Aufessen"
+    ],
+    "image_path": "/data/html_contents/Regina/recipe_images/teriyakifriedricevegan.png",
+    "image_url": "html_contents/Regina/recipe_images/teriyakifriedricevegan.png",
+    "template_name": "",
+    "safe_title": "teriyakifriedricevegan"
+  },
+  {
+    "title": "Pulled-Oyster Mushroom Burger",
+    "cook_time": "85",
+    "portions": "4",
+    "ingredients": [
+      {
+        "category": "Ingredients",
+        "items": [
+          {
+            "name": "Austernpilze",
+            "quantity": "450.0",
+            "unit": "g"
+          },
+          {
+            "name": "Brioche Br\u00f6tchen",
+            "quantity": "4.0",
+            "unit": ""
+          },
+          {
+            "name": "Essiggurken",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Veganer Schmelzk\u00e4se",
+            "quantity": "100.0",
+            "unit": "g"
+          },
+          {
+            "name": "Eisbergsalat",
+            "quantity": "100.0",
+            "unit": "g"
+          },
+          {
+            "name": "Rotkohl",
+            "quantity": "100.0",
+            "unit": "g"
+          },
+          {
+            "name": "Karotte",
+            "quantity": "50.0",
+            "unit": "g"
+          },
+          {
+            "name": "Vegane Aioli Mayo",
+            "quantity": "70.0",
+            "unit": "g"
+          },
+          {
+            "name": "Apfelessig",
+            "quantity": "3.5",
+            "unit": "EL"
+          },
+          {
+            "name": "Veganer Joghurt",
+            "quantity": "80.0",
+            "unit": "g"
+          }
+        ]
+      },
+      {
+        "category": "BBQ Sauce",
+        "items": [
+          {
+            "name": "Tomatenmark",
+            "quantity": "2.0",
+            "unit": "EL"
+          },
+          {
+            "name": "\u00d6l",
+            "quantity": "2.0",
+            "unit": "EL"
+          },
+          {
+            "name": "Ger\u00e4uchertes Paprikapulver",
+            "quantity": "2.0",
+            "unit": "TL"
+          },
+          {
+            "name": "Apfelessig",
+            "quantity": "2.0",
+            "unit": "EL"
+          },
+          {
+            "name": "Agavendicksaft",
+            "quantity": "2.0",
+            "unit": "EL"
+          },
+          {
+            "name": "Knoblauchzehe",
+            "quantity": "1",
+            "unit": ""
+          },
+          {
+            "name": "Sojasauce",
+            "quantity": "4.0",
+            "unit": "EL"
+          },
+          {
+            "name": "Wasser",
+            "quantity": "4.0",
+            "unit": "EL"
+          },
+          {
+            "name": "Chili/Cayennepulver",
+            "quantity": "0.25",
+            "unit": "TL"
+          }
+        ]
+      },
+      {
+        "category": "Eingelegte Zwiebeln",
+        "items": [
+          {
+            "name": "Rote Zwiebeln",
+            "quantity": "3.5",
+            "unit": ""
+          },
+          {
+            "name": "Wasser",
+            "quantity": "300.0",
+            "unit": "ml"
+          },
+          {
+            "name": "Wei\u00dfweinessig",
+            "quantity": "250.0",
+            "unit": "ml"
+          },
+          {
+            "name": "Zucker",
+            "quantity": "1",
+            "unit": "TL"
+          },
+          {
+            "name": "Salz",
+            "quantity": "0.5",
+            "unit": "TL"
+          },
+          {
+            "name": "Senfk\u00f6rner",
+            "quantity": "2.0",
+            "unit": "TL"
+          }
+        ]
+      }
+    ],
+    "instructions": [
+      "F\u00fcr die <b>BBQ Sauce</b>: Alle Zutaten mischen -> fertig.",
+      "F\u00fcr den <b>Coleslaw Salat</b>: <b>Kohl</b> [100g] und <b>Salat</b> [100g] in kleine St\u00fccke schneiden. <b>Karotte</b> [50g] reiben. Dressing mischen (alles kombinieren).",
+      "F\u00fcr die <b>Austernpilz Patties</b>: <b>Austernpilze</b> [450g] entlang der Fasern ziehen (~0.5cm ~ Pulled Pork). Pilze in einer Pfanne anbraten. 2/3 der <b>BBQ Sauce</b> [2 EL Tomatenmark, 2 EL \u00d6l, 2 TL Ger\u00e4uchertes Paprikapulver, 2 EL Apfelessig, 2 EL Agavendicksaft, 1 Knoblauchzehe, 4 EL Sojasauce, 4 EL Wasser, 0.25 TL Chili/Cayennepulver] in die Pfanne geben und die Pilze marinieren (3-5min). Pfanne abdecken und <b>veganen Schmelzk\u00e4se</b> [100g] bei mittlerer Hitze schmelzen lassen (3-4min).",
+      "F\u00fcr die <b>eingelegten Zwiebeln</b>: 3-4 <b>rote Zwiebeln</b> in feine Streifen schneiden. 300ml <b>Wasser</b>, 250ml <b>Wei\u00dfweinessig</b>, 1 TL <b>Zucker</b>, 0.5 TL <b>Salz</b> & 2 TL <b>Senfk\u00f6rner</b> in einem Topf erhitzen & 2min zum Kochen bringen. Topfinhalt \u00fcber die Zwiebeln gie\u00dfen!",
+      "Genie\u00dfen!"
+    ],
+    "image_url": "html_contents/Regina/recipe_images/pulledoystermushroomburger.png",
+    "image_path": "/data/html_contents/Regina/recipe_images/pulledoystermushroomburger.png",
+    "safe_title": "pulledoystermushroomburger"
+  },
+  {
+    "title": "Bananenbrot",
+    "cook_time": "50",
+    "portions": "12",
+    "ingredients": [
+      {
+        "category": "Zutaten",
+        "items": [
+          {
+            "name": "sehr reife Bananen",
+            "quantity": 4.0,
+            "unit": ""
+          },
+          {
+            "name": "Sonnenblumen\u00f6l",
+            "quantity": 100.0,
+            "unit": "ml"
+          },
+          {
+            "name": "Mandeldrink",
+            "quantity": 120.0,
+            "unit": "ml"
+          },
+          {
+            "name": "Rohrzucker",
+            "quantity": 80.0,
+            "unit": "g"
+          },
+          {
+            "name": "Weizenmehl Type 405",
+            "quantity": 150.0,
+            "unit": "g"
+          },
+          {
+            "name": "Dinkelvollkornmehl",
+            "quantity": 100.0,
+            "unit": "g"
+          },
+          {
+            "name": "gemahlene Mandeln",
+            "quantity": 100.0,
+            "unit": "g"
+          },
+          {
+            "name": "Backpulver",
+            "quantity": 2.0,
+            "unit": "TL"
+          },
+          {
+            "name": "Salz",
+            "quantity": 1.0,
+            "unit": "Prise(n)"
+          },
+          {
+            "name": "Vanillezucker",
+            "quantity": 1.0,
+            "unit": "Pck."
+          },
+          {
+            "name": "Zimt",
+            "quantity": 1.0,
+            "unit": "TL"
+          },
+          {
+            "name": "Fett f\u00fcr die Form",
+            "quantity": 1.0,
+            "unit": ""
+          }
+        ]
+      }
+    ],
+    "instructions": [
+      "Backofen auf 180\u00b0C vorheizen. Die <b>sehr reifen Bananen [4]</b> mit einer Gabel fein zerdr\u00fccken und mit <b>Sonnenblumen\u00f6l [100 ml]</b> und <b>Mandeldrink [120 ml]</b> verr\u00fchren.",
+      "Die restlichen Zutaten: <b>Rohrzucker [80 g]</b>, <b>Weizenmehl Type 405 [150 g]</b>, <b>Dinkelvollkornmehl [100 g]</b>, <b>gemahlene Mandeln [100 g]</b>, <b>Backpulver [2 TL]</b>, <b>Salz [1 Prise(n)]</b>, <b>Vanillezucker [1 Pck.]</b>, <b>Zimt [1 TL]</b> miteinander vermischen und zu der Bananenmasse geben. Alles zu einem glatten Teig r\u00fchren.",
+      "Eine Kastenform (ca. 25 cm) mit <b>Fett f\u00fcr die Form</b> fetten oder mit Backpapier auslegen und den Teig hineingeben. Ca. 50 Minuten backen (St\u00e4bchenprobe!).",
+      "Kurz abk\u00fchlen lassen und aus der Form st\u00fcrzen. Auf einem Gitter vollst\u00e4ndig ausk\u00fchlen lassen."
+    ],
+    "image_path": "/data/html_contents/Regina/recipe_images/bananenbrot.png",
+    "image_url": "recipe_images/bananenbrot.png",
+    "template_name": "",
+    "safe_title": "bananenbrot"
+  },
+  {
+    "title": "Kichererbsensalat mit getrockneten Tomaten und Feta",
+    "cook_time": "15",
+    "portions": "2 servings",
+    "ingredients": [
+      {
+        "category": "Hauptzutaten",
+        "items": [
+          {
+            "name": "Kichererbsen",
+            "quantity": 1.0,
+            "unit": "kl. Dose/n"
+          },
+          {
+            "name": "Zwiebel",
+            "quantity": 1.0,
+            "unit": "kleine"
+          },
+          {
+            "name": "Tomate",
+            "quantity": 1.0,
+            "unit": "Handvoll"
+          },
+          {
+            "name": "Feta-K\u00e4se",
+            "quantity": 70.0,
+            "unit": "g"
+          },
+          {
+            "name": "Petersilie",
+            "quantity": 1.0,
+            "unit": "Handvoll"
+          },
+          {
+            "name": "Spinat / Feldsalat (optional)",
+            "quantity": 1.0,
+            "unit": "Handvoll"
+          }
+        ]
+      },
+      {
+        "category": "Dressing",
+        "items": [
+          {
+            "name": "Oliven\u00f6l",
+            "quantity": 4.0,
+            "unit": "EL"
+          },
+          {
+            "name": "Zitrone",
+            "quantity": 1.0,
+            "unit": "Bio-"
+          },
+          {
+            "name": "Knoblauch",
+            "quantity": 1.0,
+            "unit": "Zehe/n"
+          },
+          {
+            "name": "Sambal Oelek",
+            "quantity": 1.0,
+            "unit": "TL"
+          }
+        ]
+      },
+      {
+        "category": "W\u00fcrzmittel",
+        "items": [
+          {
+            "name": "Salz",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Pfeffer",
+            "quantity": "",
+            "unit": ""
+          }
+        ]
+      }
+    ],
+    "instructions": [
+      "Kichererbsen in einem Sieb abtropfen lassen und absp\u00fclen. In einer Sch\u00fcssel die <b>Kichererbsen</b>, <b>Zwiebel</b>, <b>getrocknete Tomaten</b>, den <b>Feta</b> und die <b>Petersilie</b> vermischen. Etwas Schale der <b>Bio-Zitrone</b> dazu reiben. Die <b>Zitrone</b> danach aufschneiden und auspressen.",
+      "<b>\u00d6l</b>, 2.5-3 EL <b>Zitronensaft</b> und <b>Knoblauch</b> zu einem Dressing vermischen. Unter den Salat mischen und diesen dann mit <b>Sambal</b>, <b>Salz</b> und <b>Pfeffer</b> abschmecken. Den Salat mindestens 30 Minuten ziehen lassen.",
+      "Danach eventuell nochmal nachw\u00fcrzen."
+    ],
+    "image_path": "/data/html_contents/Regina/recipe_images/kichererbsensalatmitgetrocknetentomatenundfeta.png",
+    "image_url": "html_contents/Regina/recipe_images/kichererbsensalatmitgetrocknetentomatenundfeta.png",
+    "template_name": "",
+    "safe_title": "kichererbsensalatmitgetrocknetentomatenundfeta"
+  },
+  {
+    "title": "Mexikanische (Taco) Gew\u00fcrzmischung",
+    "cook_time": "3",
+    "portions": "1",
+    "ingredients": [
+      {
+        "category": "Gew\u00fcrze",
+        "items": [
+          {
+            "name": "Kreuzk\u00fcmmelpulver",
+            "quantity": 2.0,
+            "unit": "EL"
+          },
+          {
+            "name": "Knoblauchpulver",
+            "quantity": 1.5,
+            "unit": "EL"
+          },
+          {
+            "name": "Oregano",
+            "quantity": 1.0,
+            "unit": "EL"
+          },
+          {
+            "name": "R\u00e4ucherpaprika-Pulver",
+            "quantity": 1.5,
+            "unit": "EL"
+          },
+          {
+            "name": "Salz",
+            "quantity": 1.0,
+            "unit": "bisschen"
+          },
+          {
+            "name": "Pfeffer",
+            "quantity": 1.0,
+            "unit": "bisschen"
+          },
+          {
+            "name": "Paprika-Edels\u00fc\u00df",
+            "quantity": 2.0,
+            "unit": "EL"
+          }
+        ]
+      }
+    ],
+    "instructions": [
+      "alles mahlen",
+      "alles vermischen",
+      "<b>genie\u00dfen</b>"
+    ],
+    "image_path": "/data/html_contents/Regina/recipe_images/mexikanischetacogewrzmischung.png",
+    "image_url": "html_contents/Regina/recipe_images/mexikanischetacogewrzmischung.png",
+    "template_name": "Funky",
+    "safe_title": "mexikanischetacogewrzmischung"
+  },
+  {
+    "title": "Chili Sin Carne",
+    "cook_time": "45",
+    "portions": "6 Portionen",
+    "ingredients": [
+      {
+        "category": "Hauptgericht",
+        "items": [
+          {
+            "name": "Naturtofu",
+            "quantity": 400.0,
+            "unit": "g"
+          },
+          {
+            "name": "R\u00e4uchertofu",
+            "quantity": 200.0,
+            "unit": "g"
+          },
+          {
+            "name": "passierte Tomaten",
+            "quantity": 400.0,
+            "unit": "ml"
+          },
+          {
+            "name": "gehackte Tomaten",
+            "quantity": 400.0,
+            "unit": "ml"
+          },
+          {
+            "name": "Knoblauchzehen",
+            "quantity": 6.0,
+            "unit": ""
+          },
+          {
+            "name": "gro\u00dfe Zwiebeln",
+            "quantity": 2.0,
+            "unit": ""
+          },
+          {
+            "name": "Kidneybohnen",
+            "quantity": 1.0,
+            "unit": "Dose"
+          },
+          {
+            "name": "Mais",
+            "quantity": 1.0,
+            "unit": "Dose"
+          },
+          {
+            "name": "Reis",
+            "quantity": 400.0,
+            "unit": "g"
+          }
+        ]
+      },
+      {
+        "category": "Gew\u00fcrze/\u00d6le",
+        "items": [
+          {
+            "name": "mexikanische Gew\u00fcrzmischung",
+            "quantity": 30.0,
+            "unit": "g"
+          },
+          {
+            "name": "Oliven\u00f6l",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "veganer Parmesan",
+            "quantity": "",
+            "unit": "optional"
+          },
+          {
+            "name": "Koriander",
+            "quantity": "",
+            "unit": "optional"
+          }
+        ]
+      }
+    ],
+    "instructions": [
+      "<b>R\u00e4uchertofu</b> [200g] raspeln (mittelgro\u00df)",
+      "<b>gro\u00dfe Zwiebeln</b> [2] und <b>Knoblauchzehen</b> [6] fein hacken",
+      "<b>Naturtofu</b> [400g] mit der Hand zerbr\u00f6seln und mit der H\u00e4lfte der <b>mexikanischen Gew\u00fcrzmischung</b> [15g] und <b>Oliven\u00f6l</b> marinieren",
+      "<b>Reis</b> [400g] kochen",
+      "<b>R\u00e4uchertofu</b> kurz scharf anbraten bis goldgelb",
+      "<b>Zwiebeln</b>, <b>Knoblauch</b> und marinierten <b>Naturtofu</b> dazugeben und auch anbraten",
+      "schlie\u00dflich <b>Mais</b> [1 Dose] und <b>Kidneybohnen</b> [1 Dose] dazugeben",
+      "<b>passierte</b> [400ml] und <b>gehackte Tomaten</b> [400ml] mit restlicher <b>mexikanischer Gew\u00fcrzmischung</b> [15g] dazugeben",
+      "alles etwa 15 Minuten k\u00f6cheln lassen",
+      "<b>Reis</b> mit Chili sin Carne servieren und ggf. mit <b>veganem Parmesan</b> und <b>Koriander</b> bestreuen"
+    ],
+    "image_path": "/data/html_contents/Regina/recipe_images/chilisincarne.png",
+    "image_url": "html_contents/Regina/recipe_images/chilisincarne.png",
+    "template_name": "Funky",
+    "safe_title": "chilisincarne"
+  },
+  {
+    "title": "Maultaschensalat (vegan)",
+    "cook_time": "55",
+    "portions": "2",
+    "ingredients": [
+      {
+        "category": "Hauptgericht",
+        "items": [
+          {
+            "name": "vegane Maultaschen",
+            "quantity": 6.0,
+            "unit": ""
+          },
+          {
+            "name": "Tricolore-Salatk\u00f6pfe",
+            "quantity": 1.0,
+            "unit": ""
+          },
+          {
+            "name": "Ruccola",
+            "quantity": 50.0,
+            "unit": "g"
+          },
+          {
+            "name": "Kartoffelsalat",
+            "quantity": 100.0,
+            "unit": "ml"
+          },
+          {
+            "name": "kl. rote Zwiebel",
+            "quantity": 1.0,
+            "unit": ""
+          },
+          {
+            "name": "Radiesschen",
+            "quantity": 5.0,
+            "unit": ""
+          },
+          {
+            "name": "geschmorte Zwiebeln",
+            "quantity": 50.0,
+            "unit": "g"
+          }
+        ]
+      },
+      {
+        "category": "Bratensauce",
+        "items": [
+          {
+            "name": "vegane Bratensauce",
+            "quantity": 2.0,
+            "unit": "EL"
+          },
+          {
+            "name": "Wasser",
+            "quantity": 100.0,
+            "unit": "ml"
+          }
+        ]
+      },
+      {
+        "category": "Bohnensalat",
+        "items": [
+          {
+            "name": "Bohnen",
+            "quantity": 100.0,
+            "unit": "g"
+          },
+          {
+            "name": "Pfeffer",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Salz",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Wei\u00dfweinessig",
+            "quantity": 20.0,
+            "unit": "ml"
+          }
+        ]
+      },
+      {
+        "category": "Karottensalat",
+        "items": [
+          {
+            "name": "Karotten",
+            "quantity": 2.0,
+            "unit": ""
+          },
+          {
+            "name": "Salz",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Pfeffer",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Wei\u00dfweinessig",
+            "quantity": 20.0,
+            "unit": "ml"
+          },
+          {
+            "name": "Agavendicksaft",
+            "quantity": 10.0,
+            "unit": "ml"
+          }
+        ]
+      },
+      {
+        "category": "Dressing",
+        "items": [
+          {
+            "name": "Senf",
+            "quantity": 1.5,
+            "unit": "EL"
+          },
+          {
+            "name": "Oliven\u00f6l",
+            "quantity": 2.0,
+            "unit": "EL"
+          },
+          {
+            "name": "Wei\u00dfweinessig",
+            "quantity": 1.5,
+            "unit": "EL"
+          },
+          {
+            "name": "Agavendicksaft",
+            "quantity": 1.0,
+            "unit": "EL"
+          },
+          {
+            "name": "Salz",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Pfeffer",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "getrocknete Salatkr\u00e4uter",
+            "quantity": 1.0,
+            "unit": "EL"
+          }
+        ]
+      },
+      {
+        "category": "Topping",
+        "items": [
+          {
+            "name": "Granatapfelkerne",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Sonnenblumenkerne oder \u00c4hnliches",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Sojaprossen",
+            "quantity": "",
+            "unit": ""
+          }
+        ]
+      }
+    ],
+    "instructions": [
+      "Salate waschen und trocknen lassen",
+      "<b>Dressing</b> verr\u00fchren",
+      "<b>geschmorte Zwiebeln</b> herstellen",
+      "Karotten raspeln und mit den dazugeh\u00f6rigen Zutaten anmachen um den <b>Karottensalat</b> herzustellen",
+      "Bohnen mit den dazugeh\u00f6rigen Zutaten anmachen um den <b>Bohnensalat</b> herzustellen",
+      "beide Salate ziehen lassen",
+      "ggf <b>Kartoffelsalat</b> herstellen",
+      "rote Zwiebel und Radiesschen in feine Streifen schneiden",
+      "vegane <b>Bratensauce</b> anmischen und kurz k\u00f6cheln lassen",
+      "<b>Maultaschen</b> in Pfanne scharf anbraten",
+      "<b>Sonnenblumenkerne</b> leicht anbraten",
+      "Bohnen-, Kartoffel- und Karottensalat als Basis auf Teller legen",
+      "Salat Tricolore mit der Hand in kleine Teile zupfen und dr\u00fcber legen",
+      "<b>Ruccola</b> dr\u00fcber legen",
+      "rote Zwiebelstreifen dr\u00fcber legen",
+      "Radiesschen dr\u00fcber legen",
+      "Granatapfelkerne und Sojasprossen dr\u00fcber legen",
+      "<b>Maultaschen</b> auf Kartoffelsalat legen",
+      "geschmorte Zwiebeln \u00fcber <b>Maultaschen</b> legen",
+      "<b>Bratensauce</b> \u00fcber Maultaschen legen",
+      "<b>Dressing</b> \u00fcber Salat verteilen",
+      "<b>Sonnenblumenkerne</b> \u00fcber Salat verteilen"
+    ],
+    "image_path": "/data/html_contents/Regina/recipe_images/maultaschensalatvegan.png",
+    "image_url": "html_contents/Regina/recipe_images/maultaschensalatvegan.png",
+    "template_name": "",
+    "notes": "Neckarcamping Original Recipe",
+    "safe_title": "maultaschensalatvegan"
+  },
+  {
+    "title": "Erdnusssauce",
+    "cook_time": "3",
+    "portions": "4 servings",
+    "ingredients": [
+      {
+        "category": "Erdnusssauce",
+        "items": [
+          {
+            "name": "cremige Erdnussbutter",
+            "quantity": 65.0,
+            "unit": "g"
+          },
+          {
+            "name": "Sojasauce",
+            "quantity": 2.0,
+            "unit": "EL"
+          },
+          {
+            "name": "Ahornsirup",
+            "quantity": 2.0,
+            "unit": "EL"
+          },
+          {
+            "name": "Reisessig",
+            "quantity": 1.5,
+            "unit": "EL"
+          },
+          {
+            "name": "Sesam\u00f6l",
+            "quantity": 1.0,
+            "unit": "EL"
+          },
+          {
+            "name": "Knoblauch",
+            "quantity": 1.0,
+            "unit": "gro\u00dfe Zehe"
+          },
+          {
+            "name": "frischer Ingwer",
+            "quantity": 1.0,
+            "unit": "TL"
+          },
+          {
+            "name": "Sriracha",
+            "quantity": 2.0,
+            "unit": "TL"
+          },
+          {
+            "name": "Limettensaft",
+            "quantity": 1.5,
+            "unit": "EL"
+          },
+          {
+            "name": "Wasser oder Kokosmilch",
+            "quantity": 1.0,
+            "unit": "nach Bedarf"
+          }
+        ]
+      }
+    ],
+    "instructions": [
+      "*Hinweis: Schau dir gerne das Rezept-Video oben im Beitrag an!",
+      "Einfache alle Zutaten f\u00fcr die <b>Erdnusssauce</b> in ein Mixgef\u00e4\u00df (oder in ein Glas oder eine Sch\u00fcssel) geben und dann im Mixer oder mit dem P\u00fcrierstab cremig mixen (oder verschlossen sch\u00fctteln oder verr\u00fchren), bis eine glatte Sauce entsteht. Bei Bedarf etwas <b>Wasser oder Kokosmilch</b> zugeben, bis die gew\u00fcnschte Konsistenz erreicht ist. (Verwende wenig <b>Wasser oder Kokosmilch</b>, wenn du die <b>Erdnuss-Sauce</b> als Dip servierst oder mehr, wenn du sie als Salat-Dressing servierst).",
+      "Passt perfekt zu Sommerrollen, Sat\u00e9-Spie\u00dfen, oder einem Thai-Nudelsalat. Guten Appetit!"
+    ],
+    "image_path": "/data/html_contents/Regina/recipe_images/erdnusssauce.png",
+    "image_url": "html_contents/Regina/recipe_images/erdnusssauce.png",
+    "template_name": "",
+    "safe_title": "erdnusssauce"
+  },
+  {
+    "title": "Teriyaki Sauce",
+    "cook_time": "1",
+    "portions": "5",
+    "ingredients": [
+      {
+        "category": "Basis",
+        "items": [
+          {
+            "name": "Tamari (reduzierte Sojasauce)",
+            "quantity": 600,
+            "unit": "ml"
+          },
+          {
+            "name": "Wasser",
+            "quantity": 600,
+            "unit": "ml"
+          },
+          {
+            "name": "Ahornsirup",
+            "quantity": 400,
+            "unit": "ml"
+          },
+          {
+            "name": "Reisessig (wei\u00dfer Essig)",
+            "quantity": 50,
+            "unit": "ml"
+          },
+          {
+            "name": "Ingwer",
+            "quantity": 10,
+            "unit": "TL"
+          },
+          {
+            "name": "Knoblauchzehen",
+            "quantity": 30,
+            "unit": ""
+          }
+        ]
+      },
+      {
+        "category": "Slurry",
+        "items": [
+          {
+            "name": "Maisst\u00e4rke",
+            "quantity": 5,
+            "unit": "TL"
+          },
+          {
+            "name": "Wasser",
+            "quantity": 5,
+            "unit": "TL"
+          }
+        ]
+      }
+    ],
+    "instructions": [
+      "Gib die <b>Basiszutaten</b> in einen gro\u00dfen Topf und lasse sie bei mittlerer Temperatur k\u00f6cheln.",
+      "Vermische die <b>Slurry</b> durch R\u00fchren von <b>Wasser [5 TL]</b> und <b>Maisst\u00e4rke [5 TL]</b>.",
+      "F\u00fcge die <b>Slurry</b> hinzu, sobald die <b>Basis</b> k\u00f6chelt.",
+      "R\u00fchre kontinuierlich, bis die Sauce die gew\u00fcnschte Konsistenz hat.",
+      "Lasse die Sauce abk\u00fchlen und dann lagern.",
+      "H\u00e4lt 1-2 Wochen im K\u00fchlschrank."
+    ],
+    "image_url": "html_contents/Regina/recipe_images/teriyakisauce.png",
+    "image_path": "/data/html_contents/Regina/recipe_images/teriyakisauce.png",
+    "safe_title": "teriyakisauce"
+  },
+  {
+    "title": "Hooms - Kichererbsensalat",
+    "cook_time": "25",
+    "portions": "4",
+    "ingredients": [
+      {
+        "category": "Zutaten",
+        "items": [
+          {
+            "name": "Oliven\u00f6l",
+            "quantity": "5.0",
+            "unit": "EL"
+          },
+          {
+            "name": "Balsamico-Dressing",
+            "quantity": "2.5",
+            "unit": "EL"
+          },
+          {
+            "name": "Kreuzk\u00fcmmelpulver",
+            "quantity": "2.0",
+            "unit": "EL"
+          },
+          {
+            "name": "Harissa-Pulver",
+            "quantity": "1.0",
+            "unit": "EL"
+          },
+          {
+            "name": "Oregano",
+            "quantity": "1.0",
+            "unit": "EL"
+          },
+          {
+            "name": "Salz",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Pfeffer",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Tomatenmark",
+            "quantity": "3.0",
+            "unit": "EL"
+          },
+          {
+            "name": "Knoblauchzehen",
+            "quantity": "3.0",
+            "unit": ""
+          },
+          {
+            "name": "Gro\u00dfe rote Zwiebel",
+            "quantity": "1.0",
+            "unit": ""
+          },
+          {
+            "name": "Gurken",
+            "quantity": "7.0",
+            "unit": ""
+          },
+          {
+            "name": "Kirschtomaten",
+            "quantity": "250.0",
+            "unit": "g"
+          },
+          {
+            "name": "R\u00e4uchertofu",
+            "quantity": "200.0",
+            "unit": "g"
+          },
+          {
+            "name": "Eisbergsalat",
+            "quantity": "0.5",
+            "unit": ""
+          },
+          {
+            "name": "Dosen Kichererbsen",
+            "quantity": "2.0",
+            "unit": "Dosen"
+          },
+          {
+            "name": "Fr\u00fchlingszwiebeln",
+            "quantity": "3.0",
+            "unit": ""
+          }
+        ]
+      }
+    ],
+    "instructions": [
+      "Dr\u00fccke den <b>Knoblauch</b> und mische ihn mit den restlichen <b>Dressing</b>-Zutaten.",
+      "Schneide die restlichen Zutaten in kleine St\u00fccke und lege sie in eine Sch\u00fcssel mit den <b>Kichererbsen</b> [2 Dosen].",
+      "Mische das <b>Dressing</b> und die Salatkomponenten."
+    ],
+    "image_url": "html_contents/Regina/recipe_images/hoomskichererbsensalat.png",
+    "image_path": "/data/html_contents/Regina/recipe_images/hoomskichererbsensalat.png",
+    "safe_title": "hoomskichererbsensalat"
+  },
+  {
+    "title": "Vegane Fajitas mit Gem\u00fcse",
+    "cook_time": "40",
+    "portions": "4 servings",
+    "ingredients": [
+      {
+        "category": "Hauptzutaten",
+        "items": [
+          {
+            "name": "Paprikaschoten (rot, gelb oder gr\u00fcn)",
+            "quantity": 2.0,
+            "unit": ""
+          },
+          {
+            "name": "Austernpilze (oder Portobello-Pilze)",
+            "quantity": 200.0,
+            "unit": "g"
+          },
+          {
+            "name": "Zwiebel",
+            "quantity": 1.0,
+            "unit": ""
+          },
+          {
+            "name": "Knoblauchzehen",
+            "quantity": 2.0,
+            "unit": ""
+          },
+          {
+            "name": "Scharfe Chilisauce",
+            "quantity": "",
+            "unit": ""
+          }
+        ]
+      },
+      {
+        "category": "Marinade",
+        "items": [
+          {
+            "name": "Oliven\u00f6l",
+            "quantity": 3.0,
+            "unit": "EL"
+          },
+          {
+            "name": "Tamari (oder Sojasauce)",
+            "quantity": 2.0,
+            "unit": "EL"
+          },
+          {
+            "name": "Ahornsirup",
+            "quantity": 0.5,
+            "unit": "EL"
+          },
+          {
+            "name": "Limettensaft",
+            "quantity": 2.0,
+            "unit": "EL"
+          },
+          {
+            "name": "gemahlener Kreuzk\u00fcmme",
+            "quantity": 1.5,
+            "unit": "TL"
+          },
+          {
+            "name": "Paprikapulver",
+            "quantity": 1.0,
+            "unit": "TL"
+          },
+          {
+            "name": "Chilipulver",
+            "quantity": 1.0,
+            "unit": "TL"
+          },
+          {
+            "name": "Salz und Pfeffer",
+            "quantity": "",
+            "unit": ""
+          }
+        ]
+      },
+      {
+        "category": "Beilagen und Toppings",
+        "items": [
+          {
+            "name": "Tortillas",
+            "quantity": 7.0,
+            "unit": ""
+          },
+          {
+            "name": "Koriander-Limetten-Reis",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Avocado (oder Guacamole)",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Aioli (oder vegane Sour Cream)",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Koriander",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Sesam",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Limetten",
+            "quantity": "",
+            "unit": ""
+          }
+        ]
+      }
+    ],
+    "instructions": [
+      "*Hinweis: Schau dir das Rezept-Video + die Schritt-f\u00fcr-Schritt-Fotos oben im Beitrag an!",
+      "Den Ofen auf 200\u00b0 C Ober-/ Unterhitze vorheizen.",
+      "Die <b>Paprikaschoten</b> halbieren, entkernen und in Streifen schneiden. Die <b>Austernpilze</b> in Streifen zupfen (wie im Rezept-Video oder auf den Schritt-f\u00fcr-Schritt Bildern gezeigt). Die <b>Zwiebel</b> abziehen und ebenfalls in Streifen schneiden.",
+      "Anschlie\u00dfend das Gem\u00fcse auf ein gro\u00dfes, tiefes Backblech legen.",
+      "Alle Zutaten f\u00fcr die <b>Marinade</b> in einem Gef\u00e4\u00df verr\u00fchren und \u00fcber das Gem\u00fcse gie\u00dfen. Alles gut durchmischen und etwa 30 Minuten backen, bis das Gem\u00fcse weich ist, zwischendurch einmal durchmischen.",
+      "Die <b>Tortillas</b> kurz in einer Pfanne erw\u00e4rmen.",
+      "Dann die Fajitas zusammenstellen. Daf\u00fcr zun\u00e4chst etwas Gem\u00fcse-F\u00fcllung und <b>Koriander-Limetten-Reis</b> auf jede <b>Tortilla</b> geben. Mit <b>Avocado</b>, <b>Aioli</b>, frischem <b>Koriander</b>, <b> scharfer Chilisauce </b> und <b>Sesam</b> toppen und nach Belieben mit einem Spritzer <b>Limettensaft</b> betr\u00e4ufeln.",
+      "Guten Appetit!"
+    ],
+    "image_path": "/data/html_contents/Regina/recipe_images/veganefajitasmitgemse.png",
+    "image_url": "html_contents/Regina/recipe_images/veganefajitasmitgemse.png",
+    "template_name": "",
+    "notes": "Hooms & Hums approved! \u2764\ufe0f 30.06.2025",
+    "safe_title": "veganefajitasmitgemse"
+  },
+  {
+    "title": "Limetten-Koriander-Reis",
+    "cook_time": "25",
+    "portions": "4 servings",
+    "ingredients": [
+      {
+        "category": "Hauptzutaten",
+        "items": [
+          {
+            "name": "Basmati-Reis",
+            "quantity": 200.0,
+            "unit": "g"
+          },
+          {
+            "name": "Wasser",
+            "quantity": 360.0,
+            "unit": "ml"
+          },
+          {
+            "name": "Salz",
+            "quantity": 0.5,
+            "unit": "TL"
+          },
+          {
+            "name": "Oliven\u00f6l",
+            "quantity": 1.5,
+            "unit": "EL"
+          }
+        ]
+      },
+      {
+        "category": "Gew\u00fcrze und Kr\u00e4uter",
+        "items": [
+          {
+            "name": "Knoblauchzehe",
+            "quantity": 1.5,
+            "unit": ""
+          },
+          {
+            "name": "gr\u00fcne Peperoni oder Jalape\u00f1o (optional)",
+            "quantity": 1.0,
+            "unit": ""
+          },
+          {
+            "name": "Fr\u00fchlingszwiebeln",
+            "quantity": 2.0,
+            "unit": ""
+          },
+          {
+            "name": "Koriander",
+            "quantity": 0.5,
+            "unit": "Bund"
+          },
+          {
+            "name": "Limettenschale",
+            "quantity": 1.5,
+            "unit": "TL"
+          },
+          {
+            "name": "Limettensaft",
+            "quantity": 2.5,
+            "unit": "EL"
+          },
+          {
+            "name": "Sesam",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Rote Paprikaflocken",
+            "quantity": "",
+            "unit": ""
+          }
+        ]
+      }
+    ],
+    "instructions": [
+      "<b>Reis</b> [200 g], <b>Wasser</b> [360 ml], <b>Salz</b> [0.5 TL] und <b>Oliven\u00f6l</b> [0.5 EL] in einen Topf geben und zum Kochen bringen. Einen Deckel auf den Topf setzen, die Hitze reduzieren und 20 Minuten k\u00f6cheln lassen (oder wie auf der Packung angegeben).",
+      "Anschlie\u00dfend den Deckel abnehmen, den <b>Reis</b> mit einem L\u00f6ffel vorsichtig auflockern und eine Minute abk\u00fchlen lassen.",
+      "W\u00e4hrenddessen die <b>gr\u00fcne Peperoni</b>, die <b>Fr\u00fchlingszwiebeln</b> und den <b>Koriander</b> fein hacken. Den <b>Knoblauch</b> fein reiben oder pressen. Das gehackte Gem\u00fcse mit etwas <b>Limettenschale</b>, <b>Limettensaft</b> [1.5 EL] und dem restlichen <b>Oliven\u00f6l</b> [1 EL] zum <b>Reis</b> geben und alles gut vermengen. Abschmecken und bei Bedarf nachw\u00fcrzen.",
+      "Nach Belieben mit <b>Sesam</b> und <b>roten Paprikaflocken</b> garnieren und als Beilage zu deinen Lieblingsgerichten servieren.",
+      "Guten Appetit!"
+    ],
+    "image_path": "/data/html_contents/Regina/recipe_images/limettenkorianderreis.png",
+    "image_url": "html_contents/Regina/recipe_images/limettenkorianderreis.png",
+    "template_name": "",
+    "notes": "Perfekt zu Veganen Fajitas mit Gem\u00fcse!",
+    "safe_title": "limettenkorianderreis"
+  },
+  {
+    "title": "Der Beste Erdbeerkuchen",
+    "safe_title": "derbesteerdbeerkuchen",
+    "cook_time": "45",
+    "portions": "8 servings",
+    "ingredients": [
+      {
+        "category": "Kuchenbasis",
+        "items": [
+          {
+            "name": "Vanille-Biskuit",
+            "quantity": 1.0,
+            "unit": "Rezept",
+            "reference": "veganertortenboden"
+          }
+        ]
+      },
+      {
+        "category": "Puddingcreme",
+        "items": [
+          {
+            "name": "Pflanzenmilch",
+            "quantity": 320.0,
+            "unit": "ml",
+            "reference": null
+          },
+          {
+            "name": "Vanille-Puddingpulver",
+            "quantity": 1.0,
+            "unit": "Packung",
+            "reference": null
+          },
+          {
+            "name": "Mais-/Speisest\u00e4rke",
+            "quantity": 35.0,
+            "unit": "g",
+            "reference": null
+          },
+          {
+            "name": "Vanilleextrakt",
+            "quantity": 1.0,
+            "unit": "TL",
+            "reference": null
+          },
+          {
+            "name": "Kurkuma",
+            "quantity": 1.0,
+            "unit": "Prise",
+            "reference": null
+          },
+          {
+            "name": "Zucker",
+            "quantity": 3.5,
+            "unit": "EL",
+            "reference": null
+          },
+          {
+            "name": "veganer Frischk\u00e4se",
+            "quantity": 150.0,
+            "unit": "g",
+            "reference": null
+          }
+        ]
+      },
+      {
+        "category": "Belag",
+        "items": [
+          {
+            "name": "Erdbeeren",
+            "quantity": 300.0,
+            "unit": "g",
+            "reference": null
+          }
+        ]
+      },
+      {
+        "category": "Tortenguss",
+        "items": [
+          {
+            "name": "Veganer Roter Tortenguss",
+            "quantity": 0.5,
+            "unit": "Packung",
+            "reference": null
+          }
+        ]
+      }
+    ],
+    "instructions": [
+      "*Hinweis: Schau dir das Rezept-Video + die Schritt-f\u00fcr-Schritt Anleitung oben im Beitrag an!",
+      "Den <b>Vanille-Biskuit</b> [1 Rezept] gem\u00e4\u00df diesem Rezept backen. Anschlie\u00dfend vollst\u00e4ndig ausk\u00fchlen lassen und mit einem Tortenring oder dem Springformring umschlie\u00dfen.",
+      "Etwa 5 EL von der <b>Pflanzenmilch</b> [320 ml] abnehmen und das <b>Vanille-Puddingpulver</b> [1 Packung] (oder <b>St\u00e4rke</b> [35 g] + <b>Vanille</b> [1 TL]) und den <b>Zucker</b> [3.5 EL] darin aufl\u00f6sen. Die restliche <b>Pflanzenmilch</b> in einem Topf zum Kochen bringen. Dann die Puddingpulver-Mischung einr\u00fchren und unter st\u00e4ndigem R\u00fchren erneut aufkochen.",
+      "Den eingedickten Pudding vom Herd ziehen und kurz unter R\u00fchren etwas abk\u00fchlen lassen. Dann den <b>veganen Frischk\u00e4se</b> [150 g] mit einem Handr\u00fchrger\u00e4t untermixen und die Puddingcreme auf den Kuchenboden geben.",
+      "Die <b>Erdbeeren</b> [300 g] waschen, gut trocken tupfen und den Strunk abschneiden. Dann halbieren oder vierteln und auf dem Pudding verteilen.",
+      "Den <b>roten Tortenguss</b> [0.5 Packung] gem\u00e4\u00df Packungsanweisung in rotem Fruchtsaft (oder Wasser + Zucker) zubereiten und l\u00f6ffelweise \u00fcber die Erdbeeren gie\u00dfen. Den Kuchen mindestens 2 Stunden (oder \u00fcber Nacht) kalt stellen, bis er komplett fest geworden ist.",
+      "Anschlie\u00dfend mit einem scharfen Messer vorsichtig an der Form bzw. dem Tortenring entlang fahren und den Ring l\u00f6sen. Den Kuchen nach Belieben dekorieren, in St\u00fccke schneiden und genie\u00dfen!"
+    ],
+    "image_path": "/data/html_contents/Regina/recipe_images/derbesteerdbeerkuchen.png",
+    "image_url": "recipe_images/derbesteerdbeerkuchen.png",
+    "template_name": "",
+    "notes": ""
+  },
+  {
+    "title": "Veganer Tortenboden",
+    "safe_title": "veganertortenboden",
+    "cook_time": "35",
+    "portions": "1 serving",
+    "ingredients": [
+      {
+        "category": "Trockene Zutaten",
+        "items": [
+          {
+            "name": "Weizen- oder Dinkelmehl",
+            "quantity": 90.0,
+            "unit": "g"
+          },
+          {
+            "name": "Mais- oder Speisest\u00e4rke",
+            "quantity": 0.75,
+            "unit": "EL"
+          },
+          {
+            "name": "Backpulver",
+            "quantity": 0.75,
+            "unit": "TL"
+          },
+          {
+            "name": "Zucker",
+            "quantity": 50.0,
+            "unit": "g"
+          },
+          {
+            "name": "Salz",
+            "quantity": 1.0,
+            "unit": "Prise"
+          },
+          {
+            "name": "gemahlene Bourbon Vanille",
+            "quantity": 1.0,
+            "unit": "Prise"
+          }
+        ]
+      },
+      {
+        "category": "Fl\u00fcssige Zutaten",
+        "items": [
+          {
+            "name": "Sojamilch",
+            "quantity": 90.0,
+            "unit": "ml"
+          },
+          {
+            "name": "Pflanzen\u00f6l",
+            "quantity": 40.0,
+            "unit": "ml"
+          },
+          {
+            "name": "Apfelessig",
+            "quantity": 0.5,
+            "unit": "EL"
+          }
+        ]
+      }
+    ],
+    "instructions": [
+      "*Hinweis: Schau dir das Rezept-Video + die Schritt-f\u00fcr-Schritt Anleitung oben im Beitrag an!",
+      "Den Backofen auf 180 \u00b0C Ober-/Unterhitze vorheizen. Die Seiten einer 20-cm Springform leicht einfetten und den Boden mit <strong>Backpapier</strong> auslegen.",
+      "<strong>Mehl</strong> [90 g], <strong>St\u00e4rke</strong> [0.75 EL] und <strong>Backpulver</strong> [0.75 TL] in eine Sch\u00fcssel sieben. Dann <strong>Zucker</strong> [50 g], <strong>Salz</strong> [1 Prise] und <strong>Vanille</strong> [1 Prise] hinzugeben und alles mit einem Schneebesen vermischen.",
+      "In einem Gef\u00e4\u00df <strong>Sojamilch</strong> [90 ml], <strong>\u00d6l</strong> [40 ml] und <strong>Essig</strong> [0.5 EL] miteinander verr\u00fchren und dann mit dem Schneebesen in die Mehlmischung r\u00fchren (bei Bedarf 1 EL Milch mehr hinzugeben).",
+      "Den Teig in die vorbereitete Springform geben. Dann die Form vorsichtig einige Male auf die Arbeitsfl\u00e4che klopfen, damit entstandene Luftblasen herausgehen und der Teig glatt wird. Etwa 22-25 Minuten backen, bis ein St\u00e4bchen sauber herauskommt.",
+      "Anschlie\u00dfend den Kuchen 10 Minuten in der Form abk\u00fchlen lassen. Dann aus der Form l\u00f6sen, auf ein <strong>Kuchengitter</strong> setzen und zuende ausk\u00fchlen lassen."
+    ],
+    "image_path": "/data/html_contents/Regina/recipe_images/veganertortenboden.png",
+    "image_url": "recipe_images/veganertortenboden.png",
+    "template_name": "",
+    "notes": ""
+  }
+]
