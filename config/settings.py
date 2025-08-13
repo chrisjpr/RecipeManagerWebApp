@@ -7,7 +7,7 @@ from pathlib import Path
 from dotenv import load_dotenv
 import dj_database_url
 import django_heroku
-
+import ssl
 # ------------------------------------------------------------
 # Base
 # ------------------------------------------------------------
@@ -115,9 +115,8 @@ print("[SETTINGS - RQ DEBUG] REDIS_URL:", REDIS_URL)
 RQ_QUEUES = {
     "default": {
         "URL": REDIS_URL,
-        "DEFAULT_TIMEOUT": 600,  # seconds (10 min)
-        # If you ever hit TLS cert issues with rediss://, uncomment:
-        # "OPTIONS": {"ssl_cert_reqs": None},
+        "DEFAULT_TIMEOUT": 600,
+        "OPTIONS": {"ssl_cert_reqs": ssl.CERT_NONE},  # disables cert verification
     }
 }
 
