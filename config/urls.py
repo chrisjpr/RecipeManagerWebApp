@@ -62,6 +62,7 @@ urlpatterns = [
     path('', RedirectView.as_view(url='/recipemanager/', permanent=False)),
     # ADMIN PAGE
     path("admin/", admin.site.urls),
+    path("django-rq/", include("django_rq.urls")),
 
     # EMAIL SENDING TEST
     path("test-email/", test_email_view),
