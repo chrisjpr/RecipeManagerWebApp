@@ -335,7 +335,7 @@ def add_recipe_from_url(request):
         try:
             queue = django_rq.get_queue('default')
             job = queue.enqueue(
-                'recipemanager.tasks.process_recipe_from_url',
+                'recipes.tasks.process_recipe_from_url',
                 request.user.id,
                 url,
                 transform_vegan,
@@ -369,7 +369,7 @@ def add_recipe_from_image(request):
 
             queue = django_rq.get_queue('default')
             job = queue.enqueue(
-                'recipemanager.tasks.process_recipe_from_image',
+                'recipes.tasks.process_recipe_from_image',
                 request.user.id,
                 images_as_bytes,
                 transform_vegan,
@@ -402,7 +402,7 @@ def add_recipe_from_text(request):
             try:
                 queue = django_rq.get_queue('default')
                 job = queue.enqueue(
-                    'recipemanager.tasks.process_recipe_from_text',
+                    'recipes.tasks.process_recipe_from_text',
                     request.user.id,
                     raw_text,
                     use_llm,
