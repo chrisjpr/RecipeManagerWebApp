@@ -21,7 +21,6 @@ ALLOWED_HOSTS = [h.strip() for h in os.getenv("ALLOWED_HOSTS", "").split(",") if
 
 AUTH_USER_MODEL = "accounts.CustomUser"
 
-
 # OPEN AI KEY
 OPENAI_KEY = os.getenv("OPENAI_KEY")
 
@@ -54,7 +53,9 @@ else:
 
 STATIC_URL = "/static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
-STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
+# Only include local static dir if it actually exists (avoids Heroku warning)
+_static_dir = BASE_DIR / "static"
+STATICFILES_DIRS = [str(_static_dir)] if _static_dir.exists() else []
 
 # ------------------------------------------------------------
 # Apps & middleware
@@ -105,12 +106,18 @@ TEMPLATES = [
 WSGI_APPLICATION = "config.wsgi.application"
 
 # ------------------------------------------------------------
-# RQ TO HANDLE LONGER TASKS
+# RQ / Redis (background jobs)
 # ------------------------------------------------------------
+# Use Heroku's REDIS_URL when present; fall back to local dev Redis.
+REDIS_URL = os.getenv("REDIS_URL") or "redis://localhost:6379/0"
+print("[SETTINGS - RQ DEBUG] REDIS_URL:", REDIS_URL)
+
 RQ_QUEUES = {
     "default": {
-        "URL": os.getenv("REDIS_URL", "redis://localhost:6379/0"),
+        "URL": REDIS_URL,
         "DEFAULT_TIMEOUT": 600,  # seconds (10 min)
+        # If you ever hit TLS cert issues with rediss://, uncomment:
+        # "OPTIONS": {"ssl_cert_reqs": None},
     }
 }
 
@@ -126,7 +133,6 @@ DATABASES = {
         ssl_require=not DEBUG,   # require SSL only in production
     )
 }
-
 print("[SETTINGS - DATABASE DEBUG] Active DATABASE_URL:", os.getenv("DATABASE_URL", _default_local))
 
 # ------------------------------------------------------------
@@ -138,6 +144,9 @@ AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
+
+# Avoid auto-field warning from django_rq models
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # ------------------------------------------------------------
 # I18N
@@ -165,7 +174,6 @@ DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL")
 _csrf_hosts = [h for h in ALLOWED_HOSTS if h]
 CSRF_TRUSTED_ORIGINS = []
 for host in _csrf_hosts:
-    # include both schemes in dev to avoid https-only redirects locally
     if DEBUG:
         CSRF_TRUSTED_ORIGINS.append(f"http://{host}")
         CSRF_TRUSTED_ORIGINS.append(f"https://{host}")
