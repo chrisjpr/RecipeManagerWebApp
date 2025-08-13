@@ -216,7 +216,7 @@ def create_recipe(request):
                 try:
                     structured_data = organize_with_llm(
                         data=raw_data,
-                        api_key=settings.OPENAI_KEY,
+                        api_key=os.getenv("OPENAI_KEY"),
                         transform_vegan=transform_vegan,
                         custom_instructions=custom_instruction
                     )
@@ -341,7 +341,7 @@ def add_recipe_from_image(request):
             # Extract data from image via GPT-4o
             structured_data, best_image_bytes = get_data_from_image(
                 images=images,
-                api_key=settings.OPENAI_KEY,
+                api_key=os.getenv("OPENAI_KEY"),
                 transform_vegan=transform_vegan,
                 custom_instruction=custom_instruction,
                 custom_title=custom_title,
@@ -383,7 +383,7 @@ def add_recipe_from_text(request):
                     structured_data = organize_with_llm(
                         recipe_input=raw_text,
                         custom_instruction=custom_instruction,
-                        api_key=settings.OPENAI_KEY
+                        api_key=os.getenv("OPENAI_KEY")
                     )
                 else:
                     structured_data = {
