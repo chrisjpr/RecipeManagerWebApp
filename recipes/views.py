@@ -1,5 +1,13 @@
 
-
+import os
+import django_rq
+from rq.job import Job
+from django_rq import get_connection
+from django.views.decorators.http import require_GET
+from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect
+from django.contrib import messages
 from django.shortcuts import render, get_object_or_404, redirect
 from rest_framework import viewsets
 from .models import Recipe
@@ -37,6 +45,32 @@ def home(request):
         'random_images': random_images,
     })
 
+#region BACKGRGOUND JOBS
+######################## BACKGROUND JOBS ########################
+# ---------- Status polling endpoint ----------
+@require_GET
+@login_required
+def job_status(request):
+    job_id = request.GET.get("job_id")
+    if not job_id:
+        return JsonResponse({"status": "error", "message": "job_id missing"}, status=400)
+
+    try:
+        conn = get_connection("default")
+        job = Job.fetch(job_id, connection=conn)
+    except Exception:
+        return JsonResponse({"status": "error", "message": "invalid job_id"}, status=404)
+
+    if job.is_finished:
+        result = job.result or {}
+        return JsonResponse({"status": "finished", **result})
+    if job.is_failed:
+        return JsonResponse({"status": "failed"}, status=500)
+    if job.is_started:
+        return JsonResponse({"status": "started"})
+    return JsonResponse({"status": "queued"})
+######################## /BACKGROUND JOBS ########################
+#endregion BACKGROUND JOBS
 
 #region MANAGE RECIPES
 ########################## MANAGING RECIPES ##########################
@@ -290,7 +324,6 @@ def create_recipe(request):
 
 #region AI RECIPES
 ################## AI RECIPE FEATURES ##################
-
 @login_required
 def add_recipe_from_url(request):
     if request.method == 'POST':
@@ -300,34 +333,23 @@ def add_recipe_from_url(request):
         custom_title = request.POST.get('custom_title', '')
 
         try:
-            # Get structured data + image
-            structured_data, image_bytes = get_data_from_url(
-                url=url,
-                api_key= os.getenv("OPENAI_KEY"),
-                transform_vegan=transform_vegan,
-                custom_instructions=custom_instruction
+            queue = django_rq.get_queue('default')
+            job = queue.enqueue(
+                'recipemanager.tasks.process_recipe_from_url',
+                request.user.id,
+                url,
+                transform_vegan,
+                custom_instruction,
+                custom_title
             )
-
-            # Optionally override title
-            if custom_title:
-                structured_data['title'] = custom_title
-
-            # Save to DB with image
-            recipe = save_structured_recipe_to_db(
-                data=structured_data,
-                user=request.user,
-                image_bytes=image_bytes
-            )
-
-            messages.success(request, f"🎉 Recipe '{recipe.title}' created from URL!")
-            return redirect('recipes:recipe_detail', recipe_id=recipe.recipe_id)
+            messages.success(request, f"Recipe import started! Job ID: {job.id}")
+            return redirect('recipes:recipe_list')
 
         except Exception as e:
-            print("❌ Error in add_recipe_from_url:", e)
-            messages.error(request, "Error while creating recipe from URL.")
+            print("❌ Error enqueueing add_recipe_from_url:", e)
+            messages.error(request, "Error starting recipe import.")
 
     return render(request, 'recipes/add_recipe_from_url.html')
-
 
 @login_required
 def add_recipe_from_image(request):
@@ -338,33 +360,32 @@ def add_recipe_from_image(request):
         custom_title = request.POST.get('custom_title', '')
 
         try:
-            # Extract data from image via GPT-4o
-            structured_data, best_image_bytes = get_data_from_image(
-                images=images,
-                api_key=os.getenv("OPENAI_KEY"),
-                transform_vegan=transform_vegan,
-                custom_instruction=custom_instruction,
-                custom_title=custom_title,
-                return_image_bytes=True
+            # read uploads to bytes (RQ can serialize these)
+            images_as_bytes = []
+            for f in images:
+                b = f.read()
+                if b:
+                    images_as_bytes.append(b)
+
+            queue = django_rq.get_queue('default')
+            job = queue.enqueue(
+                'recipemanager.tasks.process_recipe_from_image',
+                request.user.id,
+                images_as_bytes,
+                transform_vegan,
+                custom_instruction,
+                custom_title,
             )
 
-            best_image_bytes = crop_image_to_visible_area(best_image_bytes) if best_image_bytes else None
-
-            # Save recipe
-            recipe = save_structured_recipe_to_db(
-                data=structured_data,
-                user=request.user,
-                image_bytes=best_image_bytes
-            )
-
-            messages.success(request, f"📷 Recipe '{recipe.title}' created from image!")
-            return redirect('recipes:recipe_detail', recipe_id=recipe.recipe_id)
+            messages.success(request, f"📷 Image import started! Job ID: {job.id}")
+            return redirect('recipes:recipe_list')
 
         except Exception as e:
-            print("❌ Error in add_recipe_from_image:", e)
+            print("❌ Error enqueueing add_recipe_from_image:", e)
             messages.error(request, "Error while creating recipe from image.")
 
     return render(request, 'recipes/add_recipe_from_image.html')
+
 
 
 
@@ -379,38 +400,27 @@ def add_recipe_from_text(request):
             custom_instruction = form.cleaned_data['custom_instruction']
 
             try:
-                if use_llm:
-                    structured_data = organize_with_llm(
-                        recipe_input=raw_text,
-                        custom_instruction=custom_instruction,
-                        api_key=os.getenv("OPENAI_KEY")
-                    )
-                else:
-                    structured_data = {
-                        "title": "Untitled Recipe",
-                        "ingredients": [],
-                        "instructions": [],
-                        "notes": "",
-                        "raw_text": raw_text,
-                    }
-
-                recipe = save_structured_recipe_to_db(
-                    data=structured_data,
-                    user=request.user,
-                    image_bytes=None  # no image from text input
+                queue = django_rq.get_queue('default')
+                job = queue.enqueue(
+                    'recipemanager.tasks.process_recipe_from_text',
+                    request.user.id,
+                    raw_text,
+                    use_llm,
+                    custom_instruction,
                 )
-
-                messages.success(request, f"✅ Recipe '{recipe.title}' created!")
-                return redirect('recipes:recipe_detail', recipe_id=recipe.recipe_id)
+                messages.success(request, f"⌨️ Text import started! Job ID: {job.id}")
+                return redirect('recipes:recipe_list')
 
             except Exception as e:
-                print("❌ Error in add_recipe_from_text:", e)
+                print("❌ Error enqueueing add_recipe_from_text:", e)
                 messages.error(request, "Error while creating recipe from text input.")
-
+        else:
+            messages.error(request, "Please correct the form errors.")
     else:
         form = ParseWithLLMForm()
 
     return render(request, 'recipes/add_recipe_from_text.html', {"form": form})
+
 
 ################## /AI RECIPE FEATURES ##################
 

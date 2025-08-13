@@ -61,6 +61,7 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 # ------------------------------------------------------------
 INSTALLED_APPS = [
     "django.contrib.admin",
+    "django_rq",
     "rest_framework",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -102,6 +103,16 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "config.wsgi.application"
+
+# ------------------------------------------------------------
+# RQ TO HANDLE LONGER TASKS
+# ------------------------------------------------------------
+RQ_QUEUES = {
+    "default": {
+        "URL": os.getenv("REDIS_URL", "redis://localhost:6379/0"),
+        "DEFAULT_TIMEOUT": 600,  # seconds (10 min)
+    }
+}
 
 # ------------------------------------------------------------
 # Database
