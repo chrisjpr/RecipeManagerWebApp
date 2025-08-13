@@ -1,0 +1,159 @@
+[
+  {
+    "title": "Pulled-Oyster Mushroom Burger",
+    "cook_time": "85",
+    "portions": "4",
+    "ingredients": [
+      {
+        "category": "Ingredients",
+        "items": [
+          {
+            "name": "Austernpilze",
+            "quantity": "450.0",
+            "unit": "g"
+          },
+          {
+            "name": "Brioche Br\u00f6tchen",
+            "quantity": "4.0",
+            "unit": ""
+          },
+          {
+            "name": "Essiggurken",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Veganer Schmelzk\u00e4se",
+            "quantity": "100.0",
+            "unit": "g"
+          },
+          {
+            "name": "Eisbergsalat",
+            "quantity": "100.0",
+            "unit": "g"
+          },
+          {
+            "name": "Rotkohl",
+            "quantity": "100.0",
+            "unit": "g"
+          },
+          {
+            "name": "Karotte",
+            "quantity": "50.0",
+            "unit": "g"
+          },
+          {
+            "name": "Vegane Aioli Mayo",
+            "quantity": "70.0",
+            "unit": "g"
+          },
+          {
+            "name": "Apfelessig",
+            "quantity": "3.5",
+            "unit": "EL"
+          },
+          {
+            "name": "Veganer Joghurt",
+            "quantity": "80.0",
+            "unit": "g"
+          }
+        ]
+      },
+      {
+        "category": "BBQ Sauce",
+        "items": [
+          {
+            "name": "Tomatenmark",
+            "quantity": "2.0",
+            "unit": "EL"
+          },
+          {
+            "name": "\u00d6l",
+            "quantity": "2.0",
+            "unit": "EL"
+          },
+          {
+            "name": "Ger\u00e4uchertes Paprikapulver",
+            "quantity": "2.0",
+            "unit": "TL"
+          },
+          {
+            "name": "Apfelessig",
+            "quantity": "2.0",
+            "unit": "EL"
+          },
+          {
+            "name": "Agavendicksaft",
+            "quantity": "2.0",
+            "unit": "EL"
+          },
+          {
+            "name": "Knoblauchzehe",
+            "quantity": "1",
+            "unit": ""
+          },
+          {
+            "name": "Sojasauce",
+            "quantity": "4.0",
+            "unit": "EL"
+          },
+          {
+            "name": "Wasser",
+            "quantity": "4.0",
+            "unit": "EL"
+          },
+          {
+            "name": "Chili/Cayennepulver",
+            "quantity": "0.25",
+            "unit": "TL"
+          }
+        ]
+      },
+      {
+        "category": "Eingelegte Zwiebeln",
+        "items": [
+          {
+            "name": "Rote Zwiebeln",
+            "quantity": "3.5",
+            "unit": ""
+          },
+          {
+            "name": "Wasser",
+            "quantity": "300.0",
+            "unit": "ml"
+          },
+          {
+            "name": "Wei\u00dfweinessig",
+            "quantity": "250.0",
+            "unit": "ml"
+          },
+          {
+            "name": "Zucker",
+            "quantity": "1",
+            "unit": "TL"
+          },
+          {
+            "name": "Salz",
+            "quantity": "0.5",
+            "unit": "TL"
+          },
+          {
+            "name": "Senfk\u00f6rner",
+            "quantity": "2.0",
+            "unit": "TL"
+          }
+        ]
+      }
+    ],
+    "instructions": [
+      "F\u00fcr die <b>BBQ Sauce</b>: Alle Zutaten mischen -> fertig.",
+      "F\u00fcr den <b>Coleslaw Salat</b>: <b>Kohl</b> [100g] und <b>Salat</b> [100g] in kleine St\u00fccke schneiden. <b>Karotte</b> [50g] reiben. Dressing mischen (alles kombinieren).",
+      "F\u00fcr die <b>Austernpilz Patties</b>: <b>Austernpilze</b> [450g] entlang der Fasern ziehen (~0.5cm ~ Pulled Pork). Pilze in einer Pfanne anbraten. 2/3 der <b>BBQ Sauce</b> [2 EL Tomatenmark, 2 EL \u00d6l, 2 TL Ger\u00e4uchertes Paprikapulver, 2 EL Apfelessig, 2 EL Agavendicksaft, 1 Knoblauchzehe, 4 EL Sojasauce, 4 EL Wasser, 0.25 TL Chili/Cayennepulver] in die Pfanne geben und die Pilze marinieren (3-5min). Pfanne abdecken und <b>veganen Schmelzk\u00e4se</b> [100g] bei mittlerer Hitze schmelzen lassen (3-4min).",
+      "F\u00fcr die <b>eingelegten Zwiebeln</b>: 3-4 <b>rote Zwiebeln</b> in feine Streifen schneiden. 300ml <b>Wasser</b>, 250ml <b>Wei\u00dfweinessig</b>, 1 TL <b>Zucker</b>, 0.5 TL <b>Salz</b> & 2 TL <b>Senfk\u00f6rner</b> in einem Topf erhitzen & 2min zum Kochen bringen. Topfinhalt \u00fcber die Zwiebeln gie\u00dfen!",
+      "Genie\u00dfen!"
+    ],
+    "image_url": "html_contents/Paule/recipe_images/pulledoystermushroomburger.png",
+    "image_path": "/data/html_contents/Paule/recipe_images/pulledoystermushroomburger.png",
+    "safe_title": "pulledoystermushroomburger"
+  }
+]

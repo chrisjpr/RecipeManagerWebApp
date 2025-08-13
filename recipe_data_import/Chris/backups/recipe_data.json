@@ -1,0 +1,698 @@
+[
+  {
+    "title": "Vegan Pulled-Oyster Mushroom Burger",
+    "cook_time": "85",
+    "portions": "4",
+    "ingredients": [
+      {
+        "category": "Ingredients",
+        "items": [
+          {
+            "quantity": 450.0,
+            "unit": "g",
+            "name": "oyster mushrooms"
+          },
+          {
+            "quantity": 4.0,
+            "unit": "brioche",
+            "name": "buns"
+          },
+          {
+            "quantity": null,
+            "unit": null,
+            "name": "None None pickles"
+          },
+          {
+            "quantity": 100.0,
+            "unit": "g",
+            "name": "vegan melting cheese"
+          },
+          {
+            "quantity": 100.0,
+            "unit": "g",
+            "name": "iceberg lettuce"
+          },
+          {
+            "quantity": 100.0,
+            "unit": "g",
+            "name": "red cabbage"
+          },
+          {
+            "quantity": 50.0,
+            "unit": "g",
+            "name": "carrot"
+          },
+          {
+            "quantity": 70.0,
+            "unit": "g",
+            "name": "vegan aioli mayo"
+          },
+          {
+            "quantity": 3.5,
+            "unit": "tbsp",
+            "name": "apple cider vinegar"
+          },
+          {
+            "quantity": 80.0,
+            "unit": "g",
+            "name": "vegan yogurt"
+          },
+          {
+            "quantity": 2.0,
+            "unit": "tbsp",
+            "name": "tomato paste"
+          },
+          {
+            "quantity": 2.0,
+            "unit": "tbsp",
+            "name": "oil"
+          },
+          {
+            "quantity": 2.0,
+            "unit": "tsp",
+            "name": "smoked paprika"
+          },
+          {
+            "quantity": 2.0,
+            "unit": "tbsp",
+            "name": "apple cider vinegar"
+          },
+          {
+            "quantity": 2.0,
+            "unit": "tbsp",
+            "name": "agave syrup"
+          },
+          {
+            "quantity": 1.0,
+            "unit": "garlic",
+            "name": "clove"
+          },
+          {
+            "quantity": 4.0,
+            "unit": "tbsp",
+            "name": "soy sauce"
+          },
+          {
+            "quantity": 4.0,
+            "unit": "tbsp",
+            "name": "water"
+          },
+          {
+            "quantity": 0.25,
+            "unit": "tsp",
+            "name": "chili/cayenne powder"
+          },
+          {
+            "quantity": 3.5,
+            "unit": "red",
+            "name": "onions"
+          },
+          {
+            "quantity": 300.0,
+            "unit": "ml",
+            "name": "water"
+          },
+          {
+            "quantity": 250.0,
+            "unit": "ml",
+            "name": "white wine vinegar"
+          },
+          {
+            "quantity": 2.0,
+            "unit": "tsp",
+            "name": "mustard seeds"
+          }
+        ]
+      }
+    ],
+    "instructions": [
+      "For the BBQ Sauce: Mix all ingredients together -> ready",
+      "For the Coleslaw Salad: Cut cabbage & lettuce into small slices. Grate carrot. Mix dressing (combine everything).",
+      "For the Oyster Mushroom Patties: Pull oyster mushrooms along the fibers (~0.5cm ~ pulled pork). Fry mushrooms in a pan. Add 2/3 of the <b>BBQ Sauce</b> [2 tbsp tomato paste, 2 tbsp oil, 2 tsp smoked paprika, 2 tbsp apple cider vinegar, 2 tbsp agave syrup, 1 garlic clove, 4 tbsp soy sauce, 4 tbsp water, 0.25 tsp chili/cayenne powder] to the pan & marinate mushrooms (3-5min). Cover pan & let <b>vegan melting cheese</b> [100g] melt at medium heat (3-4min).",
+      "For the Pickled Onions: Cut 3-4 red onions into fine strips. Heat 300ml water, 250ml white wine vinegar, 1 tsp sugar, 0.5 tsp salt & 2 tsp mustard seeds in a pot & bring to a boil for 2min. Pour pot contents over onions!",
+      "Enjoy!"
+    ],
+    "image_url": "html_contents/recipe_images/veganpulledoystermushroomburger.png",
+    "image_path": "html_contents\\recipe_images\\veganpulledoystermushroomburger.png"
+  },
+  {
+    "title": "Couscous Geilsalat",
+    "cook_time": "30",
+    "portions": "5",
+    "image_url": "html_contents/recipe_images/couscousgeilsalat.png",
+    "image_path": "html_contents\\recipe_images\\couscousgeilsalat.png",
+    "ingredients": [
+      {
+        "category": "Main",
+        "items": [
+          {
+            "name": "Couscous",
+            "quantity": "300",
+            "unit": "g"
+          },
+          {
+            "name": "Cucumber",
+            "quantity": "1",
+            "unit": ""
+          },
+          {
+            "name": "Cherry tomatoes",
+            "quantity": "300",
+            "unit": "g"
+          },
+          {
+            "name": "Corn",
+            "quantity": "150",
+            "unit": "g"
+          },
+          {
+            "name": "Spring onions",
+            "quantity": "3",
+            "unit": ""
+          },
+          {
+            "name": "Small red onions",
+            "quantity": "2",
+            "unit": ""
+          },
+          {
+            "name": "Sultanas",
+            "quantity": "125",
+            "unit": "g"
+          },
+          {
+            "name": "Parsley",
+            "quantity": "0.5",
+            "unit": "bunch"
+          }
+        ]
+      },
+      {
+        "category": "Dressing",
+        "items": [
+          {
+            "name": "Yellow curry paste",
+            "quantity": "2",
+            "unit": "tbsp"
+          },
+          {
+            "name": "Sugar",
+            "quantity": "1",
+            "unit": "tsp"
+          },
+          {
+            "name": "Salt",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Pepper",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Olive oil",
+            "quantity": "6",
+            "unit": "tbsp"
+          },
+          {
+            "name": "Rice vinegar",
+            "quantity": "4",
+            "unit": "tbsp"
+          },
+          {
+            "name": "Cumin",
+            "quantity": "2",
+            "unit": "tsp"
+          },
+          {
+            "name": "Vegetable broth",
+            "quantity": "300",
+            "unit": "ml"
+          },
+          {
+            "name": "Sweet paprika powder",
+            "quantity": "1",
+            "unit": "tsp"
+          },
+          {
+            "name": "Soy sauce",
+            "quantity": "2",
+            "unit": "tbsp"
+          },
+          {
+            "name": "Tomato paste",
+            "quantity": "2",
+            "unit": "tbsp"
+          },
+          {
+            "name": "Chili powder",
+            "quantity": "",
+            "unit": "(optional)"
+          }
+        ]
+      }
+    ],
+    "instructions": [
+      "Boil water, mix with <b>vegetable broth [300ml]</b> and let the <b>Couscous [300g]</b> swell in it (optionally season with white wine vinegar)",
+      "Mix the dressing and combine with the <b>Couscous</b>",
+      "Cut the remaining ingredients into small pieces and then add them to the bowl: <b>Cucumber [1]</b>, <b>Cherry tomatoes [300g]</b>, <b>Corn [150g]</b>, <b>Spring onions [3]</b>, <b>Small red onions [2]</b>, <b>Sultanas [125g]</b>",
+      "Stir vigorously and optionally top with more <b>Parsley [0.5 bunch]</b>"
+    ]
+  },
+  {
+    "title": "Hooms Kichererbsen-Salat",
+    "cook_time": "25",
+    "portions": "4",
+    "ingredients": [
+      {
+        "category": "Ingredients",
+        "items": [
+          {
+            "quantity": 5.0,
+            "unit": "EL",
+            "name": "Olive oil"
+          },
+          {
+            "quantity": 2.5,
+            "unit": "EL",
+            "name": "Balsamic dressing"
+          },
+          {
+            "quantity": 2.0,
+            "unit": "EL",
+            "name": "Cumin powder"
+          },
+          {
+            "quantity": 1.0,
+            "unit": "EL",
+            "name": "Harissa powder"
+          },
+          {
+            "quantity": 1.0,
+            "unit": "EL",
+            "name": "Oregano"
+          },
+          {
+            "quantity": null,
+            "unit": null,
+            "name": "Salt"
+          },
+          {
+            "quantity": null,
+            "unit": null,
+            "name": "Pepper"
+          },
+          {
+            "quantity": 3.0,
+            "unit": "EL",
+            "name": "Tomato paste"
+          },
+          {
+            "quantity": 3.0,
+            "unit": "Garlic",
+            "name": "cloves"
+          },
+          {
+            "quantity": 1.0,
+            "unit": "Large",
+            "name": "red onion"
+          },
+          {
+            "quantity": 0.7,
+            "unit": "GUrken",
+            "name": "Cucumbers"
+          },
+          {
+            "quantity": 250.0,
+            "unit": "g",
+            "name": "Cherry tomatoes"
+          },
+          {
+            "quantity": 200.0,
+            "unit": "g",
+            "name": "Smoked tofu"
+          },
+          {
+            "quantity": 0.5,
+            "unit": "Iceberg",
+            "name": "lettuce"
+          },
+          {
+            "quantity": 2.0,
+            "unit": "Dosen",
+            "name": "Cans of chickpeas"
+          },
+          {
+            "quantity": 3.0,
+            "unit": "Spring",
+            "name": "Onions"
+          }
+        ]
+      }
+    ],
+    "instructions": [
+      "Press the <b>garlic</b> and mix with the remaining <b>dressing</b> ingredients.",
+      "Cut the remaining ingredients into small pieces and place them in a bowl with the <b>chickpeas</b> [2 Dosen].",
+      "Mix the <b>dressing</b> and salad components."
+    ],
+    "image_url": "html_contents/recipe_images/hoomskichererbsensalat.png",
+    "image_path": "html_contents\\recipe_images\\hoomskichererbsensalat.png"
+  },
+  {
+    "title": "Kichererbsensalat mit getrockneten Tomaten und Feta",
+    "cook_time": "15",
+    "portions": "2 servings",
+    "ingredients": [
+      {
+        "category": "Ingredients",
+        "items": [
+          {
+            "quantity": 1.0,
+            "unit": "can",
+            "name": "chickpeas"
+          },
+          {
+            "quantity": 1.0,
+            "unit": "red",
+            "name": "onion"
+          },
+          {
+            "quantity": 1.0,
+            "unit": "handful",
+            "name": "dried tomatoes"
+          },
+          {
+            "quantity": 70.0,
+            "unit": "g",
+            "name": "feta cheese"
+          },
+          {
+            "quantity": 1.0,
+            "unit": "handful",
+            "name": "parsley"
+          },
+          {
+            "quantity": 4.0,
+            "unit": "tbsp",
+            "name": "olive oil"
+          },
+          {
+            "quantity": 1.0,
+            "unit": "organic",
+            "name": "lemon"
+          },
+          {
+            "quantity": 1.0,
+            "unit": "garlic",
+            "name": "clove"
+          },
+          {
+            "quantity": null,
+            "unit": null,
+            "name": "salt"
+          },
+          {
+            "quantity": null,
+            "unit": null,
+            "name": "pepper"
+          },
+          {
+            "quantity": 1.0,
+            "unit": "hand-full",
+            "name": "lamb's lettuce / spinach (optional)"
+          },
+          {
+            "quantity": 1.0,
+            "unit": "tsp",
+            "name": "Sambal Oelek / Red Sriracha"
+          }
+        ]
+      }
+    ],
+    "instructions": [
+      "Drain and rinse the <b>chickpeas</b> in a sieve. In a bowl, mix the <b>chickpeas</b>, <b>onion</b>, <b>dried tomatoes</b>, <b>feta</b>, and <b>parsley</b>. Grate some of the <b>organic lemon</b> zest into it. Then cut the <b>lemon</b> and squeeze it out.",
+      "Mix <b>olive oil</b>, 2-3 tbsp of <b>lemon juice</b>, and <b>garlic</b> into a dressing. Mix it into the salad and then season with <b>Sambal Oelek</b>, <b>salt</b>, and <b>pepper</b>. Let the salad sit for at least 30 minutes.",
+      "Then possibly re-season."
+    ],
+    "image_url": "https://img.chefkoch-cdn.de/rezepte/1287271234164583/bilder/967333/crop-960x540/kichererbsensalat-mit-getrockneten-tomaten-und-feta.jpg",
+    "image_path": "html_contents/recipe_images\\kichererbsensalatmitgetrocknetentomatenundfeta.png"
+  },
+  {
+    "title": "Vegane K\u00e4se-Lauch-Suppe",
+    "cook_time": "25",
+    "portions": "4 servings",
+    "image_url": "https://biancazapatka.com/wp-content/uploads/2023/10/lauch-hack-suppe.jpg",
+    "image_path": "html_contents/recipe_images\\veganekselauchsuppe.png",
+    "ingredients": [
+      {
+        "category": "Vegetables",
+        "items": [
+          {
+            "name": "leek",
+            "quantity": "2",
+            "unit": "medium stalks"
+          },
+          {
+            "name": "onion",
+            "quantity": "1",
+            "unit": "large"
+          },
+          {
+            "name": "garlic cloves",
+            "quantity": "2",
+            "unit": ""
+          }
+        ]
+      },
+      {
+        "category": "Oils and Sauces",
+        "items": [
+          {
+            "name": "vegetable oil",
+            "quantity": "2",
+            "unit": "tbsp"
+          },
+          {
+            "name": "Tamari or soy sauce",
+            "quantity": "1",
+            "unit": "tbsp"
+          },
+          {
+            "name": "vegetable broth",
+            "quantity": "500",
+            "unit": "ml"
+          },
+          {
+            "name": "plant-based cream",
+            "quantity": "250",
+            "unit": "ml"
+          }
+        ]
+      },
+      {
+        "category": "Proteins",
+        "items": [
+          {
+            "name": "vegan ground meat",
+            "quantity": "250",
+            "unit": "g"
+          }
+        ]
+      },
+      {
+        "category": "Dairy Alternatives",
+        "items": [
+          {
+            "name": "Creme Vega",
+            "quantity": "150",
+            "unit": "g"
+          }
+        ]
+      },
+      {
+        "category": "Seasonings",
+        "items": [
+          {
+            "name": "herb mix",
+            "quantity": "1.5",
+            "unit": "tsp"
+          },
+          {
+            "name": "nutmeg",
+            "quantity": "1",
+            "unit": "pinch"
+          },
+          {
+            "name": "nutritional yeast or vegan Parmesan",
+            "quantity": "3",
+            "unit": "tbsp"
+          },
+          {
+            "name": "salt and pepper",
+            "quantity": "",
+            "unit": ""
+          }
+        ]
+      },
+      {
+        "category": "Garnish and Bread",
+        "items": [
+          {
+            "name": "fresh parsley",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "baguette or homemade bread",
+            "quantity": "",
+            "unit": ""
+          }
+        ]
+      }
+    ],
+    "instructions": [
+      "*Note: Check out the recipe video and the tips + step-by-step pictures at the top of the post!",
+      "First, halve the <b>leek</b> [2 medium stalks] lengthwise, cut into strips, and wash thoroughly. Peel and chop the <b>onion</b> [1 large] and <b>garlic cloves</b> [2].",
+      "Heat the <b>vegetable oil</b> [2 tbsp] in a large pot or deep pan. Fry the <b>vegan ground meat</b> [250 g] for about 3 minutes. Add the <b>onion</b> and <b>garlic</b> and fry for 2-3 minutes. Then add the <b>leek</b> and briefly fry. Season with <b>salt</b>, <b>pepper</b>, <b>herb mix</b> [1.5 tsp], <b>nutmeg</b> [1 pinch], and <b>nutritional yeast</b> [3 tbsp].",
+      "Now deglaze with <b>Tamari or soy sauce</b> [1 tbsp], <b>vegetable broth</b> [500 ml], and <b>plant-based cream</b> [250 ml] and let simmer covered for about 10 minutes.",
+      "Then stir in the <b>Creme Vega</b> [150 g] and bring to a boil again. Taste and season if necessary.",
+      "Serve the soup in bowls and sprinkle with <b>fresh parsley</b>. Serve with fresh <b>baguette</b> as desired. Find more serving suggestions here.",
+      "Enjoy your meal!"
+    ]
+  },
+  {
+    "title": "Pesto Rosso (vegan)",
+    "cook_time": "15",
+    "portions": "6",
+    "image_url": "html_contents/recipe_images/pestorossovegan.png",
+    "image_path": "html_contents\\recipe_images\\pestorossovegan.png",
+    "ingredients": [
+      {
+        "category": "Main",
+        "items": [
+          {
+            "name": "dried tomatoes",
+            "quantity": "180",
+            "unit": "g"
+          },
+          {
+            "name": "pine nuts",
+            "quantity": "50",
+            "unit": "g"
+          },
+          {
+            "name": "balsamic vinegar",
+            "quantity": "1",
+            "unit": "tsp"
+          },
+          {
+            "name": "nutritional yeast flakes",
+            "quantity": "3",
+            "unit": "tbsp"
+          },
+          {
+            "name": "olive oil/dried tomato oil",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "salt",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "pepper",
+            "quantity": "",
+            "unit": ""
+          }
+        ]
+      }
+    ],
+    "instructions": [
+      "Toast the <b>pine nuts</b> [50g] without oil until they are golden brown",
+      "Add the <b>dried tomatoes</b> [180g], oil, garlic, <b>balsamic vinegar</b> [1 tsp], <b>salt</b>, and <b>pepper</b> and blend",
+      "Add the toasted <b>pine nuts</b> and blend a bit more"
+    ]
+  },
+  {
+    "title": "Pesto Basilico",
+    "cook_time": "15",
+    "portions": "6",
+    "image_url": "html_contents/recipe_images/pestobasilico.png",
+    "image_path": "html_contents\\recipe_images\\pestobasilico.png",
+    "ingredients": [
+      {
+        "category": "Herbs",
+        "items": [
+          {
+            "name": "fresh basil",
+            "quantity": "2.5",
+            "unit": "cups"
+          }
+        ]
+      },
+      {
+        "category": "Nuts",
+        "items": [
+          {
+            "name": "pine nuts",
+            "quantity": "35",
+            "unit": "g"
+          },
+          {
+            "name": "cashews",
+            "quantity": "50",
+            "unit": "g"
+          }
+        ]
+      },
+      {
+        "category": "Seasonings",
+        "items": [
+          {
+            "name": "garlic cloves",
+            "quantity": "2",
+            "unit": ""
+          },
+          {
+            "name": "nutritional yeast",
+            "quantity": "2",
+            "unit": "tbsp"
+          },
+          {
+            "name": "lemon juice",
+            "quantity": "1",
+            "unit": "tbsp"
+          },
+          {
+            "name": "salt",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "pepper",
+            "quantity": "",
+            "unit": ""
+          }
+        ]
+      },
+      {
+        "category": "Oils",
+        "items": [
+          {
+            "name": "olive oil",
+            "quantity": "80",
+            "unit": "ml"
+          }
+        ]
+      }
+    ],
+    "instructions": [
+      "Toast <b>pine nuts [35g]</b> and <b>cashews [50g]</b> in a pan without oil for 2-3 minutes",
+      "Puree <b>fresh basil [2.5 cups]</b>, <b>garlic cloves [2]</b>, <b>nutritional yeast [2 tbsp]</b> in a blender",
+      "Add nuts and briefly continue to puree with <b>olive oil [80ml]</b> and <b>lemon juice [1 tbsp]</b>",
+      "Season with <b>salt</b> and <b>pepper</b>"
+    ]
+  }
+]

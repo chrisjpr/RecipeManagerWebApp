@@ -1,0 +1,689 @@
+[
+  {
+    "title": "Ceviche von Jakobsmuscheln",
+    "cook_time": "25",
+    "portions": "4 servings",
+    "ingredients": [
+      {
+        "category": "Dressings/Sauces",
+        "items": [
+          {
+            "name": "Knoblauch",
+            "quantity": 3.0,
+            "unit": "Zehe/n"
+          },
+          {
+            "name": "Zitronensaft",
+            "quantity": 150.0,
+            "unit": "ml"
+          },
+          {
+            "name": "Limettensaft",
+            "quantity": 150.0,
+            "unit": "ml"
+          },
+          {
+            "name": "Oliven\u00f6l",
+            "quantity": 75.0,
+            "unit": "ml"
+          },
+          {
+            "name": "Salz",
+            "quantity": 2.0,
+            "unit": "TL"
+          },
+          {
+            "name": "Pfeffer",
+            "quantity": 1.0,
+            "unit": "TL"
+          }
+        ]
+      },
+      {
+        "category": "Main Ingredients",
+        "items": [
+          {
+            "name": "Jakobsmuschel(n)",
+            "quantity": 1.0,
+            "unit": "kg"
+          },
+          {
+            "name": "Chilischote(n)",
+            "quantity": 2.0,
+            "unit": ""
+          },
+          {
+            "name": "Zwiebel(n)",
+            "quantity": 1.0,
+            "unit": ""
+          },
+          {
+            "name": "Paprikaschote(n)",
+            "quantity": 1.0,
+            "unit": ""
+          },
+          {
+            "name": "Koriandergr\u00fcn",
+            "quantity": 1.0,
+            "unit": "Bund"
+          },
+          {
+            "name": "Kirschtomate(n)",
+            "quantity": 500.0,
+            "unit": "g"
+          },
+          {
+            "name": "Salat",
+            "quantity": 1.0,
+            "unit": "Kopf"
+          }
+        ]
+      }
+    ],
+    "instructions": [
+      "Den gehackten <b>Knoblauch</b> [3 Zehe/n] mit dem <b>Zitronensaft</b> [150 ml] und <b>Limettensaft</b> [150 ml], dem <b>Oliven\u00f6l</b> [75 ml], <b>Salz</b> [2 TL], <b>Pfeffer</b> [1 TL], und den gehackten roten <b>Chili</b> [2] in einer flachen Glassch\u00fcssel vermischen (keine Metalutensilien benutzen!).",
+      "Die <b>Jakobsmuscheln</b> [1 kg] zugeben (falls man die gro\u00dfen nimmt, halbieren oder evtl. sogar vierteln, die kleinen ganz lassen), gut vermischen.",
+      "Die Sch\u00fcssel abdecken und f\u00fcr mindestens 2 Stunden im K\u00fchlschrank k\u00fchlen.",
+      "Dann den frischen <b>Koriander</b> [1 Bund] hacken und mit den gehackten roten <b>Zwiebeln</b> [1] und gr\u00fcnen <b>Paprikaschoten</b> [1] zu der Ceviche geben und wieder gut vermischen.",
+      "Mindestens eine weitere Stunde im K\u00fchlschrank ziehen lassen.",
+      "Eine flache Sch\u00fcssel mit gro\u00dfen gr\u00fcnen <b>Salatbl\u00e4ttern</b> [1 Kopf] auslegen. Die gezogene Ceviche darauf anrichten (evtl. leicht abgetropft), und mit halbierten <b>Kirschtomaten</b> [500 g] umgeben.",
+      "Mit ein paar Bl\u00e4ttchen <b>Koriander</b>, einigen <b>Kirschtomaten</b>, evtl. roten <b>Zwiebelringen</b> sch\u00f6n garnieren.",
+      "Gut gek\u00fchlt servieren!",
+      "F\u00fcr mich pers\u00f6nlich passt dazu ganz einfach ein rustikales, knuspriges frisch gebackenes Wei\u00dfbrot oder Baguette. Typisch peruanisch sind aber gekochte S\u00fc\u00dfkartoffeln und/oder Maiskolben als Beilage.",
+      "Als Getr\u00e4nk passt ein Pisco Sour, ein gut gek\u00fchlter leichter Wei\u00dfwein, oder Sekt (mein Favorit).",
+      "Die Menge reicht f\u00fcr vier leichte Esser als Hauptspeise und f\u00fcr ca. 6 Personen als Vorspeise.",
+      "Rezept hat Alex f\u00fcr mich gekocht, war sehr lecker"
+    ],
+    "image_path": "/data/html_contents/astrid/recipe_images/cevichevonjakobsmuscheln.png",
+    "image_url": "https://img.chefkoch-cdn.de/rezepte/1923181313589704/bilder/380314/crop-960x540/ceviche-von-jakobsmuscheln.jpg",
+    "template_name": "Funky",
+    "safe_title": "cevichevonjakobsmuscheln"
+  },
+  {
+    "title": "Pulled-Oyster Mushroom Burger",
+    "cook_time": "85",
+    "portions": "4",
+    "ingredients": [
+      {
+        "category": "Ingredients",
+        "items": [
+          {
+            "name": "Austernpilze",
+            "quantity": "450.0",
+            "unit": "g"
+          },
+          {
+            "name": "Brioche Br\u00f6tchen",
+            "quantity": "4.0",
+            "unit": ""
+          },
+          {
+            "name": "Essiggurken",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Veganer Schmelzk\u00e4se",
+            "quantity": "100.0",
+            "unit": "g"
+          },
+          {
+            "name": "Eisbergsalat",
+            "quantity": "100.0",
+            "unit": "g"
+          },
+          {
+            "name": "Rotkohl",
+            "quantity": "100.0",
+            "unit": "g"
+          },
+          {
+            "name": "Karotte",
+            "quantity": "50.0",
+            "unit": "g"
+          },
+          {
+            "name": "Vegane Aioli Mayo",
+            "quantity": "70.0",
+            "unit": "g"
+          },
+          {
+            "name": "Apfelessig",
+            "quantity": "3.5",
+            "unit": "EL"
+          },
+          {
+            "name": "Veganer Joghurt",
+            "quantity": "80.0",
+            "unit": "g"
+          }
+        ]
+      },
+      {
+        "category": "BBQ Sauce",
+        "items": [
+          {
+            "name": "Tomatenmark",
+            "quantity": "2.0",
+            "unit": "EL"
+          },
+          {
+            "name": "\u00d6l",
+            "quantity": "2.0",
+            "unit": "EL"
+          },
+          {
+            "name": "Ger\u00e4uchertes Paprikapulver",
+            "quantity": "2.0",
+            "unit": "TL"
+          },
+          {
+            "name": "Apfelessig",
+            "quantity": "2.0",
+            "unit": "EL"
+          },
+          {
+            "name": "Agavendicksaft",
+            "quantity": "2.0",
+            "unit": "EL"
+          },
+          {
+            "name": "Knoblauchzehe",
+            "quantity": "1",
+            "unit": ""
+          },
+          {
+            "name": "Sojasauce",
+            "quantity": "4.0",
+            "unit": "EL"
+          },
+          {
+            "name": "Wasser",
+            "quantity": "4.0",
+            "unit": "EL"
+          },
+          {
+            "name": "Chili/Cayennepulver",
+            "quantity": "0.25",
+            "unit": "TL"
+          }
+        ]
+      },
+      {
+        "category": "Eingelegte Zwiebeln",
+        "items": [
+          {
+            "name": "Rote Zwiebeln",
+            "quantity": "3.5",
+            "unit": ""
+          },
+          {
+            "name": "Wasser",
+            "quantity": "300.0",
+            "unit": "ml"
+          },
+          {
+            "name": "Wei\u00dfweinessig",
+            "quantity": "250.0",
+            "unit": "ml"
+          },
+          {
+            "name": "Zucker",
+            "quantity": "1",
+            "unit": "TL"
+          },
+          {
+            "name": "Salz",
+            "quantity": "0.5",
+            "unit": "TL"
+          },
+          {
+            "name": "Senfk\u00f6rner",
+            "quantity": "2.0",
+            "unit": "TL"
+          }
+        ]
+      }
+    ],
+    "instructions": [
+      "F\u00fcr die <b>BBQ Sauce</b>: Alle Zutaten mischen -> fertig.",
+      "F\u00fcr den <b>Coleslaw Salat</b>: <b>Kohl</b> [100g] und <b>Salat</b> [100g] in kleine St\u00fccke schneiden. <b>Karotte</b> [50g] reiben. Dressing mischen (alles kombinieren).",
+      "F\u00fcr die <b>Austernpilz Patties</b>: <b>Austernpilze</b> [450g] entlang der Fasern ziehen (~0.5cm ~ Pulled Pork). Pilze in einer Pfanne anbraten. 2/3 der <b>BBQ Sauce</b> [2 EL Tomatenmark, 2 EL \u00d6l, 2 TL Ger\u00e4uchertes Paprikapulver, 2 EL Apfelessig, 2 EL Agavendicksaft, 1 Knoblauchzehe, 4 EL Sojasauce, 4 EL Wasser, 0.25 TL Chili/Cayennepulver] in die Pfanne geben und die Pilze marinieren (3-5min). Pfanne abdecken und <b>veganen Schmelzk\u00e4se</b> [100g] bei mittlerer Hitze schmelzen lassen (3-4min).",
+      "F\u00fcr die <b>eingelegten Zwiebeln</b>: 3-4 <b>rote Zwiebeln</b> in feine Streifen schneiden. 300ml <b>Wasser</b>, 250ml <b>Wei\u00dfweinessig</b>, 1 TL <b>Zucker</b>, 0.5 TL <b>Salz</b> & 2 TL <b>Senfk\u00f6rner</b> in einem Topf erhitzen & 2min zum Kochen bringen. Topfinhalt \u00fcber die Zwiebeln gie\u00dfen!",
+      "Genie\u00dfen!"
+    ],
+    "image_url": "html_contents/astrid/recipe_images/pulledoystermushroomburger.png",
+    "image_path": "/data/html_contents/astrid/recipe_images/pulledoystermushroomburger.png",
+    "safe_title": "pulledoystermushroomburger"
+  },
+  {
+    "title": "Vegane Bolognese",
+    "cook_time": "70",
+    "portions": "6",
+    "ingredients": [
+      {
+        "category": "Soffritto",
+        "items": [
+          {
+            "name": "Karotten",
+            "quantity": 300.0,
+            "unit": "g"
+          },
+          {
+            "name": "Sellerie",
+            "quantity": 300.0,
+            "unit": "g"
+          },
+          {
+            "name": "Zwiebeln",
+            "quantity": 300.0,
+            "unit": "g"
+          }
+        ]
+      },
+      {
+        "category": "Hauptgericht",
+        "items": [
+          {
+            "name": "Rotwein",
+            "quantity": 400.0,
+            "unit": "ml"
+          },
+          {
+            "name": "Naturtofu",
+            "quantity": 400.0,
+            "unit": "g"
+          },
+          {
+            "name": "R\u00e4uchertofu",
+            "quantity": 400.0,
+            "unit": "g"
+          },
+          {
+            "name": "Tomatenmark",
+            "quantity": 4.0,
+            "unit": "EL"
+          },
+          {
+            "name": "Knoblauchzehen",
+            "quantity": 6.0,
+            "unit": ""
+          },
+          {
+            "name": "Pasta",
+            "quantity": 1.0,
+            "unit": "kg"
+          }
+        ]
+      },
+      {
+        "category": "Gew\u00fcrze/\u00d6le",
+        "items": [
+          {
+            "name": "Oregano",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Rosmarin",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Bohnenkraut",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Basilikumpulver",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Salz",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Pfeffer",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Cayennepfeffer",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Paprika-edels\u00fc\u00df",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Lorbeerbl\u00e4tter",
+            "quantity": 3.0,
+            "unit": ""
+          },
+          {
+            "name": "Oliven\u00f6l",
+            "quantity": 100.0,
+            "unit": "ml"
+          },
+          {
+            "name": "Veganer Parmesan",
+            "quantity": 100.0,
+            "unit": "g"
+          },
+          {
+            "name": "frischer Basilikum",
+            "quantity": "",
+            "unit": ""
+          }
+        ]
+      }
+    ],
+    "instructions": [
+      "Die <b>Soffritto-Zutaten</b> (<b>Karotten</b> [300g], <b>Zwiebeln</b> [300g], <b>Sellerie</b> [300g]) alle in gleiche, kleine W\u00fcrfel hacken",
+      "Die <b>Knoblauchzehen</b> [6] fein hacken",
+      "<b>Naturtofu</b> [400g] mit der Hand zerbr\u00f6seln",
+      "<b>R\u00e4uchertofu</b> [400g] raspeln (mittelgro\u00df)",
+      "guten Schuss <b>Oliven\u00f6l</b> [100ml] in einen gro\u00dfen Topf geben, <b>R\u00e4uchertofu</b> dazugeben und scharf anbraten",
+      "<b>Zwiebeln</b> dazugeben, kurz sp\u00e4ter dann auch <b>Karotten</b> und <b>Sellerie</b> dazugeben und weiter <b>Oliven\u00f6l</b> dazugeben",
+      "<b>Tomatenmark</b> [4EL] und Gew\u00fcrze (au\u00dfer <b>Lorbeerbl\u00e4tter</b>) sowie <b>gehackte Knoblauchzehen</b> dazugeben und kurz braten lassen",
+      "mit erstem Schuss <b>Rotwein</b> [100ml] abl\u00f6schen und dann den zerbr\u00f6selten <b>Naturtofu</b> dazugeben",
+      "<b>Lorbeerbl\u00e4tter</b> [3] hinzugeben",
+      "alles f\u00fcr etwa 40 Minuten ohne Deckel k\u00f6cheln und eindicken lassen und hin und wieder mit <b>Rotwein</b>, Gew\u00fcrzen und ggf <b>Oliven\u00f6l</b> nachw\u00fcrzen",
+      "zwischendrin die <b>Pasta</b> [1kg] kochen",
+      "<b>Lorbeerbl\u00e4tter</b> wieder rausnehmen",
+      "<b>Pasta</b> und vegane Bolognese mit <b>frischem Basilikum</b> und <b>veganem Parmesan</b> [100g] anrichten (ggf noch frisch pfeffern)"
+    ],
+    "image_path": "/data/html_contents/astrid/recipe_images/veganebolognese.png",
+    "image_url": "html_contents/astrid/recipe_images/veganebolognese.png",
+    "template_name": "Funky",
+    "safe_title": "veganebolognese"
+  },
+  {
+    "title": "K\u00e4setorte",
+    "cook_time": "1.5",
+    "portions": "1",
+    "ingredients": [
+      {
+        "category": "Teig",
+        "items": [
+          {
+            "name": "Mehl",
+            "quantity": 200,
+            "unit": "g"
+          },
+          {
+            "name": "Zucker",
+            "quantity": 75,
+            "unit": "g"
+          },
+          {
+            "name": "Butter",
+            "quantity": 75,
+            "unit": "g"
+          },
+          {
+            "name": "Backpulver",
+            "quantity": 0.5,
+            "unit": "TL"
+          }
+        ]
+      },
+      {
+        "category": "Belag",
+        "items": [
+          {
+            "name": "Quark",
+            "quantity": 750,
+            "unit": "g"
+          },
+          {
+            "name": "Butter",
+            "quantity": 200,
+            "unit": "g"
+          },
+          {
+            "name": "Zucker",
+            "quantity": 200,
+            "unit": "g"
+          },
+          {
+            "name": "Grie\u00df",
+            "quantity": 2,
+            "unit": "EL"
+          },
+          {
+            "name": "Mondamin",
+            "quantity": 3,
+            "unit": "EL"
+          },
+          {
+            "name": "Vanillezucker",
+            "quantity": 1,
+            "unit": "P"
+          },
+          {
+            "name": "Eier",
+            "quantity": 4,
+            "unit": ""
+          },
+          {
+            "name": "Saure Sahne",
+            "quantity": 0.25,
+            "unit": "l"
+          },
+          {
+            "name": "Milch",
+            "quantity": 0.25,
+            "unit": "l"
+          },
+          {
+            "name": "Zitronensaft",
+            "quantity": 0.5,
+            "unit": ""
+          },
+          {
+            "name": "Zitronenschale",
+            "quantity": 1,
+            "unit": ""
+          }
+        ]
+      }
+    ],
+    "instructions": [
+      "F\u00fcr den <b>Teig</b>: <b>Mehl</b> [200g], <b>Zucker</b> [75g], <b>Butter</b> [75g] und <b>Backpulver</b> [0.5 TL] mischen und wie Streusel in die Form dr\u00fccken.",
+      "F\u00fcr den <b>Belag</b>: <b>Eier</b> [4], <b>Butter</b> [200g], <b>Zucker</b> [200g], <b>Sahne</b> [0.25l], <b>Milch</b> [0.25l], <b>Quark</b> [750g] schaumig r\u00fchren.",
+      "<b>Eischnee</b> unterheben.",
+      "1.5 Stunden backen, nach 1 Stunde abdecken, 10 Minuten in der Form abk\u00fchlen lassen."
+    ],
+    "image_url": "/images/astrid/ksetorte.png",
+    "safe_title": "ksetorte"
+  },
+  {
+    "title": "Chicken Tikka Masala",
+    "cook_time": "1",
+    "portions": "4-6",
+    "ingredients": [
+      {
+        "category": "Ingredients",
+        "items": [
+          {
+            "name": "H\u00e4hnchenbrustfilets ohne Haut",
+            "quantity": "4",
+            "unit": "St\u00fcck"
+          },
+          {
+            "name": "Zwiebeln",
+            "quantity": "2",
+            "unit": ""
+          },
+          {
+            "name": "frische rote Chilischote",
+            "quantity": "1",
+            "unit": ""
+          },
+          {
+            "name": "frisches St\u00fcck Ingwer",
+            "quantity": "1",
+            "unit": "daumengro\u00dfes"
+          },
+          {
+            "name": "frische Bund Koriandergr\u00fcn",
+            "quantity": "1",
+            "unit": ""
+          },
+          {
+            "name": "Butter",
+            "quantity": "1",
+            "unit": "St\u00fcck"
+          },
+          {
+            "name": "Pflanzen\u00f6l",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Tikka Masala Curry Paste",
+            "quantity": "150",
+            "unit": "g"
+          },
+          {
+            "name": "Meersalz",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "frisch gemahlener schwarzer Pfeffer",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "gehackte Tomaten",
+            "quantity": "400",
+            "unit": "ml"
+          },
+          {
+            "name": "Kokosmilch",
+            "quantity": "400",
+            "unit": "ml"
+          },
+          {
+            "name": "Handvoll Mandelbl\u00e4ttchen",
+            "quantity": "1",
+            "unit": ""
+          },
+          {
+            "name": "Naturjoghurt",
+            "quantity": "200",
+            "unit": "g"
+          },
+          {
+            "name": "Zitrone",
+            "quantity": "1",
+            "unit": ""
+          }
+        ]
+      }
+    ],
+    "instructions": [
+      "Das <b>H\u00e4hnchenfleisch</b> [4 St\u00fcck] in 2 cm dicke Streifen schneiden.",
+      "Die <b>Zwiebeln</b> [2] sch\u00e4len, l\u00e4ngs halbieren und in feine Halbringe schneiden.",
+      "Den <b>Chili</b> [1] in feine Ringe schneiden.",
+      "Den <b>Ingwer</b> [1 daumengro\u00dfes St\u00fcck] sch\u00e4len und in feine Scheiben schneiden.",
+      "Die <b>Korianderbl\u00e4tter</b> [1 Bund] abzupfen, die Stiele fein hacken.",
+      "In einer gro\u00dfen Kasserolle bei mittlerer bis hoher Temperatur einige Schuss <b>\u00d6l</b> zusammen mit der <b>Butter</b> [1 St\u00fcck] erhitzen.",
+      "Die <b>Zwiebeln</b>, den <b>Chili</b>, den <b>Ingwer</b> und die <b>Korianderstiele</b> in 10 Minuten weich und goldgelb schwitzen.",
+      "Die <b>Currypaste</b> [150 g] und das <b>Fleisch</b> [4 St\u00fcck] dazugeben.",
+      "Durchmischen, bis alles mit der <b>Paste</b> \u00fcberzogen ist.",
+      "Salzen und pfeffern.",
+      "Die <b>Tomaten</b> [400 ml] und die <b>Kokosmilch</b> [400 ml] unterr\u00fchren.",
+      "Eine leere Dose mit Wasser f\u00fcllen, in den Topf gie\u00dfen und umr\u00fchren.",
+      "Einmal aufkochen und dann bei aufgelegtem Deckel auf kleiner Stufe 20 Minuten k\u00f6cheln lassen, bis das <b>Fleisch</b> durchgegart und sch\u00f6n zart ist.",
+      "Dabei regelm\u00e4\u00dfig nachsehen, ob das Curry nicht zu trocken wird, und nach Bedarf weiteres Wasser dazugeben.",
+      "Zuletzt behutsam mit <b>Salz</b> und <b>Pfeffer</b> abschmecken.",
+      "Die <b>Mandelbl\u00e4ttchen</b> [1 Handvoll] und <b>Korianderbl\u00e4tter</b> [1 Bund] \u00fcber das Curry streuen und einige L\u00f6ffel <b>Joghurt</b> [200 g] daraufklecksen.",
+      "Die <b>Zitronenspalten</b> [1] separat reichen."
+    ],
+    "image_url": "/images/astrid/chickentikkamasala.png",
+    "safe_title": "chickentikkamasala"
+  },
+  {
+    "title": "Chrissis Bananen Muffins",
+    "cook_time": "1",
+    "portions": "12",
+    "ingredients": [
+      {
+        "category": "Zutaten",
+        "items": [
+          {
+            "name": "Mehl",
+            "quantity": 200.0,
+            "unit": "g"
+          },
+          {
+            "name": "Backpulver",
+            "quantity": 2.0,
+            "unit": "TL"
+          },
+          {
+            "name": "Natron",
+            "quantity": 0.5,
+            "unit": "TL"
+          },
+          {
+            "name": "Zimt",
+            "quantity": 0.25,
+            "unit": "TL"
+          },
+          {
+            "name": "Kakao",
+            "quantity": 3.0,
+            "unit": "TL"
+          },
+          {
+            "name": "Brauner Zucker",
+            "quantity": 125.0,
+            "unit": "g"
+          },
+          {
+            "name": "Ei",
+            "quantity": 1.0,
+            "unit": ""
+          },
+          {
+            "name": "Neutrales \u00d6l",
+            "quantity": 100.0,
+            "unit": "ml"
+          },
+          {
+            "name": "Buttermilch",
+            "quantity": 125.0,
+            "unit": "g"
+          },
+          {
+            "name": "Reife Bananen",
+            "quantity": 3.0,
+            "unit": ""
+          }
+        ]
+      }
+    ],
+    "instructions": [
+      "Heize den Ofen vor.",
+      "Mische <b>Mehl</b> [200g], <b>Backpulver</b> [2 TL], <b>Natron</b> [0.5 TL], <b>Zimt</b> [0.25 TL] und <b>Kakao</b> [3 TL] in einer Sch\u00fcssel.",
+      "In einer anderen Sch\u00fcssel, schlage das <b>Ei</b> [1] und f\u00fcge <b>braunen Zucker</b> [125g] hinzu.",
+      "F\u00fcge <b>neutrales \u00d6l</b> [100ml] und <b>Buttermilch</b> [125g] zur Ei-Zucker-Mischung hinzu.",
+      "Zerdr\u00fccke die <b>reifen Bananen</b> [3] und mische sie unter die feuchten Zutaten.",
+      "Kombiniere die trockenen und feuchten Zutaten und r\u00fchre, bis alles gut vermischt ist.",
+      "F\u00fclle den Teig in Muffinf\u00f6rmchen.",
+      "Backe die Muffins, bis sie goldbraun sind."
+    ],
+    "image_path": "/data/html_contents/astrid/recipe_images/chrissisbananenmuffins.png",
+    "image_url": "recipe_images/chrissisbananenmuffins.png",
+    "template_name": "",
+    "safe_title": "chrissisbananenmuffins"
+  }
+]

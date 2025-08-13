@@ -1,0 +1,78 @@
+[
+  {
+    "title": "Chrissis Bananen Muffins",
+    "cook_time": "1",
+    "portions": "12",
+    "ingredients": [
+      {
+        "category": "Zutaten",
+        "items": [
+          {
+            "name": "Mehl",
+            "quantity": 200.0,
+            "unit": "g"
+          },
+          {
+            "name": "Backpulver",
+            "quantity": 2.0,
+            "unit": "TL"
+          },
+          {
+            "name": "Natron",
+            "quantity": 0.5,
+            "unit": "TL"
+          },
+          {
+            "name": "Zimt",
+            "quantity": 0.25,
+            "unit": "TL"
+          },
+          {
+            "name": "Kakao",
+            "quantity": 3.0,
+            "unit": "TL"
+          },
+          {
+            "name": "Brauner Zucker",
+            "quantity": 125.0,
+            "unit": "g"
+          },
+          {
+            "name": "Ei",
+            "quantity": 1.0,
+            "unit": ""
+          },
+          {
+            "name": "Neutrales \u00d6l",
+            "quantity": 100.0,
+            "unit": "ml"
+          },
+          {
+            "name": "Buttermilch",
+            "quantity": 125.0,
+            "unit": "g"
+          },
+          {
+            "name": "Reife Bananen",
+            "quantity": 3.0,
+            "unit": ""
+          }
+        ]
+      }
+    ],
+    "instructions": [
+      "Heize den Ofen vor.",
+      "Mische <b>Mehl</b> [200g], <b>Backpulver</b> [2 TL], <b>Natron</b> [0.5 TL], <b>Zimt</b> [0.25 TL] und <b>Kakao</b> [3 TL] in einer Sch\u00fcssel.",
+      "In einer anderen Sch\u00fcssel, schlage das <b>Ei</b> [1] und f\u00fcge <b>braunen Zucker</b> [125g] hinzu.",
+      "F\u00fcge <b>neutrales \u00d6l</b> [100ml] und <b>Buttermilch</b> [125g] zur Ei-Zucker-Mischung hinzu.",
+      "Zerdr\u00fccke die <b>reifen Bananen</b> [3] und mische sie unter die feuchten Zutaten.",
+      "Kombiniere die trockenen und feuchten Zutaten und r\u00fchre, bis alles gut vermischt ist.",
+      "F\u00fclle den Teig in Muffinf\u00f6rmchen.",
+      "Backe die Muffins, bis sie goldbraun sind."
+    ],
+    "image_path": "/data/html_contents/Rob/recipe_images/chrissisbananenmuffins.png",
+    "image_url": "html_contents/Rob/recipe_images/chrissisbananenmuffins.png",
+    "template_name": "",
+    "safe_title": "chrissisbananenmuffins"
+  }
+]

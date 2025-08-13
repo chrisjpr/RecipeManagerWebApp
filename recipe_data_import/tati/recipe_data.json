@@ -1,0 +1,550 @@
+[
+  {
+    "title": "Teriyaki Sauce",
+    "cook_time": "1",
+    "portions": "5",
+    "ingredients": [
+      {
+        "category": "Basis",
+        "items": [
+          {
+            "name": "Tamari (reduzierte Sojasauce)",
+            "quantity": 600,
+            "unit": "ml"
+          },
+          {
+            "name": "Wasser",
+            "quantity": 600,
+            "unit": "ml"
+          },
+          {
+            "name": "Ahornsirup",
+            "quantity": 400,
+            "unit": "ml"
+          },
+          {
+            "name": "Reisessig (wei\u00dfer Essig)",
+            "quantity": 50,
+            "unit": "ml"
+          },
+          {
+            "name": "Ingwer",
+            "quantity": 10,
+            "unit": "TL"
+          },
+          {
+            "name": "Knoblauchzehen",
+            "quantity": 30,
+            "unit": ""
+          }
+        ]
+      },
+      {
+        "category": "Slurry",
+        "items": [
+          {
+            "name": "Maisst\u00e4rke",
+            "quantity": 5,
+            "unit": "TL"
+          },
+          {
+            "name": "Wasser",
+            "quantity": 5,
+            "unit": "TL"
+          }
+        ]
+      }
+    ],
+    "instructions": [
+      "Gib die <b>Basiszutaten</b> in einen gro\u00dfen Topf und lasse sie bei mittlerer Temperatur k\u00f6cheln.",
+      "Vermische die <b>Slurry</b> durch R\u00fchren von <b>Wasser [5 TL]</b> und <b>Maisst\u00e4rke [5 TL]</b>.",
+      "F\u00fcge die <b>Slurry</b> hinzu, sobald die <b>Basis</b> k\u00f6chelt.",
+      "R\u00fchre kontinuierlich, bis die Sauce die gew\u00fcnschte Konsistenz hat.",
+      "Lasse die Sauce abk\u00fchlen und dann lagern.",
+      "H\u00e4lt 1-2 Wochen im K\u00fchlschrank."
+    ],
+    "image_url": "html_contents/tati/recipe_images/teriyakisauce.png",
+    "image_path": "/data/html_contents/tati/recipe_images/teriyakisauce.png",
+    "safe_title": "teriyakisauce"
+  },
+  {
+    "title": "Teriyaki Fried Rice (vegan)",
+    "cook_time": "30",
+    "portions": "1",
+    "ingredients": [
+      {
+        "category": "Ingredients",
+        "items": [
+          {
+            "name": "Fr\u00fchlingszwiebeln",
+            "quantity": 4.0,
+            "unit": ""
+          },
+          {
+            "name": "wei\u00dfe Zwiebel",
+            "quantity": 1.0,
+            "unit": ""
+          },
+          {
+            "name": "Tofu",
+            "quantity": 300.0,
+            "unit": "g"
+          },
+          {
+            "name": "Knoblauchzehen",
+            "quantity": 2.0,
+            "unit": ""
+          },
+          {
+            "name": "Ingwer",
+            "quantity": 1.0,
+            "unit": "Daumenbreit"
+          },
+          {
+            "name": "Champignons",
+            "quantity": 250.0,
+            "unit": "g"
+          },
+          {
+            "name": "Reis",
+            "quantity": 250.0,
+            "unit": "g"
+          },
+          {
+            "name": "Sesam",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Salz & Pfeffer",
+            "quantity": "",
+            "unit": ""
+          }
+        ]
+      },
+      {
+        "category": "Gew\u00fcrze/\u00d6le",
+        "items": [
+          {
+            "name": "Sojasauce",
+            "quantity": 6.0,
+            "unit": "EL"
+          },
+          {
+            "name": "Sesam\u00f6l",
+            "quantity": 2.0,
+            "unit": "TL"
+          },
+          {
+            "name": "Zucker",
+            "quantity": 1.5,
+            "unit": "EL"
+          },
+          {
+            "name": "Mirin",
+            "quantity": 1.0,
+            "unit": "TL"
+          }
+        ]
+      },
+      {
+        "category": "Teriyaki Sauce",
+        "items": [
+          {
+            "name": "Sojasauce",
+            "quantity": 6.0,
+            "unit": "EL"
+          },
+          {
+            "name": "Sesam\u00f6l",
+            "quantity": 2.0,
+            "unit": "TL"
+          },
+          {
+            "name": "Knoblauchzehen",
+            "quantity": 1.5,
+            "unit": ""
+          },
+          {
+            "name": "Ingwer",
+            "quantity": 1.0,
+            "unit": "Daumenbreit"
+          },
+          {
+            "name": "Zucker",
+            "quantity": 1.5,
+            "unit": "EL"
+          },
+          {
+            "name": "Mirin",
+            "quantity": 1.0,
+            "unit": "TL"
+          }
+        ]
+      }
+    ],
+    "instructions": [
+      "<b>Teriyaki Sauce</b> anr\u00fchren (10 min)",
+      "<b>Tofu</b> [300g] ausdr\u00fccken & kleinw\u00fcrfeln & in 1/3 der <b>Teriyaki Sauce</b> + 2EL <b>Sesam</b> einlegen",
+      "<b>Reis</b> [250g] kochen (~20 min)",
+      "<b>wei\u00dfe Zwiebel</b> [1] in Quadrate hacken & in die Pfanne geben (2-3 min)",
+      "<b>Tofu</b> abtropfen (~5 min anbraten)",
+      "<b>Champignons</b> [250g] in (kleine) W\u00fcrfel hacken & mit restlicher <b>Teriyaki Sauce</b> + 4EL <b>Sesam</b> in Pfanne geben (3 min)",
+      "<b>Reis</b> & ggf. zus\u00e4tzliche <b>Sojasauce</b> in die Pfanne geben (~3 min)",
+      "<b>Fr\u00fchlingszwiebeln</b> in Scheiben schneiden & in die Pfanne geben (1 min)",
+      "Aufessen"
+    ],
+    "image_path": "/data/html_contents/tati/recipe_images/teriyakifriedricevegan.png",
+    "image_url": "html_contents/tati/recipe_images/teriyakifriedricevegan.png",
+    "template_name": "",
+    "safe_title": "teriyakifriedricevegan"
+  },
+  {
+    "title": "Erdnusssauce",
+    "cook_time": "3",
+    "portions": "4 servings",
+    "ingredients": [
+      {
+        "category": "Erdnusssauce",
+        "items": [
+          {
+            "name": "cremige Erdnussbutter",
+            "quantity": 65.0,
+            "unit": "g"
+          },
+          {
+            "name": "Sojasauce",
+            "quantity": 2.0,
+            "unit": "EL"
+          },
+          {
+            "name": "Ahornsirup",
+            "quantity": 2.0,
+            "unit": "EL"
+          },
+          {
+            "name": "Reisessig",
+            "quantity": 1.5,
+            "unit": "EL"
+          },
+          {
+            "name": "Sesam\u00f6l",
+            "quantity": 1.0,
+            "unit": "EL"
+          },
+          {
+            "name": "Knoblauch",
+            "quantity": 1.0,
+            "unit": "gro\u00dfe Zehe"
+          },
+          {
+            "name": "frischer Ingwer",
+            "quantity": 1.0,
+            "unit": "TL"
+          },
+          {
+            "name": "Sriracha",
+            "quantity": 2.0,
+            "unit": "TL"
+          },
+          {
+            "name": "Limettensaft",
+            "quantity": 1.5,
+            "unit": "EL"
+          },
+          {
+            "name": "Wasser oder Kokosmilch",
+            "quantity": 1.0,
+            "unit": "nach Bedarf"
+          }
+        ]
+      }
+    ],
+    "instructions": [
+      "*Hinweis: Schau dir gerne das Rezept-Video oben im Beitrag an!",
+      "Einfache alle Zutaten f\u00fcr die <b>Erdnusssauce</b> in ein Mixgef\u00e4\u00df (oder in ein Glas oder eine Sch\u00fcssel) geben und dann im Mixer oder mit dem P\u00fcrierstab cremig mixen (oder verschlossen sch\u00fctteln oder verr\u00fchren), bis eine glatte Sauce entsteht. Bei Bedarf etwas <b>Wasser oder Kokosmilch</b> zugeben, bis die gew\u00fcnschte Konsistenz erreicht ist. (Verwende wenig <b>Wasser oder Kokosmilch</b>, wenn du die <b>Erdnuss-Sauce</b> als Dip servierst oder mehr, wenn du sie als Salat-Dressing servierst).",
+      "Passt perfekt zu Sommerrollen, Sat\u00e9-Spie\u00dfen, oder einem Thai-Nudelsalat. Guten Appetit!"
+    ],
+    "image_path": "/data/html_contents/tati/recipe_images/erdnusssauce.png",
+    "image_url": "html_contents/tati/recipe_images/erdnusssauce.png",
+    "template_name": "",
+    "safe_title": "erdnusssauce"
+  },
+  {
+    "title": "Chicken Tikka Masala",
+    "cook_time": "1",
+    "portions": "4-6",
+    "ingredients": [
+      {
+        "category": "Ingredients",
+        "items": [
+          {
+            "name": "H\u00e4hnchenbrustfilets ohne Haut",
+            "quantity": "4",
+            "unit": "St\u00fcck"
+          },
+          {
+            "name": "Zwiebeln",
+            "quantity": "2",
+            "unit": ""
+          },
+          {
+            "name": "frische rote Chilischote",
+            "quantity": "1",
+            "unit": ""
+          },
+          {
+            "name": "frisches St\u00fcck Ingwer",
+            "quantity": "1",
+            "unit": "daumengro\u00dfes"
+          },
+          {
+            "name": "frische Bund Koriandergr\u00fcn",
+            "quantity": "1",
+            "unit": ""
+          },
+          {
+            "name": "Butter",
+            "quantity": "1",
+            "unit": "St\u00fcck"
+          },
+          {
+            "name": "Pflanzen\u00f6l",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Tikka Masala Curry Paste",
+            "quantity": "150",
+            "unit": "g"
+          },
+          {
+            "name": "Meersalz",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "frisch gemahlener schwarzer Pfeffer",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "gehackte Tomaten",
+            "quantity": "400",
+            "unit": "ml"
+          },
+          {
+            "name": "Kokosmilch",
+            "quantity": "400",
+            "unit": "ml"
+          },
+          {
+            "name": "Handvoll Mandelbl\u00e4ttchen",
+            "quantity": "1",
+            "unit": ""
+          },
+          {
+            "name": "Naturjoghurt",
+            "quantity": "200",
+            "unit": "g"
+          },
+          {
+            "name": "Zitrone",
+            "quantity": "1",
+            "unit": ""
+          }
+        ]
+      }
+    ],
+    "instructions": [
+      "Das <b>H\u00e4hnchenfleisch</b> [4 St\u00fcck] in 2 cm dicke Streifen schneiden.",
+      "Die <b>Zwiebeln</b> [2] sch\u00e4len, l\u00e4ngs halbieren und in feine Halbringe schneiden.",
+      "Den <b>Chili</b> [1] in feine Ringe schneiden.",
+      "Den <b>Ingwer</b> [1 daumengro\u00dfes St\u00fcck] sch\u00e4len und in feine Scheiben schneiden.",
+      "Die <b>Korianderbl\u00e4tter</b> [1 Bund] abzupfen, die Stiele fein hacken.",
+      "In einer gro\u00dfen Kasserolle bei mittlerer bis hoher Temperatur einige Schuss <b>\u00d6l</b> zusammen mit der <b>Butter</b> [1 St\u00fcck] erhitzen.",
+      "Die <b>Zwiebeln</b>, den <b>Chili</b>, den <b>Ingwer</b> und die <b>Korianderstiele</b> in 10 Minuten weich und goldgelb schwitzen.",
+      "Die <b>Currypaste</b> [150 g] und das <b>Fleisch</b> [4 St\u00fcck] dazugeben.",
+      "Durchmischen, bis alles mit der <b>Paste</b> \u00fcberzogen ist.",
+      "Salzen und pfeffern.",
+      "Die <b>Tomaten</b> [400 ml] und die <b>Kokosmilch</b> [400 ml] unterr\u00fchren.",
+      "Eine leere Dose mit Wasser f\u00fcllen, in den Topf gie\u00dfen und umr\u00fchren.",
+      "Einmal aufkochen und dann bei aufgelegtem Deckel auf kleiner Stufe 20 Minuten k\u00f6cheln lassen, bis das <b>Fleisch</b> durchgegart und sch\u00f6n zart ist.",
+      "Dabei regelm\u00e4\u00dfig nachsehen, ob das Curry nicht zu trocken wird, und nach Bedarf weiteres Wasser dazugeben.",
+      "Zuletzt behutsam mit <b>Salz</b> und <b>Pfeffer</b> abschmecken.",
+      "Die <b>Mandelbl\u00e4ttchen</b> [1 Handvoll] und <b>Korianderbl\u00e4tter</b> [1 Bund] \u00fcber das Curry streuen und einige L\u00f6ffel <b>Joghurt</b> [200 g] daraufklecksen.",
+      "Die <b>Zitronenspalten</b> [1] separat reichen."
+    ],
+    "image_url": "html_contents/tati/recipe_images/chickentikkamasala.png",
+    "image_path": "/data/html_contents/tati/recipe_images/chickentikkamasala.png",
+    "safe_title": "chickentikkamasala"
+  },
+  {
+    "title": "Nudelsalat (vegetarisch)",
+    "cook_time": "25 min",
+    "portions": "4",
+    "ingredients": [
+      {
+        "category": "F\u00fcr den Nudelsalat",
+        "items": [
+          {
+            "name": "Nudeln",
+            "quantity": 500.0,
+            "unit": "g"
+          },
+          {
+            "name": "Gew\u00fcrzgurken",
+            "quantity": 200.0,
+            "unit": "g"
+          },
+          {
+            "name": "Mais",
+            "quantity": 300.0,
+            "unit": "g"
+          },
+          {
+            "name": "Kirschtomaten",
+            "quantity": 250.0,
+            "unit": "g"
+          },
+          {
+            "name": "rote Zwiebeln",
+            "quantity": 2.0,
+            "unit": ""
+          }
+        ]
+      },
+      {
+        "category": "F\u00fcr das Dressing",
+        "items": [
+          {
+            "name": "Mayonnaise",
+            "quantity": 150.0,
+            "unit": "g"
+          },
+          {
+            "name": "Naturjoghurt",
+            "quantity": 150.0,
+            "unit": "g"
+          },
+          {
+            "name": "Gurkenwasser",
+            "quantity": 3.5,
+            "unit": "EL"
+          },
+          {
+            "name": "Paprikapulver",
+            "quantity": 1.0,
+            "unit": "TL"
+          },
+          {
+            "name": "Salz",
+            "quantity": 0.5,
+            "unit": "TL"
+          },
+          {
+            "name": "Pfeffer",
+            "quantity": 0.5,
+            "unit": "TL"
+          },
+          {
+            "name": "Gem\u00fcsebr\u00fche",
+            "quantity": 100.0,
+            "unit": "ml"
+          },
+          {
+            "name": "frisches Basilikum",
+            "quantity": 1.0,
+            "unit": "Handvoll"
+          }
+        ]
+      }
+    ],
+    "instructions": [
+      "<b>500 g Nudeln</b> Einen gro\u00dfen Topf Wasser zum Kochen bringen. Das kochende Wasser gro\u00dfz\u00fcgig salzen und die <b>Nudeln</b> darin bissfest garen. Durch ein Sieb abgie\u00dfen und mit 1 EL Oliven\u00f6l vermengen.",
+      "<b>200 g Gew\u00fcrzgurken</b>, <b>300 g Mais</b>, <b>250 g Kirschtomaten</b>, <b>2 rote Zwiebeln</b> <b>Gew\u00fcrzgurken</b> in feine Scheiben schneiden. <b>Mais</b> durch ein Sieb abgie\u00dfen. <b>Kirschtomaten</b> waschen und vierteln. <b>Rote Zwiebeln</b> abziehen und fein schneiden.",
+      "<b>150 g Mayonnaise</b>, <b>150 g Naturjoghurt</b>, <b>3 bis 4 EL Gurkenwasser</b>, <b>1 TL Paprikapulver</b>, <b>1/2 TL Salz</b>, <b>1/2 TL Pfeffer</b>, <b>100 ml Gem\u00fcsebr\u00fche</b> F\u00fcr das <b>Dressing</b> <b>Mayonnaise</b> und <b>Joghurt</b> mit <b>Gurkenwasser</b>, <b>Paprikapulver</b>, <b>Salz</b> und <b>Pfeffer</b> verr\u00fchren. Abschlie\u00dfend <b>Gem\u00fcsebr\u00fche</b> (darf nicht zu hei\u00df sein!) hinzuf\u00fcgen und unterr\u00fchren.",
+      "<b>1 Handvoll frisches Basilikum</b> Gekochte <b>Nudeln</b> in eine gro\u00dfe Sch\u00fcssel geben. Geschnittenes <b>Gem\u00fcse</b> und <b>Dressing</b> hinzuf\u00fcgen und alles gr\u00fcndlich verr\u00fchren. Abschmecken und optional mit <b>frischem Basilikum</b> garnieren. Lass dir den besten Nudelsalat schmecken!"
+    ],
+    "image_path": "",
+    "image_url": "/images/tati/nudelsalatvegetarisch.png",
+    "template_name": "",
+    "safe_title": "nudelsalatvegetarisch"
+  },
+  {
+    "title": "Chrissis Bananen Muffins",
+    "cook_time": "1",
+    "portions": "12",
+    "ingredients": [
+      {
+        "category": "Zutaten",
+        "items": [
+          {
+            "name": "Mehl",
+            "quantity": 200.0,
+            "unit": "g"
+          },
+          {
+            "name": "Backpulver",
+            "quantity": 2.0,
+            "unit": "TL"
+          },
+          {
+            "name": "Natron",
+            "quantity": 0.5,
+            "unit": "TL"
+          },
+          {
+            "name": "Zimt",
+            "quantity": 0.25,
+            "unit": "TL"
+          },
+          {
+            "name": "Kakao",
+            "quantity": 3.0,
+            "unit": "TL"
+          },
+          {
+            "name": "Brauner Zucker",
+            "quantity": 125.0,
+            "unit": "g"
+          },
+          {
+            "name": "Ei",
+            "quantity": 1.0,
+            "unit": ""
+          },
+          {
+            "name": "Neutrales \u00d6l",
+            "quantity": 100.0,
+            "unit": "ml"
+          },
+          {
+            "name": "Buttermilch",
+            "quantity": 125.0,
+            "unit": "g"
+          },
+          {
+            "name": "Reife Bananen",
+            "quantity": 3.0,
+            "unit": ""
+          }
+        ]
+      }
+    ],
+    "instructions": [
+      "Heize den Ofen vor.",
+      "Mische <b>Mehl</b> [200g], <b>Backpulver</b> [2 TL], <b>Natron</b> [0.5 TL], <b>Zimt</b> [0.25 TL] und <b>Kakao</b> [3 TL] in einer Sch\u00fcssel.",
+      "In einer anderen Sch\u00fcssel, schlage das <b>Ei</b> [1] und f\u00fcge <b>braunen Zucker</b> [125g] hinzu.",
+      "F\u00fcge <b>neutrales \u00d6l</b> [100ml] und <b>Buttermilch</b> [125g] zur Ei-Zucker-Mischung hinzu.",
+      "Zerdr\u00fccke die <b>reifen Bananen</b> [3] und mische sie unter die feuchten Zutaten.",
+      "Kombiniere die trockenen und feuchten Zutaten und r\u00fchre, bis alles gut vermischt ist.",
+      "F\u00fclle den Teig in Muffinf\u00f6rmchen.",
+      "Backe die Muffins, bis sie goldbraun sind."
+    ],
+    "image_path": "/data/html_contents/tati/recipe_images/chrissisbananenmuffins.png",
+    "image_url": "html_contents/tati/recipe_images/chrissisbananenmuffins.png",
+    "template_name": "",
+    "safe_title": "chrissisbananenmuffins"
+  }
+]

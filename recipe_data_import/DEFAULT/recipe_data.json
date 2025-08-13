@@ -1,0 +1,1151 @@
+[
+  {
+    "title": "Pesto Rosso (mit Spaghetti)",
+    "cook_time": "5",
+    "portions": "1 serving",
+    "image_url": "https://biancazapatka.com/wp-content/uploads/2023/07/tomaten-pesto-rosso.jpg",
+    "image_path": "html_contents/DEFAULT/recipe_images\\dasbestepestorossopastarezept.png",
+    "ingredients": [
+      {
+        "category": "Nuts",
+        "items": [
+          {
+            "name": "Pine nuts",
+            "quantity": "50",
+            "unit": "g"
+          }
+        ]
+      },
+      {
+        "category": "Sauces/Oils",
+        "items": [
+          {
+            "name": "Dried tomatoes in oil",
+            "quantity": "180",
+            "unit": "g"
+          },
+          {
+            "name": "Olive oil",
+            "quantity": "80",
+            "unit": "ml"
+          }
+        ]
+      },
+      {
+        "category": "Seasonings",
+        "items": [
+          {
+            "name": "Garlic cloves",
+            "quantity": "2",
+            "unit": ""
+          },
+          {
+            "name": "Balsamic vinegar",
+            "quantity": "1",
+            "unit": "tsp"
+          },
+          {
+            "name": "Salt",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Pepper",
+            "quantity": "",
+            "unit": ""
+          }
+        ]
+      },
+      {
+        "category": "Cheese/Alternatives",
+        "items": [
+          {
+            "name": "Vegan Parmesan",
+            "quantity": "2.5",
+            "unit": "tbsp"
+          }
+        ]
+      },
+      {
+        "category": "Pasta",
+        "items": [
+          {
+            "name": "Spaghetti",
+            "quantity": "",
+            "unit": ""
+          }
+        ]
+      },
+      {
+        "category": "Herbs",
+        "items": [
+          {
+            "name": "Basil",
+            "quantity": "",
+            "unit": ""
+          }
+        ]
+      }
+    ],
+    "instructions": [
+      "*Note: Feel free to watch the recipe video + the step-by-step instructions above!",
+      "First, roast the <b>Pine nuts [50g]</b> in a pan without adding oil, frequently tossing them until golden brown, about 2-3 minutes.",
+      "Let the roasted <b>Pine nuts</b> cool down and then place them in a small blender or a narrow tall container.",
+      "Add <b>Dried tomatoes in oil [180g]</b>, <b>Garlic cloves [2]</b>, <b>Balsamic vinegar [1 tsp]</b>, some <b>Salt</b> and <b>Pepper</b>, and optionally <b>Vegan Parmesan [2.5 tbsp]</b> or nutritional yeast, and blend everything finely in the blender or with an immersion blender until smooth. If necessary, more <b>Olive oil</b> and spices can be added.",
+      "Then transfer the pesto into a clean jar with a screw cap and store it in the refrigerator (the pesto should always be covered with olive oil to ensure it lasts a long time).",
+      "Cook the <b>Spaghetti</b> according to the package instructions. Once the noodles are 'al dente', drain the cooking water and immediately mix with the pesto.",
+      "Serve the Pesto Spaghetti sprinkled with more <b>Vegan Parmesan</b> and <b>Pine nuts</b>, and garnish with halved cherry tomatoes and fresh <b>Basil</b>.",
+      "Check out the many uses here. Enjoy your meal!"
+    ],
+    "safe_title": "pestorossomitspaghetti"
+  },
+  {
+    "title": "Couscous Geilsalat",
+    "cook_time": "30",
+    "portions": "5",
+    "image_url": "html_contents/DEFAULT/recipe_images/couscousgeilsalat.png",
+    "image_path": "C:\\Users\\Chris\\SynologyDrive\\IT Projekte\\Jupyter Notebooks\\Projekte\\Recipe Generator 2.0/data/html_contents/DEFAULT\\recipe_images\\couscousgeilsalat.png",
+    "ingredients": [
+      {
+        "category": "Main",
+        "items": [
+          {
+            "name": "Couscous",
+            "quantity": "300",
+            "unit": "g"
+          },
+          {
+            "name": "Cucumber",
+            "quantity": "1",
+            "unit": ""
+          },
+          {
+            "name": "Cherry tomatoes",
+            "quantity": "300",
+            "unit": "g"
+          },
+          {
+            "name": "Corn",
+            "quantity": "150",
+            "unit": "g"
+          },
+          {
+            "name": "Spring onions",
+            "quantity": "3",
+            "unit": ""
+          },
+          {
+            "name": "Small red onions",
+            "quantity": "2",
+            "unit": ""
+          },
+          {
+            "name": "Sultanas",
+            "quantity": "125",
+            "unit": "g"
+          },
+          {
+            "name": "Parsley",
+            "quantity": "0.5",
+            "unit": "bunch"
+          }
+        ]
+      },
+      {
+        "category": "Dressing",
+        "items": [
+          {
+            "name": "Yellow curry paste",
+            "quantity": "2",
+            "unit": "tbsp"
+          },
+          {
+            "name": "Sugar",
+            "quantity": "1",
+            "unit": "tsp"
+          },
+          {
+            "name": "Salt",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Pepper",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Olive oil",
+            "quantity": "6",
+            "unit": "tbsp"
+          },
+          {
+            "name": "Rice vinegar",
+            "quantity": "4",
+            "unit": "tbsp"
+          },
+          {
+            "name": "Cumin",
+            "quantity": "2",
+            "unit": "tsp"
+          },
+          {
+            "name": "Vegetable broth",
+            "quantity": "300",
+            "unit": "ml"
+          },
+          {
+            "name": "Sweet paprika powder",
+            "quantity": "1",
+            "unit": "tsp"
+          },
+          {
+            "name": "Soy sauce",
+            "quantity": "2",
+            "unit": "tbsp"
+          },
+          {
+            "name": "Tomato paste",
+            "quantity": "2",
+            "unit": "tbsp"
+          },
+          {
+            "name": "Chili powder",
+            "quantity": "",
+            "unit": "(optional)"
+          }
+        ]
+      }
+    ],
+    "instructions": [
+      "Boil water, mix with <b>vegetable broth [300ml]</b> and let the <b>Couscous [300g]</b> swell in it (optionally season with white wine vinegar)",
+      "Mix the dressing and combine with the <b>Couscous</b>",
+      "Cut the remaining ingredients into small pieces and then add them to the bowl: <b>Cucumber [1]</b>, <b>Cherry tomatoes [300g]</b>, <b>Corn [150g]</b>, <b>Spring onions [3]</b>, <b>Small red onions [2]</b>, <b>Sultanas [125g]</b>",
+      "Stir vigorously and optionally top with more <b>Parsley [0.5 bunch]</b>"
+    ],
+    "safe_title": "couscousgeilsalat"
+  },
+  {
+    "title": "Teriyaki Fried Rice (vegan)",
+    "cook_time": "30",
+    "portions": "1",
+    "ingredients": [
+      {
+        "category": "Ingredients",
+        "items": [
+          {
+            "name": "Fr\u00fchlingszwiebeln",
+            "quantity": 4.0,
+            "unit": ""
+          },
+          {
+            "name": "wei\u00dfe Zwiebel",
+            "quantity": 1.0,
+            "unit": ""
+          },
+          {
+            "name": "Tofu",
+            "quantity": 300.0,
+            "unit": "g"
+          },
+          {
+            "name": "Knoblauchzehen",
+            "quantity": 2.0,
+            "unit": ""
+          },
+          {
+            "name": "Ingwer",
+            "quantity": 1.0,
+            "unit": "Daumenbreit"
+          },
+          {
+            "name": "Champignons",
+            "quantity": 250.0,
+            "unit": "g"
+          },
+          {
+            "name": "Reis",
+            "quantity": 250.0,
+            "unit": "g"
+          },
+          {
+            "name": "Sesam",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Salz & Pfeffer",
+            "quantity": "",
+            "unit": ""
+          }
+        ]
+      },
+      {
+        "category": "Gew\u00fcrze/\u00d6le",
+        "items": [
+          {
+            "name": "Sojasauce",
+            "quantity": 6.0,
+            "unit": "EL"
+          },
+          {
+            "name": "Sesam\u00f6l",
+            "quantity": 2.0,
+            "unit": "TL"
+          },
+          {
+            "name": "Zucker",
+            "quantity": 1.5,
+            "unit": "EL"
+          },
+          {
+            "name": "Mirin",
+            "quantity": 1.0,
+            "unit": "TL"
+          }
+        ]
+      },
+      {
+        "category": "Teriyaki Sauce",
+        "items": [
+          {
+            "name": "Sojasauce",
+            "quantity": 6.0,
+            "unit": "EL"
+          },
+          {
+            "name": "Sesam\u00f6l",
+            "quantity": 2.0,
+            "unit": "TL"
+          },
+          {
+            "name": "Knoblauchzehen",
+            "quantity": 1.5,
+            "unit": ""
+          },
+          {
+            "name": "Ingwer",
+            "quantity": 1.0,
+            "unit": "Daumenbreit"
+          },
+          {
+            "name": "Zucker",
+            "quantity": 1.5,
+            "unit": "EL"
+          },
+          {
+            "name": "Mirin",
+            "quantity": 1.0,
+            "unit": "TL"
+          }
+        ]
+      }
+    ],
+    "instructions": [
+      "<b>Teriyaki Sauce</b> anr\u00fchren (10 min)",
+      "<b>Tofu</b> [300g] ausdr\u00fccken & kleinw\u00fcrfeln & in 1/3 der <b>Teriyaki Sauce</b> + 2EL <b>Sesam</b> einlegen",
+      "<b>Reis</b> [250g] kochen (~20 min)",
+      "<b>wei\u00dfe Zwiebel</b> [1] in Quadrate hacken & in die Pfanne geben (2-3 min)",
+      "<b>Tofu</b> abtropfen (~5 min anbraten)",
+      "<b>Champignons</b> [250g] in (kleine) W\u00fcrfel hacken & mit restlicher <b>Teriyaki Sauce</b> + 4EL <b>Sesam</b> in Pfanne geben (3 min)",
+      "<b>Reis</b> & ggf. zus\u00e4tzliche <b>Sojasauce</b> in die Pfanne geben (~3 min)",
+      "<b>Fr\u00fchlingszwiebeln</b> in Scheiben schneiden & in die Pfanne geben (1 min)",
+      "Aufessen"
+    ],
+    "image_path": "",
+    "image_url": "/images/DEFAULT/teriyakifriedricevegan.png",
+    "template_name": "",
+    "safe_title": "teriyakifriedricevegan"
+  },
+  {
+    "title": "Teriyaki Sauce",
+    "cook_time": "1",
+    "portions": "5",
+    "ingredients": [
+      {
+        "category": "Basis",
+        "items": [
+          {
+            "name": "Tamari (reduzierte Sojasauce)",
+            "quantity": 600,
+            "unit": "ml"
+          },
+          {
+            "name": "Wasser",
+            "quantity": 600,
+            "unit": "ml"
+          },
+          {
+            "name": "Ahornsirup",
+            "quantity": 400,
+            "unit": "ml"
+          },
+          {
+            "name": "Reisessig (wei\u00dfer Essig)",
+            "quantity": 50,
+            "unit": "ml"
+          },
+          {
+            "name": "Ingwer",
+            "quantity": 10,
+            "unit": "TL"
+          },
+          {
+            "name": "Knoblauchzehen",
+            "quantity": 30,
+            "unit": ""
+          }
+        ]
+      },
+      {
+        "category": "Slurry",
+        "items": [
+          {
+            "name": "Maisst\u00e4rke",
+            "quantity": 5,
+            "unit": "TL"
+          },
+          {
+            "name": "Wasser",
+            "quantity": 5,
+            "unit": "TL"
+          }
+        ]
+      }
+    ],
+    "instructions": [
+      "Gib die <b>Basiszutaten</b> in einen gro\u00dfen Topf und lasse sie bei mittlerer Temperatur k\u00f6cheln.",
+      "Vermische die <b>Slurry</b> durch R\u00fchren von <b>Wasser [5 TL]</b> und <b>Maisst\u00e4rke [5 TL]</b>.",
+      "F\u00fcge die <b>Slurry</b> hinzu, sobald die <b>Basis</b> k\u00f6chelt.",
+      "R\u00fchre kontinuierlich, bis die Sauce die gew\u00fcnschte Konsistenz hat.",
+      "Lasse die Sauce abk\u00fchlen und dann lagern.",
+      "H\u00e4lt 1-2 Wochen im K\u00fchlschrank."
+    ],
+    "image_url": "/images/DEFAULT/teriyakisauce.png",
+    "safe_title": "teriyakisauce"
+  },
+  {
+    "title": "Pulled-Oyster Mushroom Burger",
+    "cook_time": "85",
+    "portions": "4",
+    "ingredients": [
+      {
+        "category": "Ingredients",
+        "items": [
+          {
+            "name": "Austernpilze",
+            "quantity": "450.0",
+            "unit": "g"
+          },
+          {
+            "name": "Brioche Br\u00f6tchen",
+            "quantity": "4.0",
+            "unit": ""
+          },
+          {
+            "name": "Essiggurken",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Veganer Schmelzk\u00e4se",
+            "quantity": "100.0",
+            "unit": "g"
+          },
+          {
+            "name": "Eisbergsalat",
+            "quantity": "100.0",
+            "unit": "g"
+          },
+          {
+            "name": "Rotkohl",
+            "quantity": "100.0",
+            "unit": "g"
+          },
+          {
+            "name": "Karotte",
+            "quantity": "50.0",
+            "unit": "g"
+          },
+          {
+            "name": "Vegane Aioli Mayo",
+            "quantity": "70.0",
+            "unit": "g"
+          },
+          {
+            "name": "Apfelessig",
+            "quantity": "3.5",
+            "unit": "EL"
+          },
+          {
+            "name": "Veganer Joghurt",
+            "quantity": "80.0",
+            "unit": "g"
+          }
+        ]
+      },
+      {
+        "category": "BBQ Sauce",
+        "items": [
+          {
+            "name": "Tomatenmark",
+            "quantity": "2.0",
+            "unit": "EL"
+          },
+          {
+            "name": "\u00d6l",
+            "quantity": "2.0",
+            "unit": "EL"
+          },
+          {
+            "name": "Ger\u00e4uchertes Paprikapulver",
+            "quantity": "2.0",
+            "unit": "TL"
+          },
+          {
+            "name": "Apfelessig",
+            "quantity": "2.0",
+            "unit": "EL"
+          },
+          {
+            "name": "Agavendicksaft",
+            "quantity": "2.0",
+            "unit": "EL"
+          },
+          {
+            "name": "Knoblauchzehe",
+            "quantity": "1",
+            "unit": ""
+          },
+          {
+            "name": "Sojasauce",
+            "quantity": "4.0",
+            "unit": "EL"
+          },
+          {
+            "name": "Wasser",
+            "quantity": "4.0",
+            "unit": "EL"
+          },
+          {
+            "name": "Chili/Cayennepulver",
+            "quantity": "0.25",
+            "unit": "TL"
+          }
+        ]
+      },
+      {
+        "category": "Eingelegte Zwiebeln",
+        "items": [
+          {
+            "name": "Rote Zwiebeln",
+            "quantity": "3.5",
+            "unit": ""
+          },
+          {
+            "name": "Wasser",
+            "quantity": "300.0",
+            "unit": "ml"
+          },
+          {
+            "name": "Wei\u00dfweinessig",
+            "quantity": "250.0",
+            "unit": "ml"
+          },
+          {
+            "name": "Zucker",
+            "quantity": "1",
+            "unit": "TL"
+          },
+          {
+            "name": "Salz",
+            "quantity": "0.5",
+            "unit": "TL"
+          },
+          {
+            "name": "Senfk\u00f6rner",
+            "quantity": "2.0",
+            "unit": "TL"
+          }
+        ]
+      }
+    ],
+    "instructions": [
+      "F\u00fcr die <b>BBQ Sauce</b>: Alle Zutaten mischen -> fertig.",
+      "F\u00fcr den <b>Coleslaw Salat</b>: <b>Kohl</b> [100g] und <b>Salat</b> [100g] in kleine St\u00fccke schneiden. <b>Karotte</b> [50g] reiben. Dressing mischen (alles kombinieren).",
+      "F\u00fcr die <b>Austernpilz Patties</b>: <b>Austernpilze</b> [450g] entlang der Fasern ziehen (~0.5cm ~ Pulled Pork). Pilze in einer Pfanne anbraten. 2/3 der <b>BBQ Sauce</b> [2 EL Tomatenmark, 2 EL \u00d6l, 2 TL Ger\u00e4uchertes Paprikapulver, 2 EL Apfelessig, 2 EL Agavendicksaft, 1 Knoblauchzehe, 4 EL Sojasauce, 4 EL Wasser, 0.25 TL Chili/Cayennepulver] in die Pfanne geben und die Pilze marinieren (3-5min). Pfanne abdecken und <b>veganen Schmelzk\u00e4se</b> [100g] bei mittlerer Hitze schmelzen lassen (3-4min).",
+      "F\u00fcr die <b>eingelegten Zwiebeln</b>: 3-4 <b>rote Zwiebeln</b> in feine Streifen schneiden. 300ml <b>Wasser</b>, 250ml <b>Wei\u00dfweinessig</b>, 1 TL <b>Zucker</b>, 0.5 TL <b>Salz</b> & 2 TL <b>Senfk\u00f6rner</b> in einem Topf erhitzen & 2min zum Kochen bringen. Topfinhalt \u00fcber die Zwiebeln gie\u00dfen!",
+      "Genie\u00dfen!"
+    ],
+    "image_url": "/images/DEFAULT/pulledoystermushroomburger.png",
+    "safe_title": "pulledoystermushroomburger"
+  },
+  {
+    "title": "Vegane Hackr\u00f6llchen in Auberginenmantel",
+    "cook_time": "60",
+    "portions": "1.5",
+    "image_url": "html_contents/recipe_images/veganehackrllcheninauberginenmantel.png",
+    "image_path": "/data/html_contents/DEFAULT/recipe_images/veganehackrllcheninauberginenmantel.png",
+    "ingredients": [
+      {
+        "category": "Hackr\u00f6llchen",
+        "items": [
+          {
+            "name": "Auberginen",
+            "quantity": "2",
+            "unit": ""
+          },
+          {
+            "name": "veganes M\u00fchlen Hack",
+            "quantity": "200",
+            "unit": "g"
+          },
+          {
+            "name": "kleine Zwiebel",
+            "quantity": "1",
+            "unit": ""
+          },
+          {
+            "name": "ger\u00e4ucherte Paprika",
+            "quantity": "2",
+            "unit": "EL"
+          },
+          {
+            "name": "Salz",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Pfeffer",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Knoblauchpulver",
+            "quantity": "0.5",
+            "unit": "EL"
+          }
+        ]
+      },
+      {
+        "category": "Tomatensauce",
+        "items": [
+          {
+            "name": "passierte Tomate",
+            "quantity": "500",
+            "unit": "ml"
+          },
+          {
+            "name": "grosse Zwiebel",
+            "quantity": "1",
+            "unit": ""
+          },
+          {
+            "name": "Knoblauchzehen",
+            "quantity": "3",
+            "unit": ""
+          },
+          {
+            "name": "Basilikum",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Oregano",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Salz",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Pfeffer",
+            "quantity": "",
+            "unit": ""
+          }
+        ]
+      }
+    ],
+    "instructions": [
+      "Die <b>Zwiebeln</b> ganz fein hacken.",
+      "<b>Knoblauch</b> fein hacken.",
+      "<b>Auberginen</b> in etwa 0.5 cm d\u00fcnne Scheiben schneiden.",
+      "<b>Auberginen</b> gut mit <b>Salz</b> bedecken, dann 20 Minuten Wasser ziehen lassen und wieder abwaschen.",
+      "<b>Auberginen</b> danach f\u00fcr etwa 15 Minuten in Ofen bei 200 Grad Umluft vorbacken.",
+      "Veganes <b>Hackfleisch</b> mit dazugeh\u00f6rigen Gew\u00fcrzen und 1/3 der gehackten <b>Zwiebeln</b> vermengen.",
+      "Kleine R\u00f6llchen aus dem <b>Hackfleisch</b> bilden, sodass sie gut in die <b>Auberginen</b> passen",
+      "Restliche <b>Zwiebeln</b> f\u00fcr die <b>Tomatensauce</b> in Topf anschwitzen.",
+      "<b>Knoblauch</b> in Topf dazugeben",
+      "Restliche Gew\u00fcrze f\u00fcr <b>Tomatensauce</b> hinzuf\u00fcgen und mit <b>passierten Tomaten</b> aufgie\u00dfen.",
+      "Die <b>Tomatensauce</b> etwa 5 min k\u00f6cheln lassen",
+      "<b>Tomatensauce</b> in eine Backform umf\u00fcllen",
+      "geformtes <b>Hackfleisch</b> <b>Auberginenscheiben</b> ummanteln und in die <b>Tomatensauce</b> geben",
+      "Das gesamte nochmal f\u00fcr etwa 30-35 Minuten backen."
+    ],
+    "notes": "Super lecker!",
+    "safe_title": "veganehackrllcheninauberginenmantel"
+  },
+  {
+    "title": "Senf \u2013 Dijon Senf Hausgemacht - schnell & einfach - 162 kcal/100g",
+    "safe_title": "senfdijonsenfhausgemachtschnelleinfach162kcal100g",
+    "cook_time": "15",
+    "portions": "1 serving",
+    "image_url": "https://ais.kochbar.de/kbrezept/494141_1010402/1200x1200/senf-dijon-senf-hausgemacht-rezept-bild-nr-2.jpg",
+    "image_path": "/data/html_contents/DEFAULT/recipe_images/senfdijonsenfhausgemachtschnelleinfach162kcal100g.png",
+    "ingredients": [
+      {
+        "category": "Hauptzutaten",
+        "items": [
+          {
+            "name": "Senfmehl braun nicht ent\u00f6lt",
+            "quantity": "200",
+            "unit": "Gramm"
+          },
+          {
+            "name": "Essig wei\u00df",
+            "quantity": "200",
+            "unit": "ml"
+          },
+          {
+            "name": "Wei\u00dfwein trocken",
+            "quantity": "100",
+            "unit": "ml"
+          },
+          {
+            "name": "Honig fl\u00fcssig",
+            "quantity": "2",
+            "unit": "EL"
+          },
+          {
+            "name": "Meersalz",
+            "quantity": "2",
+            "unit": "EL"
+          },
+          {
+            "name": "Olio di Oliva - geschmacksneutrales Oliven\u00f6l",
+            "quantity": "2",
+            "unit": "EL"
+          }
+        ]
+      }
+    ],
+    "instructions": [
+      "Geschichte: Im 13. Jahrhundert erhielt die franz\u00f6sische Stadt Dijon das Monopol f\u00fcr Senfherstellung. Nach dem europ\u00e4ischen Codex f\u00fcr Senf muss der Dijon Senf aus braunem Senfk\u00f6rnern hergestellt werden. Aus alter Tradition heraus werden die Senfk\u00f6rner nicht ent\u00f6lt, was dem Senf sein geschmacklich besonders volles Aroma verleiht.",
+      "Zubereitung: Das <b>Senfmehl [200 Gramm]</b> mit den restlichen Zutaten <b>Essig wei\u00df [200 ml]</b>, <b>Wei\u00dfwein trocken [100 ml]</b>, <b>Honig fl\u00fcssig [2 EL]</b>, <b>Meersalz [2 EL]</b> und <b>Olio di Oliva - geschmacksneutrales Oliven\u00f6l [2 EL]</b> mischen. Anschlie\u00dfend mit dem P\u00fcrierstab zu einer breiigen Konsistenz mixen.",
+      "Zur F\u00f6rderung der Fermentation den Senf sechs bis sieben Stunden offen stehen lassen, \u00f6fters durchr\u00fchren.",
+      "In vorbereitete Twist off Gl\u00e4ser f\u00fcllen und mindestens 3 Wochen geschlossen durchziehen lassen.",
+      "Anmerkung: Eine der bekanntesten Dijonsenfvarianten ist der Estragonsenf.",
+      "Das dazu passende <b>Senfmehl [200 Gramm]</b> bekommt man in der Apotheke."
+    ]
+  },
+  {
+    "title": "Mac-N-Cheese - einmal auf dem Herd und nicht im Backofen",
+    "safe_title": "macncheeseeinmalaufdemherdundnichtimbackofen",
+    "cook_time": "25",
+    "portions": "4 servings",
+    "image_url": "https://img.chefkoch-cdn.de/rezepte/2311281368715005/bilder/1522999/crop-960x540/mac-n-cheese-einmal-auf-dem-herd-und-nicht-im-backofen.jpg",
+    "image_path": "/data/html_contents/DEFAULT/recipe_images/macncheeseeinmalaufdemherdundnichtimbackofen.png",
+    "ingredients": [
+      {
+        "category": "Hauptzutaten",
+        "items": [
+          {
+            "name": "H\u00f6rnchennudeln",
+            "quantity": "400",
+            "unit": "g"
+          },
+          {
+            "name": "vegane Butter",
+            "quantity": "4",
+            "unit": "EL"
+          },
+          {
+            "name": "veganer K\u00e4se, grob gerieben (z.B. Cheddar-Stil)",
+            "quantity": "350",
+            "unit": "g"
+          }
+        ]
+      },
+      {
+        "category": "Dressing/Sauce",
+        "items": [
+          {
+            "name": "vegane Kondensmilch",
+            "quantity": "180",
+            "unit": "ml"
+          },
+          {
+            "name": "vegane Worcestershiresauce",
+            "quantity": "1",
+            "unit": "TL"
+          },
+          {
+            "name": "vegane Eiersatz (z.B. Kichererbsenwasser)",
+            "quantity": "2",
+            "unit": "St\u00fcck"
+          },
+          {
+            "name": "Senf",
+            "quantity": "1.5",
+            "unit": "TL"
+          },
+          {
+            "name": "Tabasco oder Cayennepfeffer",
+            "quantity": "0.5",
+            "unit": "TL"
+          },
+          {
+            "name": "Salz",
+            "quantity": "1",
+            "unit": "TL"
+          },
+          {
+            "name": "schwarzer Pfeffer",
+            "quantity": "",
+            "unit": ""
+          }
+        ]
+      }
+    ],
+    "instructions": [
+      "Die <b>H\u00f6rnchennudeln [400g]</b> in einem Topf mit kochendem Salzwasser al dente kochen. Danach das Wasser abgie\u00dfen.",
+      "Die <b>vegane Butter [4 EL]</b> zu den Nudeln geben und bei geringer Hitze schmelzen lassen.",
+      "In einer Sch\u00fcssel <b>veganer Eiersatz [2 St\u00fcck]</b>, <b>vegane Kondensmilch [180ml]</b>, <b>Tabasco oder Cayennepfeffer [0.5 TL]</b>, <b>Salz [1 TL]</b>, <b>schwarzer Pfeffer</b>, <b>Senf [1.5 TL]</b> und ggf. <b>vegane Worcestershiresauce [1 TL]</b> vermischen und zu den Nudeln geben. Danach den <b>veganen K\u00e4se [350g]</b> hinzugeben und 3 - 5 Minuten bei geringer Hitze unter R\u00fchren schmelzen lassen, bis alles sch\u00f6n cremig ist. Hei\u00df servieren.",
+      "Man kann ggf. auch noch etwas mehr <b>veganen K\u00e4se</b> hinzuf\u00fcgen. Es kann bei Mac n' Cheese nie genug K\u00e4se sein ..."
+    ],
+    "template_name": ""
+  },
+  {
+    "title": "k\u00e4s",
+    "safe_title": "ks",
+    "cook_time": "25",
+    "portions": "4 servings",
+    "image_url": "https://img.chefkoch-cdn.de/rezepte/2311281368715005/bilder/1522999/crop-960x540/mac-n-cheese-einmal-auf-dem-herd-und-nicht-im-backofen.jpg",
+    "image_path": "/data/html_contents/DEFAULT/recipe_images/macncheeseeinmalaufdemherdundnichtimbackofen.png",
+    "ingredients": [
+      {
+        "category": "Hauptgericht",
+        "items": [
+          {
+            "name": "H\u00f6rnchennudeln",
+            "quantity": "400",
+            "unit": "g"
+          },
+          {
+            "name": "Butter",
+            "quantity": "4",
+            "unit": "EL"
+          },
+          {
+            "name": "Ei(er)",
+            "quantity": "2",
+            "unit": ""
+          },
+          {
+            "name": "Kondensmilch",
+            "quantity": "180",
+            "unit": "ml"
+          },
+          {
+            "name": "Tabasco oder Cayennepfeffer",
+            "quantity": "0.5",
+            "unit": "TL"
+          },
+          {
+            "name": "Salz",
+            "quantity": "1",
+            "unit": "TL"
+          },
+          {
+            "name": "Pfeffer, schwarzer",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "Senf",
+            "quantity": "1.5",
+            "unit": "TL"
+          },
+          {
+            "name": "Cheddark\u00e4se oder Edamer oder mittelalter Gouda, grob gerieben",
+            "quantity": "350",
+            "unit": "g"
+          },
+          {
+            "name": "Worcestershiresauce",
+            "quantity": "1",
+            "unit": "TL"
+          }
+        ]
+      },
+      {
+        "category": "Zusatz",
+        "items": [
+          {
+            "name": "Zwiebeln",
+            "quantity": "2",
+            "unit": ""
+          },
+          {
+            "name": "Mehl",
+            "quantity": "50",
+            "unit": "g"
+          },
+          {
+            "name": "Paprikapulver",
+            "quantity": "1",
+            "unit": "TL"
+          },
+          {
+            "name": "Salz",
+            "quantity": "0.5",
+            "unit": "TL"
+          },
+          {
+            "name": "Pfeffer",
+            "quantity": "",
+            "unit": ""
+          },
+          {
+            "name": "\u00d6l zum Frittieren",
+            "quantity": "",
+            "unit": ""
+          }
+        ]
+      }
+    ],
+    "instructions": [
+      "Die <b>Nudeln [400g]</b> in einem Topf mit kochendem Salzwasser al dente kochen. Danach das Wasser abgie\u00dfen.",
+      "Die <b>Butter [4 EL]</b> zu den Nudeln geben und bei geringer Hitze schmelzen lassen.",
+      "In einer Sch\u00fcssel <b>Eier [2]</b>, <b>Kondensmilch [180 ml]</b>, <b>Tabasco oder Cayennepfeffer [0.5 TL]</b>, <b>Salz [1 TL]</b>, <b>Pfeffer</b>, <b>Senf [1.5 TL]</b> und ggf. <b>Worcestershiresauce [1 TL]</b> vermischen und zu den Nudeln geben. Danach den <b>K\u00e4se [350 g]</b> hinzugeben und 3 - 5 Minuten bei geringer Hitze unter R\u00fchren schmelzen lassen, bis alles sch\u00f6n cremig ist. Hei\u00df servieren.",
+      "F\u00fcr die selbstgemachten R\u00f6stzwiebeln die <b>Zwiebeln [2]</b> in d\u00fcnne Ringe schneiden. In einer Sch\u00fcssel <b>Mehl [50 g]</b>, <b>Paprikapulver [1 TL]</b>, <b>Salz [0.5 TL]</b> und <b>Pfeffer</b> mischen und die Zwiebelringe darin wenden. In einer Pfanne ausreichend <b>\u00d6l zum Frittieren</b> erhitzen und die Zwiebelringe goldbraun und knusprig frittieren. Auf K\u00fcchenpapier abtropfen lassen und \u00fcber das Mac n' Cheese streuen."
+    ],
+    "template_name": ""
+  },
+  {
+    "title": "Stra\u00dfburger Auflauf",
+    "safe_title": "straburgerauflauf",
+    "cook_time": "70",
+    "portions": "2 servings",
+    "image_url": "https://img.chefkoch-cdn.de/rezepte/701911172819472/bilder/764355/crop-960x540/strassburger-auflauf.jpg",
+    "image_path": "/data/html_contents/DEFAULT/recipe_images/straburgerauflauf.png",
+    "ingredients": [
+      {
+        "category": "Nudeln",
+        "items": [
+          {
+            "name": "Bandnudeln",
+            "quantity": "50",
+            "unit": "g"
+          }
+        ]
+      },
+      {
+        "category": "Gem\u00fcse",
+        "items": [
+          {
+            "name": "Zwiebel",
+            "quantity": "0.25",
+            "unit": "gro\u00dfe"
+          }
+        ]
+      },
+      {
+        "category": "Fleisch",
+        "items": [
+          {
+            "name": "Hackfleisch, gemischtes",
+            "quantity": "62.5",
+            "unit": "g"
+          }
+        ]
+      },
+      {
+        "category": "Gew\u00fcrze und \u00d6le",
+        "items": [
+          {
+            "name": "\u00d6l",
+            "quantity": "0.5",
+            "unit": "EL"
+          },
+          {
+            "name": "Thymian",
+            "quantity": "0.125",
+            "unit": "TL"
+          },
+          {
+            "name": "Cayennepfeffer",
+            "quantity": "0.125",
+            "unit": "TL"
+          },
+          {
+            "name": "Salz",
+            "quantity": "0.375",
+            "unit": "TL"
+          },
+          {
+            "name": "Fett f\u00fcr die Form",
+            "quantity": "1",
+            "unit": "TL"
+          }
+        ]
+      },
+      {
+        "category": "Fl\u00fcssigkeiten",
+        "items": [
+          {
+            "name": "Rotwein",
+            "quantity": "31.25",
+            "unit": "ml"
+          }
+        ]
+      },
+      {
+        "category": "Milchprodukte",
+        "items": [
+          {
+            "name": "K\u00e4se, geriebener nach Wahl",
+            "quantity": "25",
+            "unit": "g"
+          },
+          {
+            "name": "Sahne",
+            "quantity": "50",
+            "unit": "g"
+          }
+        ]
+      },
+      {
+        "category": "Saucen",
+        "items": [
+          {
+            "name": "Tomatenmark",
+            "quantity": "1.25",
+            "unit": "EL"
+          }
+        ]
+      }
+    ],
+    "instructions": [
+      "Die <b>Bandnudeln [50g]</b> in Salzwasser bissfest garen. Anschlie\u00dfend absch\u00fctten.",
+      "Gleichzeitig die in W\u00fcrfel gehackte <b>Zwiebel [0.25 gro\u00dfe]</b> in <b>\u00d6l [0.5 EL]</b> anbraten, dann das <b>Hackfleisch [62.5g]</b> dazugeben und ebenfalls anbraten. Mit dem <b>Rotwein [31.25ml]</b> abl\u00f6schen und mit <b>Tomatenmark [1.25 EL]</b>, <b>Thymian [0.125 TL]</b>, <b>Cayennepfeffer [0.125 TL]</b> und <b>Salz [0.375 TL]</b> abschmecken. Dann die Nudeln unterheben. In eine mit <b>Fett [1 TL]</b> gefettete Auflaufform geben. <b>K\u00e4se [25g]</b> und <b>Sahne [50g]</b> dar\u00fcber verteilen.",
+      "Im vorgeheizten Backofen bei 200 \u00b0C Umluft ca. 25 - 30 Minuten \u00fcberbacken.",
+      "Hei\u00df servieren."
+    ],
+    "template_name": ""
+  },
+  {
+    "title": "1000 Kalorien Auflauf",
+    "safe_title": "1000kalorienauflauf",
+    "cook_time": "70",
+    "portions": "2 servings",
+    "image_url": "https://img.chefkoch-cdn.de/rezepte/701911172819472/bilder/764355/crop-960x540/strassburger-auflauf.jpg",
+    "image_path": "/data/html_contents/DEFAULT/recipe_images/straburgerauflauf.png",
+    "ingredients": [
+      {
+        "category": "Nudeln",
+        "items": [
+          {
+            "name": "Bandnudeln (12g Protein)",
+            "quantity": "150",
+            "unit": "g"
+          }
+        ]
+      },
+      {
+        "category": "Gem\u00fcse",
+        "items": [
+          {
+            "name": "Zwiebel(n) (1g Protein)",
+            "quantity": "1",
+            "unit": "gro\u00dfe"
+          }
+        ]
+      },
+      {
+        "category": "Fleisch",
+        "items": [
+          {
+            "name": "Hackfleisch, gemischtes (26g Protein)",
+            "quantity": "200",
+            "unit": "g"
+          }
+        ]
+      },
+      {
+        "category": "Gew\u00fcrze und \u00d6le",
+        "items": [
+          {
+            "name": "\u00d6l",
+            "quantity": "2",
+            "unit": "EL"
+          },
+          {
+            "name": "Thymian",
+            "quantity": "0.5",
+            "unit": "TL"
+          },
+          {
+            "name": "Cayennepfeffer",
+            "quantity": "0.5",
+            "unit": "TL"
+          },
+          {
+            "name": "Salz",
+            "quantity": "1.5",
+            "unit": "TL"
+          },
+          {
+            "name": "Fett f\u00fcr die Form",
+            "quantity": "",
+            "unit": ""
+          }
+        ]
+      },
+      {
+        "category": "Fl\u00fcssigkeiten",
+        "items": [
+          {
+            "name": "Rotwein",
+            "quantity": "0.125",
+            "unit": "Liter"
+          }
+        ]
+      },
+      {
+        "category": "Saucen",
+        "items": [
+          {
+            "name": "Tomatenmark",
+            "quantity": "5",
+            "unit": "EL"
+          }
+        ]
+      },
+      {
+        "category": "Milchprodukte",
+        "items": [
+          {
+            "name": "K\u00e4se, geriebener (25g Protein)",
+            "quantity": "50",
+            "unit": "g"
+          },
+          {
+            "name": "Sahne (2.4g Protein)",
+            "quantity": "100",
+            "unit": "g"
+          }
+        ]
+      }
+    ],
+    "instructions": [
+      "Die <b>Bandnudeln [150g]</b> in Salzwasser bissfest garen. Anschlie\u00dfend absch\u00fctten.",
+      "Gleichzeitig die in W\u00fcrfel gehackte <b>Zwiebel [1 gro\u00dfe]</b> in <b>\u00d6l [2 EL]</b> anbraten, dann das <b>Hackfleisch [200g]</b> dazugeben und ebenfalls anbraten. Mit dem <b>Rotwein [0.125 Liter]</b> abl\u00f6schen und mit <b>Tomatenmark [5 EL]</b>, <b>Thymian [0.5 TL]</b>, <b>Cayennepfeffer [0.5 TL]</b> und <b>Salz [1.5 TL]</b> abschmecken. Dann die Nudeln unterheben. In eine mit <b>Fett</b> gefettete Auflaufform geben. <b>K\u00e4se [50g]</b> und <b>Sahne [100g]</b> dar\u00fcber verteilen.",
+      "Im vorgeheizten Backofen bei 200 \u00b0C Umluft ca. 25 - 30 Minuten \u00fcberbacken.",
+      "Hei\u00df servieren."
+    ],
+    "template_name": ""
+  }
+]
