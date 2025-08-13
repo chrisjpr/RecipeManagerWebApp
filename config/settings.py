@@ -21,6 +21,10 @@ ALLOWED_HOSTS = [h.strip() for h in os.getenv("ALLOWED_HOSTS", "").split(",") if
 
 AUTH_USER_MODEL = "accounts.CustomUser"
 
+
+# OPEN AI KEY
+OPENAI_KEY = os.getenv("OPENAI_KEY")
+
 # ------------------------------------------------------------
 # Static & media
 # ------------------------------------------------------------

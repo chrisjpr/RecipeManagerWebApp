@@ -303,7 +303,7 @@ def add_recipe_from_url(request):
             # Get structured data + image
             structured_data, image_bytes = get_data_from_url(
                 url=url,
-                api_key=settings.OPENAI_KEY,
+                api_key= os.getenv("OPENAI_KEY"),
                 transform_vegan=transform_vegan,
                 custom_instructions=custom_instruction
             )
