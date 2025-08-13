@@ -196,3 +196,15 @@ else:
 # Heroku integration (kept, but safe for dev)
 # ------------------------------------------------------------
 django_heroku.settings(locals(), databases=False)
+
+# Pre-warm Redis connection to avoid SSL errors on first request
+import ssl
+import redis
+
+try:
+    if REDIS_URL.startswith("rediss://"):
+        r = redis.Redis.from_url(REDIS_URL, ssl_cert_reqs=ssl.CERT_NONE)
+        r.ping()
+        print("✅ Redis preflight check (web dyno) successful")
+except Exception as e:
+    print("❌ Redis preflight check failed:", e)
