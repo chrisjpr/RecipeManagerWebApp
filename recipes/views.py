@@ -1,6 +1,7 @@
 
 import os
 import django_rq
+import redis
 from rq.job import Job
 from django_rq import get_connection
 from django.views.decorators.http import require_GET
@@ -33,7 +34,26 @@ from .forms import ParseWithLLMForm
 ingredient_formset = IngredientFormSet(prefix="ingredients")
 instruction_formset = InstructionFormSet(prefix="instructions")
 
+
+# Helper function to safe enqueue a job
+
+def get_safe_rq_queue(name: str = "default"):
+    """
+    Build a Redis connection using settings.REDIS_URL + settings.REDIS_SSL_OPTIONS
+    so local dev with Heroku Redis (TLS) works, then return a Queue bound to it.
+    """
+    try:
+        ssl_opts = getattr(settings, "REDIS_SSL_OPTIONS", {})
+        conn = redis.Redis.from_url(settings.REDIS_URL, **ssl_opts)
+        return django_rq.get_queue(name, connection=conn)
+    except Exception as e:
+        print("❌ Could not build Redis connection for RQ:", e)
+        # Fallback to the default behavior (may fail in local TLS case, but keeps behavior unchanged)
+        return django_rq.get_queue(name)
+
+
 # Create your views here.
+
 
 # specify homepage
 @login_required
@@ -333,7 +353,7 @@ def add_recipe_from_url(request):
         custom_title = request.POST.get('custom_title', '')
 
         try:
-            queue = django_rq.get_queue('default')
+            queue = get_safe_rq_queue('default')
             job = queue.enqueue(
                 'recipes.tasks.process_recipe_from_url',
                 request.user.id,
@@ -367,7 +387,7 @@ def add_recipe_from_image(request):
                 if b:
                     images_as_bytes.append(b)
 
-            queue = django_rq.get_queue('default')
+            queue = get_safe_rq_queue('default')
             job = queue.enqueue(
                 'recipes.tasks.process_recipe_from_image',
                 request.user.id,
@@ -400,7 +420,7 @@ def add_recipe_from_text(request):
             custom_instruction = form.cleaned_data['custom_instruction']
 
             try:
-                queue = django_rq.get_queue('default')
+                queue = get_safe_rq_queue('default')
                 job = queue.enqueue(
                     'recipes.tasks.process_recipe_from_text',
                     request.user.id,
