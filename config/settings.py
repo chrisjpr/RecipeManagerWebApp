@@ -197,14 +197,41 @@ else:
 # ------------------------------------------------------------
 django_heroku.settings(locals(), databases=False)
 
-# Pre-warm Redis connection to avoid SSL errors on first request
-import ssl
-import redis
 
+
+
+# ------------------------------------------------------------
+# RQ / Redis (background jobs) — force TLS "no verify" via URL
+# ------------------------------------------------------------
+import os, ssl
+from urllib.parse import urlparse, parse_qsl, urlencode, urlunparse
+
+def _ensure_ssl_cert_none(url: str) -> str:
+    if not url.startswith("rediss://"):
+        return url
+    p = urlparse(url)
+    q = dict(parse_qsl(p.query, keep_blank_values=True))
+    # If not explicitly set, disable cert verification for Heroku Redis' self-signed chain
+    q.setdefault("ssl_cert_reqs", "none")
+    # Optional: also disable hostname check if your redis-py is strict (safe to include)
+    q.setdefault("ssl_check_hostname", "false")
+    return urlunparse(p._replace(query=urlencode(q)))
+
+REDIS_URL = _ensure_ssl_cert_none(os.getenv("REDIS_URL", "redis://127.0.0.1:6379/0"))
+print("[SETTINGS - RQ DEBUG] REDIS_URL:", REDIS_URL)
+
+RQ_QUEUES = {
+    "default": {
+        "URL": REDIS_URL,
+        "DEFAULT_TIMEOUT": 600,
+        # no OPTIONS — we rely on the URL so rqworker gets the same flags
+    }
+}
+
+# Preflight ping so the first request doesn't pay TLS setup cost
 try:
-    if REDIS_URL.startswith("rediss://"):
-        r = redis.Redis.from_url(REDIS_URL, ssl_cert_reqs=ssl.CERT_NONE)
-        r.ping()
-        print("✅ Redis preflight check (web dyno) successful")
+    import redis
+    redis.Redis.from_url(REDIS_URL).ping()
+    print("✅ Redis preflight check successful")
 except Exception as e:
     print("❌ Redis preflight check failed:", e)
