@@ -270,3 +270,50 @@ def password_reset_confirm(request, uidb64, token):
         return render(request, 'registration/custom_password_reset_confirm.html', {'validlink': True})
     else:
         return render(request, 'registration/custom_password_reset_confirm.html', {'validlink': False})
+
+#region ACCOUNT SETTINGS
+###################### ACCOUNT SETTINGS #####################
+
+# accounts/views.py  (add these imports near the top with your others)
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash
+from .forms import AccountProfileForm, ICON_CHOICES
+
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+
+@login_required
+def account_settings(request):
+    user = request.user
+
+    profile_form = AccountProfileForm(instance=user)
+    password_form = PasswordChangeForm(user=user)
+
+    if request.method == "POST":
+        if "save_profile" in request.POST:
+            profile_form = AccountProfileForm(request.POST, instance=user)
+            if profile_form.is_valid():
+                profile_form.save()
+                messages.success(request, "✅ Profile updated.")
+                return redirect("accounts:settings")
+            else:
+                messages.error(request, "❌ Please fix the highlighted errors.")
+        elif "change_password" in request.POST:
+            password_form = PasswordChangeForm(user=user, data=request.POST)
+            if password_form.is_valid():
+                user = password_form.save()
+                update_session_auth_hash(request, user)  # keep the session
+                messages.success(request, "🔒 Password changed successfully.")
+                return redirect("accounts:settings")
+            else:
+                messages.error(request, "❌ Please correct the password form.")
+
+    context = {
+        "profile_form": profile_form,
+        "password_form": password_form,
+        "icon_choices": ICON_CHOICES,  # for nice icon grid
+    }
+    return render(request, "accounts/settings.html", context)
+
+###################### /ACCOUNT SETTINGS #####################
+#endregion

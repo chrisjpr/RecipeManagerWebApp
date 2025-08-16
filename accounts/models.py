@@ -12,6 +12,7 @@ class CustomUser(AbstractUser):
     email = models.EmailField(unique=True)
     is_verified = models.BooleanField(default=False)
     verification_code = models.UUIDField(default=uuid.uuid4, null=True, blank=True)
+    profile_icon = models.CharField(max_length=50, default="restaurant")
 
     
 class FriendRequest(models.Model):

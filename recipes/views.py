@@ -32,6 +32,10 @@ from django.utils.http import url_has_allowed_host_and_scheme
 from django.http import HttpResponse, HttpResponseForbidden, Http404
 from django.template.loader import render_to_string
 from django.conf import settings
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
+from django.db.models import Q
+from accounts.models import CustomUser 
 
 from .functions.pipelines import *  
 from .functions.data_acquisition import *
@@ -62,18 +66,78 @@ def get_safe_rq_queue(name: str = "default"):
 
 
 # specify homepage
+
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
+from django.db.models import Q
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
+try:
+    # adjust import path to wherever your Friendship model lives
+    from accounts.models import Friendship
+except Exception:
+    Friendship = None
+
+
+def _friend_users_for(user):
+    """
+    Return a queryset of CustomUser friends for `user`,
+    handling either a direct M2M to User or a Friendship through-model.
+    """
+    # Case A: direct M2M to the user model (user.friends is a manager of User)
+    if hasattr(user, "friends") and getattr(user.friends, "model", None) is User:
+        return user.friends.all().order_by("username")
+
+    # Case B: Friendship model with user<->friend links
+    if Friendship is not None:
+        # Collect the other side's user IDs
+        pairs = Friendship.objects.filter(
+            Q(user=user) | Q(friend=user)
+        ).values_list("user_id", "friend_id")
+
+        uid = user.id
+        friend_ids = []
+        for u_id, f_id in pairs:
+            friend_ids.append(f_id if u_id == uid else u_id)
+
+        # de-duplicate while preserving order
+        seen = set()
+        friend_ids = [fid for fid in friend_ids if not (fid in seen or seen.add(fid))]
+
+        if not friend_ids:
+            return User.objects.none()
+        # return actual users, ordered by username
+        return User.objects.filter(id__in=friend_ids).order_by("username")
+
+    # Fallback: no friends at all
+    return User.objects.none()
+
+
 @login_required
 def home(request):
-    recipes = Recipe.objects.filter(user=request.user).order_by('-created_at')[:10] if request.user.is_authenticated else []
-    random_images = (
-    Recipe.objects.filter(visibility='public')
-    .exclude(image='')
-    .order_by('?')[:12]
+    recipes = (
+        Recipe.objects.filter(user=request.user).order_by("-created_at")[:10]
     )
-    return render(request, 'recipes/home.html', {
-        'recipes': recipes,
-        'random_images': random_images,
-    })
+
+    random_images = (
+        Recipe.objects.filter(visibility="public")
+        .exclude(image="")
+        .order_by("?")[:12]
+    )
+
+    friends = _friend_users_for(request.user)
+
+    return render(
+        request,
+        "recipes/home.html",
+        {
+            "recipes": recipes,
+            "random_images": random_images,
+            "friends": friends,
+        },
+    )
+    
 
 #region BACKGRGOUND JOBS
 ######################## BACKGROUND JOBS ########################

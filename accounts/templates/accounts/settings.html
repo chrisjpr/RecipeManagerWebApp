@@ -1,0 +1,164 @@
+{% extends "base.html" %}
+{% block title %}Account Settings | Recipe Manager{% endblock %}
+
+{% block content %}
+<!-- Icon font (no images needed) -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:wght@400;700" rel="stylesheet">
+
+<style>
+  .settings-grid{display:grid;grid-template-columns:1fr;gap:1rem}
+  .settings-card{
+    background:var(--card-bg);border:1px solid #eee;border-radius:12px;
+    padding:1rem;box-shadow:var(--shadow)
+  }
+  .settings-card h3{margin:0 0 .5rem 0}
+  .field{margin:.6rem 0}
+  label{display:block;font-weight:600;margin-bottom:.25rem}
+  input[type="text"],input[type="password"]{
+    width:100%;padding:.6rem .7rem;border:1px solid #d1d5db;border-radius:8px;font:inherit
+  }
+  .btn-row{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.75rem}
+  .btn{
+    border:1px solid #d7dee3;border-radius:10px;padding:.55rem .9rem;background:#f4f6f8;color:var(--text-color);
+    text-decoration:none;font-weight:700;cursor:pointer
+  }
+  .btn.primary{background:var(--primary-color);border-color:#2e7d32;color:#fff}
+  .btn.danger{background:#e53935;border-color:#c62828;color:#fff}
+  .muted{color:var(--muted-text);font-size:.95rem}
+
+  /* Material Symbols consistency */
+  .material-symbols-rounded{
+    font-variation-settings:'FILL' 0,'wght' 600,'GRAD' 0,'opsz' 24;
+  }
+
+  /* Icon grid — no overlap, touch-friendly, truncates long names */
+  .icon-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(120px,1fr));
+    gap:.6rem;margin-top:.5rem
+  }
+  .icon-option{
+    display:flex;align-items:center;gap:.5rem;
+    border:1px solid #e5e7eb;border-radius:10px;padding:.5rem .6rem;
+    background:#fafafa;cursor:pointer;min-height:44px; /* touch target */
+    overflow:hidden;
+  }
+  .icon-option input[type="radio"]{flex-shrink:0;margin:0}
+  .icon-option .material-symbols-rounded{font-size:24px;line-height:1;color:var(--primary-color);flex-shrink:0}
+  .icon-option .label-text{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-transform:capitalize}
+
+  .current-icon{display:flex;align-items:center;gap:.4rem;margin-top:.25rem}
+  .current-icon .material-symbols-rounded{font-size:22px}
+
+  /* Form-level non-field errors */
+  .form-errors{margin:.5rem 0;color:#b00020}
+
+  @media (min-width: 900px){ .settings-grid{grid-template-columns:1fr 1fr} }
+</style>
+
+<div class="settings-grid">
+
+  <!-- Profile (username + icon) -->
+  <div class="settings-card">
+    <h3>👤 Profile</h3>
+    <form method="post">
+      {% csrf_token %}
+
+      {% if profile_form.non_field_errors %}
+        <div class="form-errors">{{ profile_form.non_field_errors|join:", " }}</div>
+      {% endif %}
+
+      <div class="field">
+        <label for="{{ profile_form.username.id_for_label }}">Username</label>
+        {{ profile_form.username }}
+        {% if profile_form.username.errors %}
+          <div class="muted" style="color:#b00020">{{ profile_form.username.errors|join:", " }}</div>
+        {% endif %}
+      </div>
+
+      <div class="field">
+        <label>Choose your icon</label>
+
+        <div class="current-icon muted">
+          Current:
+          <span class="material-symbols-rounded">
+            {{ request.user.profile_icon|default:"restaurant" }}
+          </span>
+          <code style="background:#f3f4f6;padding:.1rem .35rem;border-radius:6px">{{ request.user.profile_icon }}</code>
+        </div>
+
+        {% with selected=profile_form.profile_icon.value %}
+          <div class="icon-grid">
+            {% for icon in icon_choices %}
+              <label class="icon-option">
+                <input
+                  type="radio"
+                  name="profile_icon"
+                  value="{{ icon }}"
+                  {% if selected %}
+                    {% if selected == icon %}checked{% endif %}
+                  {% else %}
+                    {% if profile_form.instance.profile_icon == icon %}checked{% endif %}
+                  {% endif %}
+                >
+                <span class="material-symbols-rounded">{{ icon }}</span>
+                <span class="label-text">{{ icon|cut:"_" }}</span>
+              </label>
+            {% endfor %}
+          </div>
+        {% endwith %}
+
+        {% if profile_form.profile_icon.errors %}
+          <div class="muted" style="color:#b00020">{{ profile_form.profile_icon.errors|join:", " }}</div>
+        {% endif %}
+      </div>
+
+      <div class="btn-row">
+        <button type="submit" name="save_profile" class="btn primary">💾 Save Profile</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Password change -->
+  <div class="settings-card">
+    <h3>🔒 Change Password</h3>
+    <form method="post">
+      {% csrf_token %}
+
+      {% if password_form.non_field_errors %}
+        <div class="form-errors">{{ password_form.non_field_errors|join:", " }}</div>
+      {% endif %}
+
+      <div class="field">
+        <label for="{{ password_form.old_password.id_for_label }}">Current password</label>
+        {{ password_form.old_password }}
+        {% if password_form.old_password.errors %}
+          <div class="muted" style="color:#b00020">{{ password_form.old_password.errors|join:", " }}</div>
+        {% endif %}
+      </div>
+
+      <div class="field">
+        <label for="{{ password_form.new_password1.id_for_label }}">New password</label>
+        {{ password_form.new_password1 }}
+        {% if password_form.new_password1.errors %}
+          <div class="muted" style="color:#b00020">{{ password_form.new_password1.errors|join:", " }}</div>
+        {% endif %}
+      </div>
+
+      <div class="field">
+        <label for="{{ password_form.new_password2.id_for_label }}">Confirm new password</label>
+        {{ password_form.new_password2 }}
+        {% if password_form.new_password2.errors %}
+          <div class="muted" style="color:#b00020">{{ password_form.new_password2.errors|join:", " }}</div>
+        {% endif %}
+      </div>
+
+      <div class="btn-row">
+        <button type="submit" name="change_password" class="btn">Update Password</button>
+      </div>
+      <p class="muted" style="margin-top:.5rem">You’ll stay signed in after changing your password.</p>
+    </form>
+  </div>
+
+</div>
+{% endblock %}

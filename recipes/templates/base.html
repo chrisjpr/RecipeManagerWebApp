@@ -9,6 +9,8 @@
 
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <!-- Material Symbols for profile icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:wght@400;700" rel="stylesheet">
 
   <style>
     :root{
@@ -45,11 +47,20 @@
     .nav-links a:hover{background:rgba(255,255,255,.15)}
     .user-box{
       background:rgba(255,255,255,.15);
-      padding:.4rem .8rem; border-radius:8px; display:flex; align-items:center; gap:.75rem;
+      padding:.4rem .8rem; border-radius:8px; display:flex; align-items:center; gap:.6rem;
       color:#f1f1f1;
     }
     .user-box a{color:inherit; text-decoration:none}
     .username-label{font-weight:500; font-size:.95rem}
+
+    /* Material Symbols base style */
+    .material-symbols-rounded{
+      font-variation-settings:'FILL' 0,'wght' 600,'GRAD' 0,'opsz' 24;
+      line-height:1;
+    }
+    /* Icon colors per context */
+    .user-icon--desktop{color:#fff; font-size:22px}
+    .user-icon--mobile{color:var(--primary-color); font-size:22px}
 
     /* Mobile hamburger button (hidden on desktop) */
     .nav-toggle{
@@ -76,6 +87,9 @@
     .mobile-user{
       margin-top:.25rem; padding:.6rem .5rem; border:1px solid #e5e7eb; border-radius:10px; background:#f9fafb;
       display:flex; justify-content:space-between; align-items:center; gap:.5rem; flex-wrap:wrap;
+    }
+    .mobile-user .left{
+      display:flex; align-items:center; gap:.5rem;
     }
     .mobile-user .username{font-weight:600; color:#111827}
     .mobile-user a{color:#111827; text-decoration:none; font-weight:600}
@@ -129,7 +143,10 @@
 
         <div class="user-box">
           {% if user.is_authenticated %}
-            <span class="username-label">👤 {{ user.username }}</span>
+            <span class="material-symbols-rounded user-icon--desktop">
+              {% firstof user.profile_icon "restaurant" %}
+            </span>
+            <span class="username-label">@{{ user.username|cut:"_" }}</span>
             <a href="{% url 'accounts:logout' %}">🚪 Logout</a>
           {% else %}
             <a href="{% url 'accounts:login' %}">🔑 Login</a>
@@ -154,7 +171,12 @@
 
         <div class="mobile-user">
           {% if user.is_authenticated %}
-            <span class="username">👤 {{ user.username }}</span>
+            <div class="left">
+              <span class="material-symbols-rounded user-icon--mobile">
+                {% firstof user.profile_icon "restaurant" %}
+              </span>
+              <span class="username">@{{ user.username|cut:"_" }}</span>
+            </div>
             <a href="{% url 'accounts:logout' %}">🚪 Logout</a>
           {% else %}
             <a href="{% url 'accounts:login' %}">🔑 Login</a>
