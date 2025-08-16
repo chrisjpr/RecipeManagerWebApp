@@ -3,246 +3,166 @@
 <head>
   <meta charset="UTF-8">
   <title>{% block title %}Recipe Manager{% endblock %}</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- Google Fonts for a modern aesthetic -->
+  <!-- Make it responsive on phones -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
   <style>
-    :root {
-      --primary-color: #4CAF50;
-      --secondary-color: #388E3C;
-      --accent-color: #FFC107;
-      --background-color: #f8f9fa;
-      --text-color: #2c3e50;
-      --muted-text: #6c757d;
-      --card-bg: #fff;
-      --shadow: rgba(0, 0, 0, 0.08) 0px 4px 10px;
+    :root{
+      --primary-color:#4CAF50;
+      --secondary-color:#388E3C;
+      --accent-color:#FFC107;
+      --background-color:#f8f9fa;
+      --text-color:#2c3e50;
+      --muted-text:#6c757d;
+      --card-bg:#fff;
+      --shadow:0 4px 10px rgba(0,0,0,.08);
+    }
+    *{margin:0;padding:0;box-sizing:border-box}
+    html,body{font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:var(--background-color);color:var(--text-color);line-height:1.6}
+
+    /* ====== Header / Top bar ====== */
+    header{
+      position:sticky; top:0; z-index:1000;
+      background:var(--primary-color); color:#fff;
+      padding:0.75rem 1rem;
+      box-shadow:0 2px 10px rgba(0,0,0,.06);
+    }
+    .nav-wrap{
+      max-width:1100px; margin:0 auto;
+      display:flex; align-items:center; justify-content:space-between; gap:.75rem;
+    }
+    .brand-link{color:inherit;text-decoration:none;display:flex;align-items:center;gap:.5rem}
+    .brand-link h1{font-size:1.6rem;white-space:nowrap}
+
+    /* Desktop nav group */
+    nav{display:flex; align-items:center; gap:1rem}
+    .nav-links{display:flex; gap:.75rem; align-items:center; white-space:nowrap; font-size:.95rem}
+    .nav-links a{color:#fff; text-decoration:none; font-weight:600; padding:.3rem .6rem; border-radius:6px; transition:background-color .2s}
+    .nav-links a:hover{background:rgba(255,255,255,.15)}
+    .user-box{
+      background:rgba(255,255,255,.15);
+      padding:.4rem .8rem; border-radius:8px; display:flex; align-items:center; gap:.75rem;
+      color:#f1f1f1;
+    }
+    .user-box a{color:inherit; text-decoration:none}
+    .username-label{font-weight:500; font-size:.95rem}
+
+    /* Mobile hamburger button (hidden on desktop) */
+    .nav-toggle{
+      display:none; border:1px solid rgba(255,255,255,.6); background:transparent; color:#fff;
+      padding:.35rem .55rem; border-radius:8px; font-size:1.1rem; cursor:pointer;
+    }
+    .nav-toggle:focus{outline:2px solid #fff2}
+
+    /* Mobile dropdown panel */
+    .mobile-menu{
+      display:none;
+      position:absolute; left:0; right:0; top:100%;
+      background:#ffffff; color:var(--text-color);
+      box-shadow:0 10px 24px rgba(0,0,0,.12);
+      border-bottom:1px solid #eaeaea;
+    }
+    .mobile-inner{
+      max-width:1100px; margin:0 auto; padding:.75rem 1rem; display:grid; gap:.5rem;
+    }
+    .mobile-links a{
+      display:block; padding:.6rem .5rem; border-radius:8px; text-decoration:none; color:#1f2937; font-weight:600;
+    }
+    .mobile-links a:hover{background:#f3f4f6}
+    .mobile-user{
+      margin-top:.25rem; padding:.6rem .5rem; border:1px solid #e5e7eb; border-radius:10px; background:#f9fafb;
+      display:flex; justify-content:space-between; align-items:center; gap:.5rem; flex-wrap:wrap;
+    }
+    .mobile-user .username{font-weight:600; color:#111827}
+    .mobile-user a{color:#111827; text-decoration:none; font-weight:600}
+
+    /* ====== Main / Card ====== */
+    main{max-width:960px; margin:1.25rem auto; padding:0 1rem}
+    .card{background:var(--card-bg); padding:1.25rem; border-radius:12px; box-shadow:var(--shadow); margin-bottom:2rem}
+
+    /* Messages */
+    .message{padding:1rem; margin-bottom:1rem; border-radius:8px}
+    .message.success{background:#d4edda;color:#155724}
+    .message.error{background:#f8d7da;color:#721c24}
+
+    footer{
+      background:#e9ecef; color:var(--muted-text);
+      text-align:center; padding:1rem 0; margin-top:3rem;
     }
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+    /* ====== Responsive ====== */
+    @media (max-width: 900px){
+      .brand-link h1{font-size:1.4rem}
+    }
+    @media (max-width: 768px){
+      /* Hide desktop nav; show hamburger */
+      .nav-links, .user-box{display:none}
+      .nav-toggle{display:inline-flex; align-items:center; gap:.5rem}
+      /* Make main a bit tighter on phones */
+      main{margin:1rem auto}
+      .card{padding:1rem}
     }
 
-  .nav-links a {
-    text-decoration: none;
-    color: #333;
-    font-weight: 600;
-    padding: 0.4rem 0.8rem;
-    border-radius: 6px;
-    transition: background-color 0.2s;
-  }
-
-  .nav-links a:hover {
-    background-color: #f0f0f0;
-  }
-
-
-    html, body {
-      font-family: 'Inter', sans-serif;
-      background-color: var(--background-color);
-      color: var(--text-color);
-      height: 100%;
-      line-height: 1.6;
-    }
-
-  header {
-    background-color: var(--primary-color);
-    color: white;
-    padding: 1rem 2rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: nowrap;          /* CHANGED: was wrap */
-  }
-
-    header h1 {
-      font-size: 1.75rem;
-      margin: 0;
-    }
-
-    .brand-link {
-      text-decoration: none;
-      color: inherit;
-    }
-
-nav {
-  display: flex;
-  align-items: center;
-  flex-wrap: nowrap;          /* CHANGED: was wrap */
-  justify-content: flex-end;  /* keep links next to brand */
-  min-width: 0;               /* allow shrink instead of wrapping */
-}
-
-/* compact link row */
-.nav-links {
-  display: flex;
-  gap: 0.75rem;               /* tighter than before */
-  align-items: center;
-  white-space: nowrap;        /* keep in one line */
-  font-size: 0.95rem;         /* a little smaller */
-}
-
-/* keep links white, tighter padding */
-.nav-links a {
-  text-decoration: none;
-  color: inherit;             /* stays white in header */
-  font-weight: 600;
-  padding: 0.3rem 0.6rem;     /* smaller */
-  border-radius: 6px;
-  transition: background-color 0.2s;
-  margin-left: 0;             /* override global nav a margin */
-}
-
-.nav-links a:hover {
-  background-color: rgba(255,255,255,0.15);
-}
-    .username-label {
-      margin-left: 1.5rem;
-      font-weight: 500;
-      color: #f1f1f1;
-      font-size: 0.95rem;
-    }
-
-    main {
-      max-width: 960px;
-      margin: 2rem auto;
-      padding: 0 1rem;
-    }
-
-    .card {
-      background-color: var(--card-bg);
-      padding: 2rem;
-      border-radius: 12px;
-      box-shadow: var(--shadow);
-      margin-bottom: 2rem;
-    }
-
-    .section-title {
-      margin-bottom: 1rem;
-      font-size: 1.5rem;
-      font-weight: 600;
-      border-bottom: 2px solid var(--accent-color);
-      display: inline-block;
-    }
-
-    .subtitle {
-      color: var(--muted-text);
-      font-size: 0.95rem;
-      margin-bottom: 1rem;
-    }
-
-    footer {
-      background-color: #e9ecef;
-      color: var(--muted-text);
-      text-align: center;
-      padding: 1rem 0;
-      position: relative;
-      bottom: 0;
-      width: 100%;
-      margin-top: 4rem;
-    }
-
-    .message {
-      padding: 1rem;
-      margin-bottom: 1.5rem;
-      border-radius: 8px;
-    }
-
-    .message.success {
-      background-color: #d4edda;
-      color: #155724;
-    }
-
-    .message.error {
-      background-color: #f8d7da;
-      color: #721c24;
-    }
-
-    @media (max-width: 768px) {
-      header {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
-      nav {
-        margin-top: 1rem;
-        flex-wrap: wrap;
-      }
-
-      nav a {
-        margin-left: 0;
-        margin-right: 1rem;
-      }
-
-      .username-label {
-        margin-left: 0;
-        margin-top: 0.5rem;
-      }
-    }
-
-  .user-box {
-    background-color: rgba(255, 255, 255, 0.15);
-    padding: 0.4rem 0.8rem;     /* slightly smaller */
-    border-radius: 8px;
-    margin-left: 1rem;          /* tighter than 2rem */
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-  }
-
-  /* keep everything in the user box non-blue and non-underlined */
-nav .user-box { color: #f1f1f1; }
-
-nav .user-box a,
-nav .user-box a:visited {
-  color: inherit;           /* use the box color (white-ish) */
-  text-decoration: none;    /* no underline */
-}
-
-nav .user-box a:hover,
-nav .user-box a:focus,
-nav .user-box a:active {
-  color: inherit;
-  text-decoration: none;    /* still no underline on hover/focus */
-  /* optional: subtle hover bg */
-  /* background-color: rgba(255,255,255,0.12); border-radius: 6px; */
-}
-
-.username-label {
-  font-weight: 500;
-  color: #f1f1f1;
-  font-size: 0.95rem;
-}
+    /* When menu is open */
+    .mobile-open .mobile-menu{display:block}
+    .mobile-open .nav-toggle[aria-expanded="true"]{background:rgba(255,255,255,.18)}
   </style>
 </head>
 <body>
   <header>
-    <a href="{% url 'recipes:home' %}" class="brand-link"><h1>🍳 Recipe Manager</h1></a>
-      <nav>
-      <div class="nav-links">
-        <a href="{% url 'recipes:home' %}">🏠 Home</a>
-        <a href="{% url 'recipes:recipe_list' %}">📖 My Recipes</a>
-        <a href="{% url 'recipes:public_recipes' %}">🌍 Public Recipes</a>
-        <a href="{% url 'recipes:create_recipe_landing' %}">➕ Create Recipe</a>
-        <a href="{% url 'accounts:friend_dashboard' %}">👥 Friends</a>
-      </div>
+    <div class="nav-wrap">
+      <a href="{% url 'recipes:home' %}" class="brand-link"><h1>🍳 Recipe Manager</h1></a>
 
+      <!-- Desktop navigation -->
+      <nav aria-label="Primary">
+        <div class="nav-links">
+          <a href="{% url 'recipes:home' %}">🏠 Home</a>
+          <a href="{% url 'recipes:recipe_list' %}">📖 My Recipes</a>
+          <a href="{% url 'recipes:public_recipes' %}">🌍 Public Recipes</a>
+          <a href="{% url 'recipes:create_recipe_landing' %}">➕ Create Recipe</a>
+          <a href="{% url 'accounts:friend_dashboard' %}">👥 Friends</a>
+        </div>
 
         <div class="user-box">
           {% if user.is_authenticated %}
             <span class="username-label">👤 {{ user.username }}</span>
-            
             <a href="{% url 'accounts:logout' %}">🚪 Logout</a>
           {% else %}
             <a href="{% url 'accounts:login' %}">🔑 Login</a>
           {% endif %}
         </div>
-      </nav>
-  </header>
 
+        <!-- Mobile hamburger -->
+        <button id="navToggle" class="nav-toggle" aria-expanded="false" aria-controls="mobileMenu" aria-label="Open menu">☰</button>
+      </nav>
+    </div>
+
+    <!-- Mobile dropdown contents -->
+    <div id="mobileMenu" class="mobile-menu" role="menu" aria-label="Mobile menu">
+      <div class="mobile-inner">
+        <div class="mobile-links">
+          <a href="{% url 'recipes:home' %}" role="menuitem">🏠 Home</a>
+          <a href="{% url 'recipes:recipe_list' %}" role="menuitem">📖 My Recipes</a>
+          <a href="{% url 'recipes:public_recipes' %}" role="menuitem">🌍 Public Recipes</a>
+          <a href="{% url 'recipes:create_recipe_landing' %}" role="menuitem">➕ Create Recipe</a>
+          <a href="{% url 'accounts:friend_dashboard' %}" role="menuitem">👥 Friends</a>
+        </div>
+
+        <div class="mobile-user">
+          {% if user.is_authenticated %}
+            <span class="username">👤 {{ user.username }}</span>
+            <a href="{% url 'accounts:logout' %}">🚪 Logout</a>
+          {% else %}
+            <a href="{% url 'accounts:login' %}">🔑 Login</a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </header>
 
   <main>
     {% if messages %}
@@ -258,4 +178,40 @@ nav .user-box a:active {
 
   <footer>
     &copy; {{ year|default:"2025" }} RecipeManager. Crafted with ❤️.
-  </
+  </footer>
+
+  <script>
+    // Mobile menu toggle (accessible)
+    (function(){
+      const btn = document.getElementById('navToggle');
+      const menu = document.getElementById('mobileMenu');
+      if(!btn || !menu) return;
+
+      function closeMenu(){
+        document.body.classList.remove('mobile-open');
+        btn.setAttribute('aria-expanded','false');
+      }
+      function openMenu(){
+        document.body.classList.add('mobile-open');
+        btn.setAttribute('aria-expanded','true');
+      }
+      btn.addEventListener('click', function(){
+        const expanded = btn.getAttribute('aria-expanded') === 'true';
+        expanded ? closeMenu() : openMenu();
+      });
+
+      // Close on outside click
+      document.addEventListener('click', function(e){
+        if(!document.body.classList.contains('mobile-open')) return;
+        const withinHeader = e.target.closest('header');
+        if(!withinHeader) closeMenu();
+      });
+
+      // Close on Escape
+      document.addEventListener('keydown', function(e){
+        if(e.key === 'Escape') closeMenu();
+      });
+    })();
+  </script>
+</body>
+</html>
