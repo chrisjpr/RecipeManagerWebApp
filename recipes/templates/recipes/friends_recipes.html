@@ -76,7 +76,7 @@
           <td>{{ recipe.created_at|date:"d.m.Y" }}</td>
           <td>{{ recipe.get_visibility_display }}</td>
           <td>
-            <a href="{% url 'recipes:copy_recipe' recipe.recipe_id %}" class="copy-btn">📋 Copy</a>
+            <a href="{% url 'recipes:copy_recipe' recipe.recipe_id %}?next={{ request.get_full_path|urlencode }}" class="copy-btn">📋 Copy</a>
           </td>
         </tr>
       {% endfor %}

@@ -4,137 +4,25 @@
 {% block content %}
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 <style>
-  body {
-    font-family: 'Inter', sans-serif;
-    background: #f7f9fc;
-    color: #333;
-    margin: 0;
-    padding: 0;
-  }
-
-  .recipe-header {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    background: linear-gradient(120deg, #fff6ec, #fefeff);
-    border-bottom: 1px solid #ddd;
-    padding: 2rem;
-    align-items: center;
-    border-radius: 12px;
-    margin-bottom: 2rem;
-  }
-
-  .recipe-header img {
-    max-width: 300px;
-    border-radius: 12px;
-    border: 4px solid #ffecd1;
-  }
-
-  .recipe-info {
-    flex: 1;
-    margin-left: 2rem;
-  }
-
-  .recipe-info h2 {
-    font-size: 2.5rem;
-    margin-bottom: 0.5rem;
-  }
-
-  .recipe-meta {
-    font-size: 1.1rem;
-    color: #555;
-    margin-bottom: 1rem;
-  }
-
-  .content-section {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    gap: 2rem;
-  }
-
-  .box {
-    flex: 1;
-    background: white;
-    padding: 2rem;
-    border-radius: 12px;
-    border: 1px solid #eee;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-    min-width: 300px;
-  }
-
-  .box h3 {
-    text-align: center;
-    margin-bottom: 1.5rem;
-    font-size: 1.5rem;
-    border-bottom: 1px solid #f0d9c3;
-    padding-bottom: 0.5rem;
-  }
-
-  .ingredient-item {
-    margin-bottom: 0.75rem;
-  }
-
-  .portion-controls {
-    text-align: center;
-    margin-bottom: 1.5rem;
-  }
-
-  .portion-controls input {
-    width: 60px;
-    padding: 6px;
-    font-size: 1rem;
-    margin-right: 10px;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-  }
-
-  .portion-controls button {
-    background-color: #ffcb91;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: 600;
-    transition: 0.2s ease;
-  }
-
-  .portion-controls button:hover {
-    background-color: #ffa95e;
-  }
-
-  ol {
-    padding-left: 1.5rem;
-    line-height: 1.7;
-  }
-
-  .notes-box {
-    margin-top: 2rem;
-    background-color: #fff8ef;
-    border-left: 5px solid #ffcb91;
-    padding: 1rem 1.5rem;
-    border-radius: 8px;
-  }
-
-  .action-buttons {
-    margin-top: 2rem;
-    text-align: center;
-  }
-
-  .action-buttons a {
-    margin: 0 0.5rem;
-    padding: 8px 16px;
-    background: #e7f1ff;
-    color: #333;
-    text-decoration: none;
-    border-radius: 6px;
-    border: 1px solid #b8daff;
-    font-weight: 500;
-  }
-
-  .action-buttons a:hover {
-    background-color: #cde4ff;
-  }
+  body { font-family: 'Inter', sans-serif; background: #f7f9fc; color: #333; margin: 0; padding: 0; }
+  .recipe-header { display: flex; flex-wrap: wrap; justify-content: space-between; background: linear-gradient(120deg, #fff6ec, #fefeff); border-bottom: 1px solid #ddd; padding: 2rem; align-items: center; border-radius: 12px; margin-bottom: 2rem; }
+  .recipe-header img { max-width: 300px; border-radius: 12px; border: 4px solid #ffecd1; }
+  .recipe-info { flex: 1; margin-left: 2rem; }
+  .recipe-info h2 { font-size: 2.5rem; margin-bottom: 0.5rem; }
+  .recipe-meta { font-size: 1.1rem; color: #555; margin-bottom: 1rem; }
+  .content-section { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 2rem; }
+  .box { flex: 1; background: white; padding: 2rem; border-radius: 12px; border: 1px solid #eee; box-shadow: 0 2px 8px rgba(0,0,0,0.05); min-width: 300px; }
+  .box h3 { text-align: center; margin-bottom: 1.5rem; font-size: 1.5rem; border-bottom: 1px solid #f0d9c3; padding-bottom: 0.5rem; }
+  .ingredient-item { margin-bottom: 0.75rem; }
+  .portion-controls { text-align: center; margin-bottom: 1.5rem; }
+  .portion-controls input { width: 60px; padding: 6px; font-size: 1rem; margin-right: 10px; border-radius: 6px; border: 1px solid #ccc; }
+  .portion-controls button { background-color: #ffcb91; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 600; transition: 0.2s ease; }
+  .portion-controls button:hover { background-color: #ffa95e; }
+  ol { padding-left: 1.5rem; line-height: 1.7; }
+  .notes-box { margin-top: 2rem; background-color: #fff8ef; border-left: 5px solid #ffcb91; padding: 1rem 1.5rem; border-radius: 8px; }
+  .action-buttons { margin-top: 2rem; text-align: center; }
+  .action-buttons a { margin: 0 0.5rem; padding: 8px 16px; background: #e7f1ff; color: #333; text-decoration: none; border-radius: 6px; border: 1px solid #b8daff; font-weight: 500; }
+  .action-buttons a:hover { background-color: #cde4ff; }
 </style>
 
 <div class="recipe-header">
@@ -175,15 +63,15 @@
           <ul style="margin-top: 0.5rem;">
             {% for ingredient in group.list %}
               <li class="ingredient-item ingredient"
-                  data-quantity="{{ ingredient.quantity|default_if_none:0 }}"
-                  data-unit="{{ ingredient.unit }}"
+                  data-quantity="{{ ingredient.quantity|default_if_none:'' }}"
+                  data-unit="{{ ingredient.unit|default_if_none:'' }}"
                   data-name="{{ ingredient.name }}">
                 {% if ingredient.linked_recipe %}
                   <a href="{% url 'recipes:recipe_detail' ingredient.linked_recipe.recipe_id %}" target="_blank">
-                    {{ ingredient.quantity|default_if_none:"" }} {{ ingredient.unit }} {{ ingredient.name }}
+                    {% if ingredient.quantity %}{{ ingredient.quantity }}{% endif %}{% if ingredient.unit %}{% if ingredient.quantity %} {% endif %}{{ ingredient.unit }}{% endif %}{% if ingredient.quantity or ingredient.unit %} {% endif %}{{ ingredient.name }}
                   </a>
                 {% else %}
-                  {{ ingredient.quantity|default_if_none:"" }} {{ ingredient.unit }} {{ ingredient.name }}
+                  {% if ingredient.quantity %}{{ ingredient.quantity }}{% endif %}{% if ingredient.unit %}{% if ingredient.quantity %} {% endif %}{{ ingredient.unit }}{% endif %}{% if ingredient.quantity or ingredient.unit %} {% endif %}{{ ingredient.name }}
                 {% endif %}
               </li>
             {% endfor %}
@@ -195,7 +83,7 @@
     </ul>
   </div>
 
-  <!-- Instructions Box (now placed side-by-side) -->
+  <!-- Instructions Box -->
   <div class="box">
     <h3>📋 Instructions</h3>
     <ol>
@@ -208,9 +96,6 @@
   </div>
 </div>
 
-
-
-
 {% if recipe.notes %}
   <div class="notes-box">
     <strong>Notes:</strong><br>
@@ -220,13 +105,24 @@
 
 <script>
 function adjustPortions() {
-  const multiplier = parseFloat(document.getElementById("portionMultiplier").value);
+  const multiplier = parseFloat(document.getElementById("portionMultiplier").value) || 1;
+
   document.querySelectorAll('.ingredient').forEach(el => {
-    const quantity = parseFloat(el.dataset.quantity || 0);
-    const unit = el.dataset.unit || '';
-    const name = el.dataset.name || '';
-    const adjusted = quantity ? (quantity * multiplier).toFixed(1) + ' ' : '';
-    el.textContent = adjusted + unit + ' ' + name;
+    const quantityRaw = el.getAttribute('data-quantity'); // '' if none
+    const unit = (el.getAttribute('data-unit') || '').trim();
+    const name = (el.getAttribute('data-name') || '').trim();
+
+    const parts = [];
+
+    if (quantityRaw !== '' && !isNaN(parseFloat(quantityRaw))) {
+      const base = parseFloat(quantityRaw) * multiplier;
+      const formatted = (Math.round(base * 10) / 10).toString();
+      parts.push(formatted);
+    }
+    if (unit) parts.push(unit);
+    if (name) parts.push(name);
+
+    el.textContent = parts.join(' ');
   });
 }
 </script>
