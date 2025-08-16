@@ -94,6 +94,7 @@ INSTALLED_APPS = [
     "recipes",
     "toolbox",
     "emails",
+    "django_user_agents"
 ]
 
 MIDDLEWARE = [
@@ -243,3 +244,6 @@ LOGGING = {
         "django.request": {"handlers": ["console"], "level": "ERROR", "propagate": False},
     },
 }
+
+
+
