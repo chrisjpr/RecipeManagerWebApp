@@ -1,0 +1,50 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Toolbox</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root { --bg:#0b0c10; --card:#121318; --text:#e8e8ea; --muted:#a9abb3; --accent:#6aa0ff; }
+    body { margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Helvetica,Arial,sans-serif; background:var(--bg); color:var(--text); }
+    .wrap { max-width:960px; margin:48px auto; padding:0 16px; }
+    .header { display:flex; align-items:center; justify-content:space-between; margin-bottom:24px; }
+    .h1 { font-size: clamp(24px, 3vw, 36px); margin:0; letter-spacing:.2px; }
+    .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:16px; }
+    .card { background:var(--card); border:1px solid #1e2027; border-radius:16px; padding:18px; box-shadow:0 6px 20px rgba(0,0,0,.25); }
+    .card h3 { margin:0 0 8px; font-size:18px; }
+    .card p { margin:0 0 12px; color:var(--muted); font-size:14px; line-height:1.4; }
+    .btn { display:inline-block; padding:10px 14px; border-radius:12px; background:var(--accent); color:#0b0c10; text-decoration:none; font-weight:600; }
+    .sub { color:var(--muted); margin:6px 0 24px; font-size:14px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="header">
+      <h1 class="h1">Toolbox</h1>
+    </div>
+
+    <p class="sub">Quick utilities and admin actions.</p>
+
+    <div class="grid">
+      {% for tool in tools %}
+      <div class="card">
+        <h3>{{ tool.title }}</h3>
+        <p>{{ tool.description }}</p>
+        {% if tool.url_name %}
+          <a class="btn" href="{% url tool.url_name %}">Open</a>
+        {% else %}
+          <span class="btn" style="opacity:.6;pointer-events:none;">Coming soon</span>
+        {% endif %}
+      </div>
+      {% empty %}
+      <div class="card">
+        <h3>No tools yet</h3>
+        <p>Add items to the <code>tools</code> list in <code>toolbox/views.py</code>.</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</body>
+</html>
