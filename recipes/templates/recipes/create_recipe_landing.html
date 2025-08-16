@@ -17,14 +17,19 @@
   <div class="creation-method">
     <div class="method-icon">🤖</div>
     <h3>Import from URL</h3>
-    <p>Paste the URL of any recipe page, and we'll extract the data for you using AI magic.</p>
+    <p>
+      Paste any recipe URL from over 900 supported sites, and we'll extract the required recipe data for you using AI.
+      Find a list of supported recipe pages
+      <a href="https://docs.recipe-scrapers.com/getting-started/supported-sites/"
+        class="inline-link" target="_blank" rel="noopener noreferrer">here</a>.
+    </p>
     <a href="{% url 'recipes:add_recipe_from_url' %}" class="create-btn">🌐 Import from URL</a>
   </div>
 
   <div class="creation-method">
     <div class="method-icon">📷</div>
     <h3>Scan from Image</h3>
-    <p>Upload as many photos or screenshots of a recipe as you like. Our AI will extract a matching title image and the text to structure it into a recipe for you!</p>
+    <p>Upload as many photos or screenshots of a recipe as you like. The AI will extract a matching title image from your uploads and the text to structure it into a recipe for you!</p>
     <a href="{% url 'recipes:add_recipe_from_image' %}" class="create-btn">📸 Import from Image</a>
   </div>
 </div>
@@ -66,5 +71,6 @@
 .create-btn:hover {
   background-color: var(--secondary-color);
 }
+.inline-link { color: #1a73e8; text-decoration: underline; }
 </style>
 {% endblock %}

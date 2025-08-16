@@ -33,3 +33,48 @@ class CustomLoginForm(AuthenticationForm):
                 code='unverified'
             )
 
+
+
+#region ACCOUNT SETTINGS
+# ------------------------------------------------------------
+
+# --- Account Settings (username + icon) ---
+
+# 30 Material Symbols names (no images needed)
+ICON_CHOICES = [
+    "restaurant","local_pizza","icecream","ramen_dining","bakery_dining",
+    "sushi","emoji_food_beverage","coffee","brunch_dining","dinner_dining",
+    "fastfood","takeout_dining","kitchen","set_meal","soup_kitchen",
+    "cake","cookie","nutrition","rice_bowl","egg_alt",
+    "espresso","flatware","breakfast_dining","wine_bar","liquor",
+    "emoji_people","face","sentiment_satisfied","person","restaurant_menu"
+]
+
+class AccountProfileForm(forms.ModelForm):
+    profile_icon = forms.ChoiceField(
+        choices=[(i, i) for i in ICON_CHOICES],
+        required=True,
+        label="Profile icon"
+    )
+
+    class Meta:
+        model = CustomUser
+        fields = ["username", "profile_icon"]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Nice labels/placeholders
+        self.fields["username"].label = "Username"
+        self.fields["username"].widget.attrs.update({"placeholder": "Your username"})
+
+    def clean_username(self):
+        username = self.cleaned_data["username"]
+        qs = CustomUser.objects.filter(username__iexact=username)
+        if self.instance.pk:
+            qs = qs.exclude(pk=self.instance.pk)
+        if qs.exists():
+            raise forms.ValidationError("This username is already taken.")
+        return username
+    
+
+#endregion
