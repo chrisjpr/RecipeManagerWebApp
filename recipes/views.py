@@ -24,8 +24,12 @@ from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from django.core.paginator import Paginator
-from django.contrib.auth import get_user_model 
-
+from django.contrib.auth import get_user_model
+from django.urls import reverse
+import json
+from django.shortcuts import redirect, get_object_or_404
+from django.utils.http import url_has_allowed_host_and_scheme
+from django.conf import settings
 
 from .functions.pipelines import *  
 from .functions.data_acquisition import *
@@ -59,7 +63,11 @@ def get_safe_rq_queue(name: str = "default"):
 @login_required
 def home(request):
     recipes = Recipe.objects.filter(user=request.user).order_by('-created_at')[:10] if request.user.is_authenticated else []
-    random_images = Recipe.objects.exclude(image='').order_by('?')[:12]  # For rotator
+    random_images = (
+    Recipe.objects.filter(visibility='public')
+    .exclude(image='')
+    .order_by('?')[:12]
+    )
     return render(request, 'recipes/home.html', {
         'recipes': recipes,
         'random_images': random_images,
@@ -154,7 +162,13 @@ def recipe_list(request):
             messages.success(request, f"✅ Updated visibility for {updated_count} recipe(s).")
         else:
             messages.info(request, "No recipes were updated.")
-        return redirect('recipes:recipe_list')
+
+        # ✅ Preserve pagination & sorting (page, sort, dir) on redirect
+        querystring = request.GET.urlencode()
+        redirect_url = reverse('recipes:recipe_list')
+        if querystring:
+            redirect_url = f"{redirect_url}?{querystring}"
+        return redirect(redirect_url)
     # Render template with all needed context
     return render(request, 'recipes/recipe_list.html', {
         'page_obj': page_obj,
@@ -187,10 +201,26 @@ def recipe_delete(request, pk):
     recipe = get_object_or_404(Recipe, pk=pk)
     if recipe.user != request.user:
         return HttpResponseForbidden()
+
+    next_url = request.GET.get('next') or request.POST.get('next')
+
     if request.method == 'POST':
         recipe.delete()
+        # ✅ Go back to where the user was (page/sort preserved)
+        if next_url:
+            return redirect(next_url)
         return redirect('recipes:recipe_list')
-    return render(request, 'recipes/recipe_confirm_delete.html', {'recipe': recipe})
+
+    return render(
+        request,
+        'recipes/recipe_confirm_delete.html',
+        {
+            'recipe': recipe,
+            'next': next_url,
+            'recipe_list_url': reverse('recipes:recipe_list'),
+        }
+    )
+
 
 
 @login_required
@@ -515,6 +545,12 @@ def copy_recipe(request, recipe_id):
         copied.instructions.create(description=inst.description, step_number=inst.step_number)
     
     messages.success(request, "Recipe copied!")
-    return redirect('recipes:friends_recipes', friend_id=original.user_id)
+    next_url = request.POST.get('next') or request.GET.get('next') or request.META.get('HTTP_REFERER')
+
+    if next_url and url_has_allowed_host_and_scheme(next_url, allowed_hosts={request.get_host()}):
+        return redirect(next_url)
+
+    # Final fallback (adjust to whatever makes sense in your app)
+    return redirect("recipes:friends_list")  # or friends_recipes, etc.
 
 ###################### /FRIEND MANAGEMENT #####################

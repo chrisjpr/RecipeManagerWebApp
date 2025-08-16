@@ -23,9 +23,14 @@
   <h3 class="section-title">🍽️ Featured Recipes</h3>
   <div id="image-showcase" class="image-grid">
     {% for recipe in random_images|slice:":6" %}
-      <a href="{% url 'recipes:recipe_detail' recipe.recipe_id %}">
-        <img src="{{ recipe.image.url }}" alt="{{ recipe.title }}" class="recipe-thumb" loading="lazy">
-      </a>
+      <div>
+        <a href="{% url 'recipes:recipe_detail' recipe.recipe_id %}">
+          <img src="{{ recipe.image.url }}" alt="{{ recipe.title }}" class="recipe-thumb" loading="lazy">
+        </a>
+        <div style="font-size:.9rem;margin-top:.35rem;color:#555;text-decoration:none;">
+          <span>@{{ recipe.user.username|cut:"_" }}</span>
+        </div>
+      </div>
     {% endfor %}
   </div>
 </div>
@@ -43,7 +48,7 @@
 
 <!-- 🕓 Recent Recipes -->
 <div class="card">
-  <h3 class="section-title">📋 Recent Recipes</h3>
+  <h3 class="section-title">📋 Your Recent Recipes</h3>
   {% if recipes %}
     <ul class="recent-list">
       {% for recipe in recipes %}
