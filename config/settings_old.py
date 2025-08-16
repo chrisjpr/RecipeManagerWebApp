@@ -1,62 +1,41 @@
 """
-Django settings for config project – prod-ready, DEBUG-toggleable
+Django settings for config project – dev/prod safe
 """
 
-from pathlib import Path
 import os
+from pathlib import Path
 from dotenv import load_dotenv
 import dj_database_url
 import django_heroku
-
+import ssl
 # ------------------------------------------------------------
 # Base
 # ------------------------------------------------------------
 BASE_DIR = Path(__file__).resolve().parent.parent
-load_dotenv(dotenv_path=BASE_DIR / ".env", override=True)
+load_dotenv(dotenv_path=BASE_DIR / '.env', override=True)
 
-# Toggle with env: DJANGO_DEBUG=1 for debug; 0/absent for production
-DEBUG = os.getenv("DJANGO_DEBUG", "0") in ("1", "true", "True")
-# SECRET_KEY required in production
-SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "dev-secret-key-only-used-when-debug")
-if not DEBUG and not os.getenv("DJANGO_SECRET_KEY"):
-    raise RuntimeError("DJANGO_SECRET_KEY must be set when DEBUG is false")
+SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret-key-change-me")
+DEBUG = os.getenv("DEBUG", "False").lower() in ("true", "1")
 
-# Hosts
-ALLOWED_HOSTS = [h.strip() for h in os.getenv("DJANGO_ALLOWED_HOSTS", "").split(",") if h.strip()]
-if DEBUG and not ALLOWED_HOSTS:
-    ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
-
-# If you deploy on Heroku, optionally add app hostname automatically
-HEROKU_APP_NAME = os.getenv("HEROKU_APP_NAME")
-if HEROKU_APP_NAME:
-    ALLOWED_HOSTS.append(f"{HEROKU_APP_NAME}.herokuapp.com")
-
-# Build CSRF trusted origins from ALLOWED_HOSTS
-CSRF_TRUSTED_ORIGINS = []
-for host in ALLOWED_HOSTS:
-    # Django expects scheme here
-    CSRF_TRUSTED_ORIGINS.append(f"https://{host}")
-    if DEBUG:
-        CSRF_TRUSTED_ORIGINS.append(f"http://{host}")
+ALLOWED_HOSTS = [h.strip() for h in os.getenv("ALLOWED_HOSTS", "").split(",") if h.strip()]
 
 AUTH_USER_MODEL = "accounts.CustomUser"
 
-# OpenAI (kept as-is)
+# OPEN AI KEY
 OPENAI_KEY = os.getenv("OPENAI_KEY")
 
 # ------------------------------------------------------------
-# Static & Media
+# Static & media
 # ------------------------------------------------------------
-AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
-AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
-AWS_STORAGE_BUCKET_NAME = os.getenv("AWS_STORAGE_BUCKET_NAME")
-AWS_S3_REGION_NAME = os.getenv("AWS_S3_REGION_NAME", "eu-central-1")
+AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_STORAGE_BUCKET_NAME')
+AWS_S3_REGION_NAME = 'eu-central-1'
 AWS_QUERYSTRING_AUTH = False
 AWS_S3_FILE_OVERWRITE = False
 AWS_DEFAULT_ACL = None
 
-# MEDIA_LOCAL=true -> use local FS; otherwise S3
-USE_S3 = os.getenv("MEDIA_LOCAL", "false").lower() not in ("true", "1")
+USE_S3 = os.getenv("MEDIA_LOCAL", "False").lower() not in ("true", "1")
 
 if USE_S3:
     STORAGES = {
@@ -69,11 +48,12 @@ else:
         "default": {"BACKEND": "django.core.files.storage.FileSystemStorage"},
         "staticfiles": {"BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage"},
     }
-    MEDIA_ROOT = BASE_DIR / "media"
+    MEDIA_ROOT = os.path.join(BASE_DIR, "media")
     MEDIA_URL = "/media/"
 
 STATIC_URL = "/static/"
-STATIC_ROOT = BASE_DIR / "staticfiles"
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+# Only include local static dir if it actually exists (avoids Heroku warning)
 _static_dir = BASE_DIR / "static"
 STATICFILES_DIRS = [str(_static_dir)] if _static_dir.exists() else []
 
@@ -127,50 +107,36 @@ TEMPLATES = [
 WSGI_APPLICATION = "config.wsgi.application"
 
 # ------------------------------------------------------------
-# Database
+# RQ / Redis (background jobs)
 # ------------------------------------------------------------
-_default_local = "postgres://recipe_user:2411@127.0.0.1:5432/recipe_db"
-DATABASES = {
-    "default": dj_database_url.config(
-        default=os.getenv("DATABASE_URL", _default_local),
-        conn_max_age=600,
-        ssl_require=not DEBUG,
-    )
-}
-
-# ------------------------------------------------------------
-# Redis / RQ (single, no duplication)
-# ------------------------------------------------------------
-from urllib.parse import urlparse, parse_qsl, urlencode, urlunparse
-
-def _ensure_redis_url_flags(url: str) -> str:
-    if not url.startswith("rediss://"):
-        return url
-    p = urlparse(url)
-    q = dict(parse_qsl(p.query, keep_blank_values=True))
-    q.setdefault("ssl_cert_reqs", "none")
-    q.setdefault("ssl_check_hostname", "false")
-    return urlunparse(p._replace(query=urlencode(q)))
-
-REDIS_URL = _ensure_redis_url_flags(os.getenv("REDIS_URL", "redis://127.0.0.1:6379/0"))
+# Use Heroku's REDIS_URL when present; fall back to local dev Redis.
+REDIS_URL = os.getenv("REDIS_URL") or "redis://localhost:6379/0"
+print("[SETTINGS - RQ DEBUG] REDIS_URL:", REDIS_URL)
 
 RQ_QUEUES = {
     "default": {
         "URL": REDIS_URL,
         "DEFAULT_TIMEOUT": 600,
+        "OPTIONS": {"ssl_cert_reqs": ssl.CERT_NONE},  # disables cert verification
     }
 }
 
-if DEBUG:
-    try:
-        import redis
-        redis.Redis.from_url(REDIS_URL).ping()
-        print("✅ Redis preflight check successful")
-    except Exception as e:
-        print("❌ Redis preflight check failed:", e)
+# ------------------------------------------------------------
+# Database
+# ------------------------------------------------------------
+# Use DATABASE_URL when set; otherwise fall back to local dev DB
+_default_local = "postgres://recipe_user:2411@127.0.0.1:5432/recipe_db"
+DATABASES = {
+    "default": dj_database_url.config(
+        default=os.getenv("DATABASE_URL", _default_local),
+        conn_max_age=600,
+        ssl_require=not DEBUG,   # require SSL only in production
+    )
+}
+print("[SETTINGS - DATABASE DEBUG] Active DATABASE_URL:", os.getenv("DATABASE_URL", _default_local))
 
 # ------------------------------------------------------------
-# Passwords / auth
+# Password validation
 # ------------------------------------------------------------
 AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
@@ -179,6 +145,7 @@ AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 
+# Avoid auto-field warning from django_rq models
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # ------------------------------------------------------------
@@ -201,45 +168,71 @@ EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL")
 
 # ------------------------------------------------------------
-# Security (prod vs dev)
+# Security: split dev vs prod
 # ------------------------------------------------------------
+# Build CSRF_TRUSTED_ORIGINS from ALLOWED_HOSTS so both http/https work in dev.
+_csrf_hosts = [h for h in ALLOWED_HOSTS if h]
+CSRF_TRUSTED_ORIGINS = []
+for host in _csrf_hosts:
+    if DEBUG:
+        CSRF_TRUSTED_ORIGINS.append(f"http://{host}")
+        CSRF_TRUSTED_ORIGINS.append(f"https://{host}")
+    else:
+        CSRF_TRUSTED_ORIGINS.append(f"https://{host}")
+
 if DEBUG:
+    # Local dev: do NOT force HTTPS, do NOT mark cookies secure-only
     SECURE_SSL_REDIRECT = False
     SESSION_COOKIE_SECURE = False
     CSRF_COOKIE_SECURE = False
     SECURE_PROXY_SSL_HEADER = None
 else:
+    # Production (e.g., Heroku): enforce HTTPS & secure cookies
     SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
     SECURE_SSL_REDIRECT = os.getenv("SECURE_SSL_REDIRECT", "True").lower() in ("true", "1")
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
-    SECURE_CONTENT_TYPE_NOSNIFF = True
-    SECURE_REFERRER_POLICY = "same-origin"
-    X_FRAME_OPTIONS = "DENY"
-    # Enable HSTS once you’re sure HTTPS is working end-to-end
-    SECURE_HSTS_SECONDS = int(os.getenv("SECURE_HSTS_SECONDS", "0"))  # set to 31536000 later
-    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-    SECURE_HSTS_PRELOAD = False
 
 # ------------------------------------------------------------
-# Heroku integration
+# Heroku integration (kept, but safe for dev)
 # ------------------------------------------------------------
-django_heroku.settings(locals(), databases=False)  # keep our DB config
+django_heroku.settings(locals(), databases=False)
+
+
+
 
 # ------------------------------------------------------------
-# Logging (send errors to console in prod)
+# RQ / Redis (background jobs) — force TLS "no verify" via URL
 # ------------------------------------------------------------
-LOGGING = {
-    "version": 1,
-    "disable_existing_loggers": False,
-    "handlers": {
-        "console": {"class": "logging.StreamHandler"},
-    },
-    "root": {
-        "handlers": ["console"],
-        "level": "DEBUG" if DEBUG else "INFO",
-    },
-    "loggers": {
-        "django.request": {"handlers": ["console"], "level": "ERROR", "propagate": False},
-    },
+import os, ssl
+from urllib.parse import urlparse, parse_qsl, urlencode, urlunparse
+
+def _ensure_ssl_cert_none(url: str) -> str:
+    if not url.startswith("rediss://"):
+        return url
+    p = urlparse(url)
+    q = dict(parse_qsl(p.query, keep_blank_values=True))
+    # If not explicitly set, disable cert verification for Heroku Redis' self-signed chain
+    q.setdefault("ssl_cert_reqs", "none")
+    # Optional: also disable hostname check if your redis-py is strict (safe to include)
+    q.setdefault("ssl_check_hostname", "false")
+    return urlunparse(p._replace(query=urlencode(q)))
+
+REDIS_URL = _ensure_ssl_cert_none(os.getenv("REDIS_URL", "redis://127.0.0.1:6379/0"))
+print("[SETTINGS - RQ DEBUG] REDIS_URL:", REDIS_URL)
+
+RQ_QUEUES = {
+    "default": {
+        "URL": REDIS_URL,
+        "DEFAULT_TIMEOUT": 600,
+        # no OPTIONS — we rely on the URL so rqworker gets the same flags
+    }
 }
+
+# Preflight ping so the first request doesn't pay TLS setup cost
+try:
+    import redis
+    redis.Redis.from_url(REDIS_URL).ping()
+    print("✅ Redis preflight check successful")
+except Exception as e:
+    print("❌ Redis preflight check failed:", e)
