@@ -70,6 +70,7 @@ urlpatterns = [
     # API and App URLs
 
     path("recipemanager/", include(("recipes.urls", 'recipes')), name='recipes'),  # ✅ THIS LINE
+    path("toolbox/", include("toolbox.urls"), name='toolbox'),  # ✅ THIS LINE
 
     # Authentication
     path('accounts/', include(('accounts.urls', 'accounts')), name = 'accounts'),  # ✅ THIS LINE

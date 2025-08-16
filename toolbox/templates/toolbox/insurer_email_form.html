@@ -1,0 +1,82 @@
+{% load static %}
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Toolbox – Send insurer email</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;max-width:720px;margin:2rem auto;padding:0 1rem}
+    form{display:grid;gap:1rem}
+    label{font-weight:600}
+    input,button{padding:.6rem .8rem;font-size:1rem}
+    .messages{margin:1rem 0}
+    .messages .error{color:#b91c1c}
+    .messages .success{color:#065f46}
+    /* Django's default error list styling */
+    .errorlist{margin:.25rem 0 0;padding-left:0;list-style:none;color:#b91c1c}
+  </style>
+</head>
+<body>
+  <h1>Send email to insurer</h1>
+
+  {% if messages %}
+    <div class="messages">
+      {% for m in messages %}
+        <div class="{{ m.tags }}">{{ m }}</div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <form method="post">
+    {% csrf_token %}
+
+    {# form-wide (non-field) errors #}
+    {% if form.non_field_errors %}
+      {{ form.non_field_errors }}
+    {% endif %}
+
+    <div>
+      <label for="{{ form.police_number.id_for_label }}">{{ form.police_number.label }}</label><br>
+      {{ form.police_number }}
+      {% if form.police_number.errors %}{{ form.police_number.errors }}{% endif %}
+    </div>
+
+    <div>
+      <label for="{{ form.insured_name.id_for_label }}">{{ form.insured_name.label }}</label><br>
+      {{ form.insured_name }}
+      {% if form.insured_name.errors %}{{ form.insured_name.errors }}{% endif %}
+    </div>
+
+    <div>
+      <label for="{{ form.birth_date.id_for_label }}">{{ form.birth_date.label }}</label><br>
+      {{ form.birth_date }}
+      {% if form.birth_date.errors %}{{ form.birth_date.errors }}{% endif %}
+    </div>
+
+    <div>
+      <label for="{{ form.start_date.id_for_label }}">{{ form.start_date.label }}</label><br>
+      {{ form.start_date }}
+      {% if form.start_date.errors %}{{ form.start_date.errors }}{% endif %}
+    </div>
+
+    <div>
+      <label for "{{ form.end_date.id_for_label }}">{{ form.end_date.label }}</label><br>
+      {{ form.end_date }}
+      {% if form.end_date.errors %}{{ form.end_date.errors }}{% endif %}
+    </div>
+
+    <div>
+      <label for="{{ form.sender_name.id_for_label }}">{{ form.sender_name.label }}</label><br>
+      {{ form.sender_name }}
+      {% if form.sender_name.errors %}{{ form.sender_name.errors }}{% endif %}
+    </div>
+
+    <button type="submit">Send email</button>
+  </form>
+
+  <p style="margin-top:1rem">
+    <a href="{% url 'toolbox:insurer_email_sent' %}">See success page</a> (for testing)
+  </p>
+</body>
+</html>

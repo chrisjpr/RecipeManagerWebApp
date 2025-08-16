@@ -4,7 +4,7 @@ from django.core.mail import send_mail
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
-
+import os
 
 
 def custom_send_verification_email(user, request):
@@ -27,7 +27,7 @@ If you didn’t register, you can ignore this email.
 
 – Your RecipeManager Team
 """
-    send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [user.email])
+    send_mail(subject, message, os.getenv("DEFAULT_FROM_EMAIL"), [user.email])
 
 
 def custom_send_password_reset_email(user, reset_url):
@@ -36,4 +36,4 @@ def custom_send_password_reset_email(user, reset_url):
         'user': user,
         'reset_url': reset_url,
     })
-    send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [user.email])
+    send_mail(subject, message, os.getenv("DEFAULT_FROM_EMAIL"), [user.email])

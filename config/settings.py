@@ -72,6 +72,7 @@ INSTALLED_APPS = [
     "storages",
     "accounts",
     "recipes",
+    "toolbox",
     "emails",
 ]
 

@@ -1,0 +1,7 @@
+Sehr geehrte Damen und Herren,
+
+{{ insured_name }}, geboren am {{ birth_date|date:"d.m.Y" }} 
+fährt das Auto von {{ start_date|date:"d.m.Y" }} bis {{ end_date|date:"d.m.Y" }}.
+Bitte berücksichtigen Sie ihn im Fahrerkreis.
+
+{{ sender_name }}
