@@ -29,6 +29,8 @@ from django.urls import reverse
 import json
 from django.shortcuts import redirect, get_object_or_404
 from django.utils.http import url_has_allowed_host_and_scheme
+from django.http import HttpResponse, HttpResponseForbidden, Http404
+from django.template.loader import render_to_string
 from django.conf import settings
 
 from .functions.pipelines import *  
@@ -554,3 +556,160 @@ def copy_recipe(request, recipe_id):
     return redirect("recipes:friends_list")  # or friends_recipes, etc.
 
 ###################### /FRIEND MANAGEMENT #####################
+
+
+#region PUBLIC RECIPES
+####################### PUBLIC RECIPES #######################
+@login_required
+def public_recipes(request):
+    # Sorting (default: created_at desc)
+    sort_field = request.GET.get('sort') or 'created_at'
+    direction = request.GET.get('dir') or 'desc'
+    order_expr = sort_field if direction == 'asc' else f'-{sort_field}'
+
+    # All public recipes EXCEPT the current user's
+    recipes_qs = (
+        Recipe.objects
+        .filter(visibility='public')
+        .exclude(user=request.user)
+        .order_by(order_expr)
+        .prefetch_related('ingredients')
+    )
+
+    # Ingredient suggestions (lowercased/distinct), like friends_recipes
+    all_ingredients = Ingredient.objects.filter(
+        recipe__in=recipes_qs
+    ).values_list('name', flat=True).distinct()
+    all_ingredients = sorted({name.lower() for name in all_ingredients})
+
+    # Pagination (10 per page, consistent with your other lists)
+    paginator = Paginator(recipes_qs, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    # Build CSV for client-side ingredient filtering
+    for recipe in page_obj:
+        ingredient_list = [ing.name for ing in recipe.ingredients.all()]
+        recipe.ingredients_csv = ", ".join(ingredient_list)
+
+    return render(request, 'recipes/public_recipes.html', {
+        'page_obj': page_obj,
+        'current_sort': sort_field,
+        'current_dir': direction,
+        'all_ing_json': json.dumps(all_ingredients),
+    })
+####################### /PUBLIC RECIPES #######################
+#endregion PUBLIC RECIPES
+
+
+
+
+#region PDF EXPORT
+######################### PDF EXPORT ########################
+
+
+# recipes/views.py
+from io import BytesIO
+from django.http import HttpResponse, HttpResponseForbidden
+from xhtml2pdf import pisa
+from django.contrib.staticfiles import finders
+from django.template.loader import get_template
+
+import os
+
+from .models import Recipe
+
+def user_can_view_recipe(user, recipe):
+    if recipe.visibility == "public":
+        return True
+    if user.is_authenticated and recipe.user_id == user.id:
+        return True
+    # add any "friends" rules here if you have them
+    return False
+
+def _is_abs(url: str) -> bool:
+    return url.startswith("http://") or url.startswith("https://")
+
+def _strip_prefix(s: str, prefix: str) -> str:
+    return s[len(prefix):] if s.startswith(prefix) else s
+
+
+def _link_callback(uri: str, rel: str | None):
+    """
+    Resolve URIs in HTML so xhtml2pdf can load assets.
+
+    - If the URI is absolute (http/https), return it unchanged (let xhtml2pdf fetch it).
+    - If MEDIA_URL/STATIC_URL are absolute (CDN/S3) and the URI starts with them, return the URI unchanged.
+    - If MEDIA_URL/STATIC_URL are relative, map to MEDIA_ROOT/STATIC_ROOT or use staticfiles finders.
+    - For other relative paths, resolve against 'rel' (the current template directory).
+    - Never raise FileNotFoundError; fall back to returning the original URI so xhtml2pdf can try.
+    """
+    if not uri:
+        return uri
+
+    # 1) Fully-qualified external URL?
+    if _is_abs(uri):
+        return uri
+
+    # 2) MEDIA_URL handling (S3/CDN vs local)
+    media_url = getattr(settings, "MEDIA_URL", "") or ""
+    if media_url:
+        if _is_abs(media_url) and uri.startswith(media_url):
+            # S3/CDN media → leave as is
+            return uri
+        if uri.startswith(media_url):
+            candidate = os.path.join(settings.MEDIA_ROOT, _strip_prefix(uri, media_url))
+            if os.path.isfile(candidate):
+                return candidate
+
+    # 3) STATIC_URL handling (CDN vs local)
+    static_url = getattr(settings, "STATIC_URL", "") or ""
+    if static_url:
+        if _is_abs(static_url) and uri.startswith(static_url):
+            # CDN static → leave as is
+            return uri
+        if uri.startswith(static_url):
+            # Try collectstatic path
+            found = finders.find(_strip_prefix(uri, static_url))
+            if found:
+                return found
+            candidate = os.path.join(getattr(settings, "STATIC_ROOT", "") or "", _strip_prefix(uri, static_url))
+            if candidate and os.path.isfile(candidate):
+                return candidate
+
+    # 4) Relative path: resolve against template directory if provided
+    if rel and not os.path.isabs(uri):
+        base_dir = os.path.dirname(rel)
+        candidate = os.path.normpath(os.path.join(base_dir, uri))
+        if os.path.isfile(candidate):
+            return candidate
+
+    # 5) Last resort: return the original string and let xhtml2pdf try
+    return uri
+
+def recipe_pdf(request, recipe_id):
+    recipe = get_object_or_404(
+        Recipe.objects.prefetch_related("ingredients", "instructions"),
+        recipe_id=recipe_id
+    )
+    if not user_can_view_recipe(request.user, recipe):
+        return HttpResponseForbidden("You don't have access to this recipe.")
+
+    # Optional: convenience attribute if your template wants it
+    recipe.ingredients_csv = ", ".join(i.name for i in recipe.ingredients.all())
+
+    template = get_template("recipes/recipe_pdf_xhtml2pdf.html")
+    html = template.render({"recipe": recipe, "request": request})
+
+    result = BytesIO()
+    pdf_status = pisa.CreatePDF(html, dest=result, link_callback=_link_callback)
+    if pdf_status.err:
+        return HttpResponse("Error rendering PDF", status=500)
+
+    filename = f'{slugify(recipe.title or "recipe")}.pdf'
+    resp = HttpResponse(result.getvalue(), content_type="application/pdf")
+    resp["Content-Disposition"] = f'attachment; filename="{filename}"'
+    return resp
+
+
+######################### /PDF EXPORT ########################

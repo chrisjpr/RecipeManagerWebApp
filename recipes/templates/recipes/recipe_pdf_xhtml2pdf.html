@@ -1,0 +1,141 @@
+{% load static %}
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>{{ recipe.title }} – PDF</title>
+  <style>
+    /* xhtml2pdf-safe CSS (no flex/grid/pseudo-elements) */
+    @page { size: A4; margin: 10mm 8mm; }
+    body { font-family: Helvetica, Arial, sans-serif; color: #263238; font-size: 11pt; line-height: 1.35; }
+
+    .primary { color: #4CAF50; }
+    .accent  { color: #FFC107; }
+    .muted   { color: #607d8b; }
+    .soft    { color: #546e7a; }
+
+    h1 { font-size: 18pt; margin: 0 0 2pt 0; color: #2c3e50; }
+    h2 { font-size: 12.5pt; margin: 0 0 6pt 0; color: #2c3e50; }
+    .small { font-size: 9.5pt; }
+
+    .rule { height: 3pt; background: #4CAF50; border-radius: 2pt; margin: 4pt 0 8pt; }
+
+    /* header: table layout */
+    table { border-collapse: collapse; }
+    .hdr-table { width: 100%; }
+    .hdr-left  { width: 75%; vertical-align: middle; }
+    .hdr-right { width: 25%; text-align: right; vertical-align: middle; }
+    .recipe-img { max-height: 90pt; max-width: 140pt; border-radius: 6pt; border: 1pt solid #e0e0e0; }
+
+    /* content columns via table */
+    .content-table { width: 100%; }
+    .col { vertical-align: top; }
+    .col-left  { width: 46%; padding-right: 8pt; }
+    .col-right { width: 54%; padding-left: 8pt; }
+
+    /* cards */
+    .card {
+      border: 1pt solid #e6e6e6;
+      border-radius: 6pt;
+      padding: 8pt;
+      background: #ffffff;
+    }
+    .card-head { border-bottom: 1pt solid #f0f0f0; padding-bottom: 4pt; margin-bottom: 6pt; }
+
+    /* lists */
+    ul, ol { margin: 0; padding-left: 0; }
+    li { margin: 2pt 0; }
+
+    /* ingredient groups + bullets (inline span instead of :before) */
+    .group { margin: 6pt 0 4pt; font-weight: 700; color: #37474f; }
+    .ing-list {
+  list-style: disc;
+  margin: 3pt 0 6pt;
+  padding-left: 14pt;  /* indent so bullets line up neatly */
+}
+
+    /* notes */
+    .notes {
+      margin-top: 8pt;
+      background: #fff8ef;
+      border: 1pt solid #ffe1b6;
+      border-left: 4pt solid #FFC107;
+      border-radius: 6pt;
+      padding: 8pt;
+    }
+
+    .avoid-break { page-break-inside: avoid; }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <table class="hdr-table">
+    <tr>
+      <td class="hdr-left">
+        <h1>{{ recipe.title }}</h1>
+        <div class="small soft">
+          Cook time: <span class="primary">{{ recipe.cook_time }}</span> min
+          &nbsp;•&nbsp; Portions: <span class="primary">{{ recipe.portions }}</span>
+          &nbsp;•&nbsp; Owner: @{{ recipe.user.username|cut:"_" }}
+        </div>
+        <div class="rule"></div>
+      </td>
+      <td class="hdr-right">
+        {% if recipe.image %}
+          <img class="recipe-img" src="{{ recipe.image.url }}" alt="{{ recipe.title }}">
+        {% else %}
+          <span class="muted small">No image</span>
+        {% endif %}
+      </td>
+    </tr>
+  </table>
+
+  <!-- CONTENT -->
+  <table class="content-table">
+    <tr>
+      <td class="col col-left">
+        <div class="card avoid-break">
+          <div class="card-head"><h2>Ingredients</h2></div>
+
+          {% regroup recipe.ingredients.all by category as ingredient_groups %}
+          {% for group in ingredient_groups %}
+            <div class="group">{{ group.grouper|default:"Other" }}</div>
+            <ul class="ing-list">
+              {% for ingredient in group.list %}
+                <li>
+                  {% if ingredient.quantity %}{{ ingredient.quantity }}{% endif %}
+                  {% if ingredient.unit %}{% if ingredient.quantity %} {% endif %}{{ ingredient.unit }}{% endif %}
+                  {% if ingredient.quantity or ingredient.unit %} {% endif %}
+                  {{ ingredient.name }}
+                </li>
+              {% endfor %}
+            </ul>
+          {% endfor %}
+        </div>
+      </td>
+
+      <td class="col col-right">
+        <div class="card">
+          <div class="card-head"><h2>Instructions</h2></div>
+          <ol class="small">
+            {% for instruction in recipe.instructions.all %}
+              <li class="avoid-break">{{ instruction.description|safe }}</li>
+            {% empty %}
+              <li class="muted">No instructions provided.</li>
+            {% endfor %}
+          </ol>
+        </div>
+
+        {% if recipe.notes %}
+          <div class="notes avoid-break">
+            <strong>Notes</strong><br>
+            <span class="small">{{ recipe.notes|linebreaks }}</span>
+          </div>
+        {% endif %}
+      </td>
+    </tr>
+  </table>
+
+</body>
+</html>

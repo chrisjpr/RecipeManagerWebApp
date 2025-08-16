@@ -22,6 +22,8 @@ urlpatterns = [
     path('copy/<int:recipe_id>/', views.copy_recipe, name='copy_recipe'),
     path('update-visibility/', views.update_visibility_ajax, name='update_visibility'),
     path('create-options/', views.create_recipe_landing, name='create_recipe_landing'),
+    path("public/", views.public_recipes, name="public_recipes"),
+    path("recipe/<int:recipe_id>/pdf/", views.recipe_pdf, name="recipe_pdf_xhtml2pdf"),
 
 
 ]
