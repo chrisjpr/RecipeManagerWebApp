@@ -17,7 +17,7 @@ load_dotenv(dotenv_path=BASE_DIR / ".env", override=True)
 # Toggle with env: DJANGO_DEBUG=1 for debug; 0/absent for production
 DEBUG = os.getenv("DJANGO_DEBUG", "0") in ("1", "true", "True")
 # SECRET_KEY required in production
-SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "dev-secret-key-only-used-when-debug")
+SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
 if not DEBUG and not os.getenv("DJANGO_SECRET_KEY"):
     raise RuntimeError("DJANGO_SECRET_KEY must be set when DEBUG is false")
 
