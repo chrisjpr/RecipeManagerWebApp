@@ -130,12 +130,19 @@ WSGI_APPLICATION = "config.wsgi.application"
 # ------------------------------------------------------------
 # Database
 # ------------------------------------------------------------
-_default_local = "postgres://recipe_user:2411@127.0.0.1:5432/recipe_db"
+import os, dj_database_url
+
+# Your Supabase connection string
+_supabase_url = "postgresql://postgres.nikxdkfhqsywhgfidrjc:ZWldD3rBr33@aws-0-eu-north-1.pooler.supabase.com:6543/postgres?sslmode=require"
+
+# Use DATABASE_URL if provided by environment (Heroku), otherwise Supabase directly
+DATABASE_URL = os.getenv("DATABASE_URL", _supabase_url)
+
 DATABASES = {
-    "default": dj_database_url.config(
-        default=os.getenv("DATABASE_URL", _default_local),
+    "default": dj_database_url.parse(
+        DATABASE_URL,
         conn_max_age=600,
-        ssl_require=not DEBUG,
+        ssl_require=True,  # keep SSL enforced for Supabase
     )
 }
 
