@@ -68,37 +68,25 @@
       color: inherit;
     }
 
-nav {
-  display: flex;
-  align-items: center;
-  flex-wrap: nowrap;          /* CHANGED: was wrap */
-  justify-content: flex-end;  /* keep links next to brand */
-  min-width: 0;               /* allow shrink instead of wrapping */
-}
+  nav {
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;          /* CHANGED: was wrap */
+    justify-content: flex-end;  /* keep links next to brand */
+    min-width: 0;               /* allow shrink instead of wrapping */
+  }
 
-/* compact link row */
-.nav-links {
-  display: flex;
-  gap: 0.75rem;               /* tighter than before */
-  align-items: center;
-  white-space: nowrap;        /* keep in one line */
-  font-size: 0.95rem;         /* a little smaller */
-}
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin-left: 1.5rem;
+      font-weight: 500;
+    }
 
-/* keep links white, tighter padding */
-.nav-links a {
-  text-decoration: none;
-  color: inherit;             /* stays white in header */
-  font-weight: 600;
-  padding: 0.3rem 0.6rem;     /* smaller */
-  border-radius: 6px;
-  transition: background-color 0.2s;
-  margin-left: 0;             /* override global nav a margin */
-}
+    nav a:hover {
+      text-decoration: underline;
+    }
 
-.nav-links a:hover {
-  background-color: rgba(255,255,255,0.15);
-}
     .username-label {
       margin-left: 1.5rem;
       font-weight: 500;
@@ -169,7 +157,6 @@ nav {
 
       nav {
         margin-top: 1rem;
-        flex-wrap: wrap;
       }
 
       nav a {
@@ -183,32 +170,14 @@ nav {
       }
     }
 
-  .user-box {
-    background-color: rgba(255, 255, 255, 0.15);
-    padding: 0.4rem 0.8rem;     /* slightly smaller */
-    border-radius: 8px;
-    margin-left: 1rem;          /* tighter than 2rem */
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-  }
-
-  /* keep everything in the user box non-blue and non-underlined */
-nav .user-box { color: #f1f1f1; }
-
-nav .user-box a,
-nav .user-box a:visited {
-  color: inherit;           /* use the box color (white-ish) */
-  text-decoration: none;    /* no underline */
-}
-
-nav .user-box a:hover,
-nav .user-box a:focus,
-nav .user-box a:active {
-  color: inherit;
-  text-decoration: none;    /* still no underline on hover/focus */
-  /* optional: subtle hover bg */
-  /* background-color: rgba(255,255,255,0.12); border-radius: 6px; */
+    .user-box {
+  background-color: rgba(255, 255, 255, 0.15);
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  margin-left: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 }
 
 .username-label {
@@ -222,14 +191,14 @@ nav .user-box a:active {
   <header>
     <a href="{% url 'recipes:home' %}" class="brand-link"><h1>🍳 Recipe Manager</h1></a>
       <nav>
-      <div class="nav-links">
-        <a href="{% url 'recipes:home' %}">🏠 Home</a>
-        <a href="{% url 'recipes:recipe_list' %}">📖 My Recipes</a>
-        <a href="{% url 'recipes:public_recipes' %}">🌍 Public Recipes</a>
-        <a href="{% url 'recipes:create_recipe_landing' %}">➕ Create Recipe</a>
-        <a href="{% url 'accounts:friend_dashboard' %}">👥 Friends</a>
-      </div>
-
+        <div style="display: flex; justify-content: center; gap: 1.5rem; margin: 1rem 0;">
+          <a href="{% url 'recipes:home' %}">🏠 Home</a>
+          <a href="{% url 'recipes:recipe_list' %}">📖 My Recipes</a>
+          <a href="{% url 'recipes:public_recipes' %}">🌍 Public Recipes</a>
+          <a href="{% url 'recipes:create_recipe_landing' %}">➕ Create Recipe</a>
+          <a href="{% url 'accounts:friend_dashboard' %}">👥 Friends</a>
+          
+        </div>
 
         <div class="user-box">
           {% if user.is_authenticated %}

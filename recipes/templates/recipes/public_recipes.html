@@ -1,0 +1,224 @@
+{% extends 'base.html' %}
+{% block title %}Public Recipes | Recipe Manager{% endblock %}
+
+{% block content %}
+<h2>🌍 Public Recipes</h2>
+
+<!-- Filter & Control Panel -->
+<div class="controls">
+  <div class="search-group">
+    <label for="search"><strong>Search by Title:</strong></label>
+    <input type="text" id="search" placeholder="Search by title">
+  </div>
+
+  <div class="search-group ingredient-group">
+    <label for="ingredient-search"><strong>Search by Ingredients:</strong></label>
+    <div id="ingredient-search-container">
+      <div id="ingredient-tokens"></div>
+      <input type="text" id="ingredient-search" placeholder="Type ingredient..." autocomplete="off">
+      <div id="ingredient-suggestions" class="suggestions-box"></div>
+    </div>
+  </div>
+</div>
+
+{% if page_obj %}
+  <table id="recipe-table">
+    <thead>
+      <tr>
+        <th>Preview</th>
+        <th>
+          {% if current_sort == 'title' %}
+            <a href="?sort=title&dir={% if current_dir == 'asc' %}desc{% else %}asc{% endif %}&page={{ page_obj.number }}">Title {% if current_dir == 'asc' %}▲{% else %}▼{% endif %}</a>
+          {% else %}
+            <a href="?sort=title&dir=asc&page={{ page_obj.number }}">Title</a>
+          {% endif %}
+        </th>
+                <th>
+          {% if current_sort == 'user' %}
+            <a href="?sort=user&dir={% if current_dir == 'asc' %}desc{% else %}asc{% endif %}&page={{ page_obj.number }}">User {% if current_dir == 'asc' %}▲{% else %}▼{% endif %}</a>
+          {% else %}
+            <a href="?sort=user&dir=asc&page={{ page_obj.number }}">User</a>
+          {% endif %}
+        </th>
+        <th>
+          {% if current_sort == 'portions' %}
+            <a href="?sort=portions&dir={% if current_dir == 'asc' %}desc{% else %}asc{% endif %}&page={{ page_obj.number }}">Portions {% if current_dir == 'asc' %}▲{% else %}▼{% endif %}</a>
+          {% else %}
+            <a href="?sort=portions&dir=asc&page={{ page_obj.number }}">Portions</a>
+          {% endif %}
+        </th>
+        <th>
+          {% if current_sort == 'cook_time' %}
+            <a href="?sort=cook_time&dir={% if current_dir == 'asc' %}desc{% else %}asc{% endif %}&page={{ page_obj.number }}">Cook Time {% if current_dir == 'asc' %}▲{% else %}▼{% endif %}</a>
+          {% else %}
+            <a href="?sort=cook_time&dir=asc&page={{ page_obj.number }}">Cook Time</a>
+          {% endif %}
+        </th>
+        <th>
+          {% if current_sort == 'created_at' %}
+            <a href="?sort=created_at&dir={% if current_dir == 'asc' %}desc{% else %}asc{% endif %}&page={{ page_obj.number }}">Created At {% if current_dir == 'asc' %}▲{% else %}▼{% endif %}</a>
+          {% else %}
+            <a href="?sort=created_at&dir=asc&page={{ page_obj.number }}">Created At</a>
+          {% endif %}
+        </th>
+        <th>Visibility</th>
+        <th>Copy</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for recipe in page_obj %}
+        <tr data-ingredients="{{ recipe.ingredients_csv|default:'' }}">
+          <td>
+            {% if recipe.image %}
+              <img src="{{ recipe.image.url }}" alt="{{ recipe.title }}" width="50" height="50" style="object-fit: cover; border-radius: 4px;">
+            {% else %}
+              <span style="color: #999;">N/A</span>
+            {% endif %}
+          </td>
+          <td class="title-cell">
+            <a href="{% url 'recipes:recipe_detail' recipe.recipe_id %}">{{ recipe.title }}</a>
+          </td>
+          <td class="user-cell">{{ recipe.user.username|cut:"_" }}</td>
+          <td>{{ recipe.portions }}</td>
+          <td>{{ recipe.cook_time }}</td>
+          <td>{{ recipe.created_at|date:"d.m.Y" }}</td>
+          <td>{{ recipe.get_visibility_display }}</td>
+          <td>
+            <a href="{% url 'recipes:copy_recipe' recipe.recipe_id %}?next={{ request.get_full_path|urlencode }}" class="copy-btn">📋 Copy</a>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <!-- Pagination -->
+  <div class="pagination">
+    {% if page_obj.has_previous %}
+      <a href="?page=1&sort={{ current_sort }}&dir={{ current_dir }}">« First</a>
+      <a href="?page={{ page_obj.previous_page_number }}&sort={{ current_sort }}&dir={{ current_dir }}">Previous</a>
+    {% endif %}
+    <span class="current-page">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+    {% if page_obj.has_next %}
+      <a href="?page={{ page_obj.next_page_number }}&sort={{ current_sort }}&dir={{ current_dir }}">Next</a>
+      <a href="?page={{ page_obj.paginator.num_pages }}&sort={{ current_sort }}&dir={{ current_dir }}">Last »</a>
+    {% endif %}
+  </div>
+{% else %}
+  <p class="subtitle">No public recipes available right now.</p>
+{% endif %}
+
+<!-- Title Search (same as friends_recipes) -->
+<script>
+  document.getElementById('search').addEventListener('input', function () {
+    const term = this.value.toLowerCase();
+    const rows = document.querySelectorAll('#recipe-table tbody tr');
+    rows.forEach(row => {
+      const title = row.querySelector('.title-cell').textContent.toLowerCase();
+      row.style.display = title.includes(term) ? '' : 'none';
+    });
+  });
+</script>
+
+<!-- Ingredient Filter (same as friends_recipes) -->
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const input = document.getElementById('ingredient-search');
+  const suggestionsBox = document.getElementById('ingredient-suggestions');
+  const tokensContainer = document.getElementById('ingredient-tokens');
+  const selectedIngredients = new Set();
+  const allIngredients = JSON.parse('{{ all_ing_json|escapejs }}');
+
+  function renderSuggestions(term) {
+    const termLC = term.toLowerCase();
+    const matches = allIngredients.filter(i => i.startsWith(termLC) && !selectedIngredients.has(i));
+    suggestionsBox.innerHTML = '';
+    matches.forEach(m => {
+      const div = document.createElement('div');
+      div.className = 'suggestion';
+      div.textContent = term + m.slice(term.length);
+      div.addEventListener('click', () => {
+        addIngredientToken(m);
+        input.value = '';
+        suggestionsBox.innerHTML = '';
+        filterRecipes();
+      });
+      suggestionsBox.appendChild(div);
+    });
+    suggestionsBox.style.display = matches.length > 0 ? 'block' : 'none';
+  }
+
+  function addIngredientToken(ingredient) {
+    const ingLC = ingredient.toLowerCase();
+    if (selectedIngredients.has(ingLC)) return;
+    selectedIngredients.add(ingLC);
+    const token = document.createElement('div');
+    token.className = 'ingredient-token';
+    token.textContent = ingredient;
+    const close = document.createElement('span');
+    close.textContent = '×';
+    close.className = 'remove';
+    close.addEventListener('click', () => {
+      selectedIngredients.delete(ingLC);
+      tokensContainer.removeChild(token);
+      filterRecipes();
+    });
+    token.appendChild(close);
+    tokensContainer.appendChild(token);
+  }
+
+  function filterRecipes() {
+    const rows = document.querySelectorAll('#recipe-table tbody tr');
+    rows.forEach(row => {
+      const rowIngredients = row.getAttribute('data-ingredients').toLowerCase().split(',').map(i => i.trim());
+      const matchesAll = [...selectedIngredients].every(sel => rowIngredients.includes(sel));
+      row.style.display = matchesAll ? '' : 'none';
+    });
+  }
+
+  input.addEventListener('input', () => renderSuggestions(input.value.trim()));
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && input.value.trim()) {
+      e.preventDefault();
+      addIngredientToken(input.value.trim());
+      input.value = '';
+      suggestionsBox.innerHTML = '';
+      filterRecipes();
+    }
+  });
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('#ingredient-search-container')) {
+      suggestionsBox.innerHTML = '';
+    }
+  });
+});
+</script>
+
+<!-- Styling (same block you use in friends_recipes) -->
+<style>
+  .controls { display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 1rem; }
+  .search-group { display: flex; align-items: center; gap: 0.5rem; }
+  .ingredient-group { align-items: flex-start; flex-direction: column; }
+  #recipe-table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+  #recipe-table th, #recipe-table td { border: 1px solid #ddd; padding: 0.6rem; text-align: center; }
+  .title-cell { text-align: left; white-space: nowrap; }
+  .copy-btn { background-color: #007bff; color: white; padding: 4px 8px; border-radius: 6px; text-decoration: none; font-weight: bold; display: inline-block; }
+  .copy-btn:hover { background-color: #0056b3; }
+  .suggestions-box { position: absolute; background: white; border: 1px solid #ccc; z-index: 10; width: 100%; max-height: 150px; overflow-y: auto; }
+  .suggestion { padding: 4px; cursor: pointer; }
+  .suggestion:hover { background-color: #eee; }
+  .ingredient-token { display: inline-block; background: #e0e0e0; border-radius: 4px; padding: 2px 6px; margin: 2px 4px 2px 0; font-size: 0.9em; }
+  .ingredient-token .remove { margin-left: 4px; cursor: pointer; font-weight: bold; }
+  .pagination { text-align: center; margin-top: 1rem; }
+  .pagination a { margin: 0 5px; text-decoration: none; color: #007bff; }
+  .pagination .current-page { font-weight: bold; margin: 0 5px; }
+  @media (max-width: 600px) {
+    .controls { flex-direction: column; }
+    .title-cell { white-space: normal; }
+    #recipe-table { overflow-x: auto; display: block; }
+  }
+  #recipe-table th a { color: inherit; text-decoration: none; font-weight: bold; }
+  #recipe-table th a:hover { color: inherit; text-decoration: none; }
+  .title-cell a { color: inherit; text-decoration: none; font-weight: 500; }
+  .title-cell a:hover { color: inherit; text-decoration: none; }
+</style>
+{% endblock %}

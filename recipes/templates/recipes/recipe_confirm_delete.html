@@ -1,10 +1,110 @@
 {% extends 'base.html' %}
+{% block title %}Delete Recipe | Recipe Manager{% endblock %}
+
 {% block content %}
-<h1>Delete Recipe: {{ recipe.title }}</h1>
-<p>Are you sure you want to delete this recipe?</p>
-<form method="post">
-  {% csrf_token %}
-  <button type="submit">Yes, delete</button>
-  <a href="{% url 'recipes:recipe_detail' recipe.recipe_id %}">Cancel</a>
-</form>
+<style>
+  .confirm-wrap {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  .confirm-head {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: var(--text-color);
+  }
+  .confirm-head .badge {
+    background: #ffeaea;
+    color: #b00020;
+    border: 1px solid #ffc6c6;
+    border-radius: 10px;
+    padding: .35rem .6rem;
+    font-weight: 700;
+    font-size: .9rem;
+  }
+  .confirm-card {
+    background: var(--card-bg);
+    border: 1px solid #eee;
+    border-radius: 12px;
+    padding: 1.25rem;
+    box-shadow: var(--shadow);
+  }
+  .confirm-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 1rem;
+    align-items: center;
+  }
+  .recipe-meta {
+    color: var(--muted-text);
+    font-size: .95rem;
+  }
+  .recipe-thumb {
+    width: 110px;
+    height: 110px;
+    object-fit: cover;
+    border-radius: 10px;
+    border: 1px solid #eee;
+  }
+
+  .btn-bar {
+    margin-top: 1rem;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: .75rem;
+  }
+  .btn {
+    display: inline-block;
+    text-align: center;
+    padding: .9rem 1.25rem;
+    border-radius: 10px;
+    font-weight: 700;
+    text-decoration: none;
+    border: 1px solid transparent;
+    cursor: pointer;
+    font-size: 1rem;
+  }
+  .btn-danger {
+    background: #e53935;         /* red delete */
+    border-color: #c62828;
+    color: #fff;
+  }
+  .btn-danger:hover { background: #d32f2f; }
+  .btn-secondary {
+    background: #f4f6f8;
+    border-color: #d7dee3;
+    color: var(--text-color);
+  }
+  .btn-secondary:hover { background: #e9eef2; }
+
+  @media (min-width: 640px) {
+    .btn-bar { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+
+<div class="confirm-wrap">
+  <div class="confirm-head">
+    <span class="badge">⚠️ Warning</span>
+    <h2 style="margin:0">Delete Recipe</h2>
+  </div>
+
+  <div class="confirm-card">
+    <div class="confirm-row">
+      <div>
+        <h3 style="margin:0 0 .25rem 0">{{ recipe.title }}</h3>
+        <p class="recipe-meta">This action can’t be undone. The recipe and all of its ingredients & instructions will be removed.</p>
+      </div>
+      {% if recipe.image %}
+        <img class="recipe-thumb" src="{{ recipe.image.url }}" alt="{{ recipe.title }}">
+      {% endif %}
+    </div>
+
+    <form method="post" class="btn-bar">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-danger">Yes, delete</button>
+      <a class="btn btn-secondary" href="{% url 'recipes:recipe_detail' recipe.recipe_id %}">Don’t delete</a>
+    </form>
+  </div>
+</div>
 {% endblock %}
