@@ -141,17 +141,18 @@
           <a href="{% url 'accounts:friend_dashboard' %}">👥 Friends</a>
         </div>
 
-        <div class="user-box">
-          {% if user.is_authenticated %}
-            <span class="material-symbols-rounded user-icon--desktop">
-              {% firstof user.profile_icon "restaurant" %}
-            </span>
-            <span class="username-label">@{{ user.username|cut:"_" }}</span>
-            <a href="{% url 'accounts:logout' %}">🚪 Logout</a>
-          {% else %}
-            <a href="{% url 'accounts:login' %}">🔑 Login</a>
-          {% endif %}
-        </div>
+      <div class="user-box">
+        {% if user.is_authenticated %}
+          <span class="material-symbols-rounded user-icon--desktop">
+            {% firstof user.profile_icon "restaurant" %}
+          </span>
+          <!-- Username links to Account Settings (no blue/underline due to existing .user-box a CSS) -->
+          <a href="{% url 'accounts:settings' %}" class="username-label">@{{ user.username|cut:"_" }}</a>
+          <a href="{% url 'accounts:logout' %}">🚪 Logout</a>
+        {% else %}
+          <a href="{% url 'accounts:login' %}">🔑 Login</a>
+        {% endif %}
+      </div>
 
         <!-- Mobile hamburger -->
         <button id="navToggle" class="nav-toggle" aria-expanded="false" aria-controls="mobileMenu" aria-label="Open menu">☰</button>
@@ -169,19 +170,20 @@
           <a href="{% url 'accounts:friend_dashboard' %}" role="menuitem">👥 Friends</a>
         </div>
 
-        <div class="mobile-user">
-          {% if user.is_authenticated %}
-            <div class="left">
-              <span class="material-symbols-rounded user-icon--mobile">
-                {% firstof user.profile_icon "restaurant" %}
-              </span>
-              <span class="username">@{{ user.username|cut:"_" }}</span>
-            </div>
-            <a href="{% url 'accounts:logout' %}">🚪 Logout</a>
-          {% else %}
-            <a href="{% url 'accounts:login' %}">🔑 Login</a>
-          {% endif %}
+    <div class="mobile-user">
+      {% if user.is_authenticated %}
+        <div class="left">
+          <span class="material-symbols-rounded user-icon--mobile">
+            {% firstof user.profile_icon "restaurant" %}
+          </span>
+          <!-- Username links to Account Settings on mobile too -->
+          <a href="{% url 'accounts:settings' %}" class="username">@{{ user.username|cut:"_" }}</a>
         </div>
+        <a href="{% url 'accounts:logout' %}">🚪 Logout</a>
+      {% else %}
+        <a href="{% url 'accounts:login' %}">🔑 Login</a>
+      {% endif %}
+    </div>
       </div>
     </div>
   </header>
