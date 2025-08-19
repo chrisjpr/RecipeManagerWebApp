@@ -94,21 +94,51 @@
       </div>
     </div>
 
-    <!-- Visibility box -->
-    <div class="rounded-2xl bg-white dark:bg-slate-800 ring-1 ring-black/5 p-4 md:p-5 shadow-card">
-      <h2 class="text-base font-semibold mb-3 flex items-center gap-2">🛡️ Visibility</h2>
-      <p class="text-sm text-gray-700 dark:text-gray-200 mb-2">Change visibility for all <strong>selected recipes</strong> to:</p>
-      <div class="flex flex-wrap items-center gap-2">
-        <button id="set_sel_public"  type="button" class="inline-flex items-center gap-1 rounded-xl bg-emerald-600 text-white px-3 py-2 text-sm font-semibold hover:bg-emerald-700" data-vis="public"><span class="material-symbols-rounded text-base">public</span> Public</button>
-        <button id="set_sel_friends" type="button" class="inline-flex items-center gap-1 rounded-xl bg-amber-600 text-white px-3 py-2 text-sm font-semibold hover:bg-amber-700" data-vis="friends"><span class="material-symbols-rounded text-base">group</span> Friends</button>
-        <button id="set_sel_private" type="button" class="inline-flex items-center gap-1 rounded-xl bg-gray-700 text-white px-3 py-2 text-sm font-semibold hover:bg-gray-800" data-vis="private"><span class="material-symbols-rounded text-base">lock</span> Private</button>
+<!-- Visibility box -->
+<div class="rounded-2xl bg-white dark:bg-slate-800 ring-1 ring-black/5 p-4 md:p-5 shadow-card">
+  <h2 class="text-base font-semibold mb-3 flex items-center gap-2">🛡️ Visibility</h2>
+  <p class="text-sm text-gray-700 dark:text-gray-200 mb-3">
+    Here you can adjust who can see the your recipes for multiple recipes at the same time. Just <strong>select recipes</strong> by using the check boxes left of the list. You can either select all recipes on this page or separately choose recipes to edit. Click one of the options below, then press <em>Save Changes</em>.
+  </p>
+
+  <div class="grid gap-3 sm:grid-cols-3">
+    <button id="set_sel_public" type="button"
+      class="flex flex-col items-start gap-1 rounded-xl bg-emerald-600 text-white px-3 py-2 text-sm font-semibold hover:bg-emerald-700"
+      data-vis="public">
+      <div class="flex items-center gap-1">
+        <span class="material-symbols-rounded text-base">public</span> Public
       </div>
-      <div class="mt-3">
-        <button type="submit" class="inline-flex items-center gap-2 rounded-xl bg-emerald-600 text-white px-3 py-2 font-semibold hover:bg-emerald-700">
-          <span class="material-symbols-rounded">save</span> Save Changes
-        </button>
+      <p class="text-xs font-normal opacity-80">Visible to everyone</p>
+    </button>
+
+    <button id="set_sel_friends" type="button"
+      class="flex flex-col items-start gap-1 rounded-xl bg-amber-600 text-white px-3 py-2 text-sm font-semibold hover:bg-amber-700"
+      data-vis="friends">
+      <div class="flex items-center gap-1">
+        <span class="material-symbols-rounded text-base">group</span> Friends
       </div>
-    </div>
+      <p class="text-xs font-normal opacity-80">Visible only to your friends</p>
+    </button>
+
+    <button id="set_sel_private" type="button"
+      class="flex flex-col items-start gap-1 rounded-xl bg-gray-700 text-white px-3 py-2 text-sm font-semibold hover:bg-gray-800"
+      data-vis="private">
+      <div class="flex items-center gap-1">
+        <span class="material-symbols-rounded text-base">lock</span> Private
+      </div>
+      <p class="text-xs font-normal opacity-80">Visible only to you</p>
+    </button>
+  </div>
+
+  <div class="mt-4 flex justify-end">
+    <button type="submit"
+      class="inline-flex items-center gap-1 rounded-lg bg-emerald-600 text-white px-2.5 py-1.5 text-sm font-semibold hover:bg-emerald-700">
+      <span class="material-symbols-rounded text-sm">save</span> Save Changes
+    </button>
+  </div>
+
+</div>
+
   </section>
 
   <!-- Floating header gets inserted here -->

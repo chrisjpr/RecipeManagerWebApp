@@ -1,350 +1,455 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block content %}
+{% block title %}Create a New Recipe{% endblock %}
 
-
-
-<h2 style="margin-bottom: 1rem;">🍽️ Create a New Recipe</h2>
-
-<form method="post" enctype="multipart/form-data" id="recipeForm" style="max-width: 900px;">
-  {% csrf_token %}
-
-  <!-- ========== MODE SWITCH ========== -->
-<div class="mode-switch">
-  <h3>🚀 Choose Input Mode</h3>
-  <div class="toggle-wrapper">
-    <label class="toggle">
-      <input type="radio" name="use_llm" value="manual" id="modeManual" checked>
-      <span class="option manual">✍️ Manual</span>
-    </label>
-    <label class="toggle">
-      <input type="radio" name="use_llm" value="ai" id="modeAI">
-      <span class="option ai">🤖 AI Assistance</span>
-    </label>
-  </div>
-</div>
-
-  <!-- ========== BASIC INFO ========== -->
-  <div class="card">
-    <h3>📝 Basic Info</h3>
-    <div class="form-row">
-      <label>{{ recipe_form.title.label }}:</label>
-      {{ recipe_form.title }}
-    </div>
-    <div class="form-row">
-      <label>{{ recipe_form.cook_time.label }} (minutes):</label>
-      {{ recipe_form.cook_time }}
-    </div>
-    <div class="form-row">
-      <label>{{ recipe_form.portions.label }}:</label>
-      {{ recipe_form.portions }}
-    </div>
-    <div class="form-row">
-      <label>{{ recipe_form.image.label }}:</label>
-      {{ recipe_form.image }}
-    </div>
-    <div class="form-row">
-      <label>{{ recipe_form.notes.label }}:</label>
-      {{ recipe_form.notes }}
-    </div>
-  </div>
-
-  <!-- ========== LLM FIELDS ========== -->
-  <div class="card llm-section" style="display: none;">
-    <h3>🤖 LLM Assistance</h3>
-    <div class="form-row">
-      <label for="ingredients_text">Ingredients (one per line):</label>
-      <textarea name="ingredients_text" rows="6" class="form-control" placeholder="e.g., 2 cups flour"></textarea>
-    </div>
-    <div class="form-row">
-      <label for="instructions_text">Instructions (one step per line):</label>
-      <textarea name="instructions_text" rows="6" class="form-control" placeholder="e.g., Preheat oven to 180°C"></textarea>
-    </div>
-    <div class="form-row">
-      {{ recipe_form.transform_vegan }} {{ recipe_form.transform_vegan.label_tag }}
-    </div>
-    <div class="form-row">
-      <label>{{ recipe_form.custom_instruction.label }}</label>
-      {{ recipe_form.custom_instruction }}
-      <small>Optional: Add specific formatting or grouping instructions.</small>
-    </div>
-  </div>
-
-  <!-- ========== MANUAL FIELDS ========== -->
-<!-- ========== MANUAL FIELDS ========== -->
-<div class="manual-section">
-  <div class="card">
-    <h3>🥦 Ingredients</h3>
-    {{ ingredient_formset.management_form }}
-    <div id="ingredients-formset">
-      {% for form in ingredient_formset %}
-        <div class="form-inline entry">
-          {% for field in form.visible_fields %}
-            {% if field.name != 'DELETE' %}
-              <div class="form-group">
-                {{ field.label_tag }} {{ field }}
-              </div>
-            {% endif %}
-          {% endfor %}
-          <button type="button" class="delete-row">❌</button>
-        </div>
-      {% endfor %}
-    </div>
-    <button type="button" class="add-row" data-prefix="ingredients">➕ Add Ingredient</button>
-  </div>
-
-  <div class="card">
-    <h3>📋 Instructions</h3>
-    {{ instruction_formset.management_form }}
-    <div id="instructions-formset">
-      {% for form in instruction_formset %}
-        <div class="form-inline entry instruction-entry">
-          {% for field in form.visible_fields %}
-            {% if field.name != 'DELETE' %}
-              <div class="form-group {% if field.name == 'description' %}instruction-text{% endif %}">
-                {{ field.label_tag }} {{ field }}
-              </div>
-            {% endif %}
-          {% endfor %}
-          <button type="button" class="delete-row">❌</button>
-        </div>
-      {% endfor %}
-    </div>
-    <button type="button" class="add-row" data-prefix="instructions">➕ Add Instruction</button>
-  </div>
-</div>
-
-
-  <br>
-  <button type="submit" class="submit-btn">✅ Save Recipe</button>
-</form>
-
-<!-- Hidden Form Templates -->
-<div id="empty-ingredients-form" style="display: none;">
-  <div class="form-inline entry">
-    {% for field in ingredient_formset.empty_form.visible_fields %}
-      {% if field.name != 'DELETE' %}
-        <div class="form-group">
-          {{ field.label_tag }} {{ field }}
-        </div>
-      {% endif %}
-    {% endfor %}
-    <button type="button" class="delete-row">❌</button>
-  </div>
-</div>
-
-<div id="empty-instructions-form" style="display: none;">
-  <div class="form-inline entry">
-    {% for field in instruction_formset.empty_form.visible_fields %}
-      {% if field.name != 'DELETE' %}
-        <div class="form-group">
-          {{ field.label_tag }} {{ field }}
-        </div>
-      {% endif %}
-    {% endfor %}
-    <button type="button" class="delete-row">❌</button>
-  </div>
-</div>
-
-<!-- ========== STYLES ========== -->
+{% block extra_head %}
 <style>
-  .mode-switch {
-    text-align: center;
-    margin-bottom: 2rem;
-  }
-
-  .toggle-wrapper {
-    display: flex;
-    justify-content: center;
-    gap: 3rem;
-    margin-top: 1rem;
-  }
-
-  .toggle input[type="radio"] {
-    display: none;
-  }
-
-  .option {
-    padding: 1rem 2.5rem;
-    border-radius: 10px;
-    font-size: 1.4rem;
-    font-weight: bold;
-    transition: all 0.3s ease;
-    cursor: pointer;
-    border: 3px solid #ccc;
-    user-select: none;
-    box-shadow: 0 0 12px rgba(0, 0, 0, 0.05);
-  }
-
-  .toggle input[type="radio"]:checked + .option.manual {
-    background: #fffbe6;
-    border-color: #ffc107;
-    box-shadow: 0 0 14px #ffc107aa;
-  }
-
-  .toggle input[type="radio"]:checked + .option.ai {
-    background: #e0f7ff;
-    border-color: #17a2b8;
-    box-shadow: 0 0 14px #17a2b8aa;
-  }
-
-  .toggle .option.manual::before {
-    content: "✍️ ";
-  }
-
-  .toggle .option.ai::before {
-    content: "🤖 ";
-  }
-
-  .card {
-    background: #fff;
-    border: 2px solid #ddd;
-    padding: 1.5rem;
-    margin-bottom: 2rem;
-    border-radius: 10px;
-    box-shadow: 0 0 6px rgba(0, 0, 0, 0.05);
-  }
-
-  .form-inline {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-    margin-bottom: 1rem;
-    border: 1px solid #ddd;
-    padding: 1rem;
-    border-radius: 8px;
-    align-items: flex-end;
-  }
-
-  .form-group {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    min-width: 150px;
-  }
-
-  .form-group label {
-    font-weight: 600;
-    margin-bottom: 4px;
-  }
-  
-  .textarea {
-  height: 80px; /* or smaller like 60px */
-  resize: vertical; /* allow manual resizing if needed */
-  padding: 0.5rem;
-  font-size: 1rem;
-  border-radius: 6px;
-}
-
-  .form-group input,
-  .form-group select,
-  .form-group textarea {
-    padding: 0.5rem;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    font-size: 1rem;
+  /* ---- Modern form look without widget-tweaks ---- */
+  .form-modern input[type="text"],
+  .form-modern input[type="number"],
+  .form-modern input[type="file"],
+  .form-modern input[type="url"],
+  .form-modern textarea,
+  .form-modern select {
     width: 100%;
-    box-sizing: border-box;
+    border: 1px solid rgb(209 213 219); /* gray-300 */
+    border-radius: 0.75rem; /* rounded-xl */
+    padding: 0.625rem 0.75rem;
+    background: white;
+    color: rgb(30 41 59); /* slate-800 */
+  }
+  .dark .form-modern input[type="text"],
+  .dark .form-modern input[type="number"],
+  .dark .form-modern input[type="file"],
+  .dark .form-modern input[type="url"],
+  .dark .form-modern textarea,
+  .dark .form-modern select {
+    background: rgb(15 23 42); /* slate-900 */
+    color: rgb(226 232 240);   /* slate-200 */
+    border-color: rgb(51 65 85); /* slate-700 */
+  }
+  .form-modern textarea { min-height: 96px; }
+
+  /* File input: keep it simple and readable */
+  .form-modern input[type="file"] {
+    padding: 0.5rem;
   }
 
-  .delete-row {
-    background: #dc3545;
-    color: white;
-    font-size: 1.2rem;
-    padding: 0.4rem 0.8rem;
-    border: none;
-    border-radius: 6px;
+  /* Help badge + details popover */
+  .help-badge {
+    display: inline-block;
+    border-radius: 0.5rem;
+    padding: 0.125rem 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 600;
     cursor: pointer;
-    height: 38px;
-    display: flex;
+  }
+  details.help-popover > summary {
+    list-style: none;
+    display: inline-flex;
     align-items: center;
-    justify-content: center;
+    gap: .375rem;
+  }
+  details.help-popover > summary::-webkit-details-marker { display: none; }
+
+  /* Pretty toggle bound to the original checkbox */
+  .toggle {
+    --h: 28px;
+    height: var(--h);
+    width: 56px;
+    border-radius: 9999px;
+    background: rgb(203 213 225); /* slate-300 */
+    position: relative;
+    transition: background .2s ease;
+  }
+  .toggle::after{
+    content:"";
+    position:absolute; top: 3px; left: 3px;
+    height: calc(var(--h) - 6px);
+    width: calc(var(--h) - 6px);
+    border-radius: 9999px;
+    background: white;
+    box-shadow: 0 1px 2px rgba(0,0,0,.15);
+    transition: transform .2s ease;
+  }
+  .toggle.on{ background: rgb(5 150 105); } /* emerald-600 */
+  .toggle.on::after{ transform: translateX(28px); }
+
+  /* Sticky action bar */
+  .sticky-actions{
+    position: sticky; bottom: 1rem; z-index: 30;
   }
 
-  .delete-row::before {
-    content: "✖";
+  /* Cards */
+  .card {
+    border-radius: 1rem;
+    background: white;
+    box-shadow: 0 1px 2px rgba(0,0,0,.06);
+    border: 1px solid rgba(0,0,0,.05);
   }
-
-  .delete-row:hover {
-    background-color: #b42d3b;
-  }
-
-  .add-row {
-    background: #007bff;
-    color: white;
-    padding: 0.5rem 1rem;
-    border-radius: 5px;
-    font-weight: bold;
-    border: none;
-    cursor: pointer;
-  }
-
-  .add-row:hover {
-    background-color: #0056b3;
-  }
-
-  .submit-btn {
-    background-color: #28a745;
-    color: white;
-    font-size: 1.1rem;
-    padding: 0.75rem 1.5rem;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    display: block;
-    margin: 2rem auto 0;
-  }
-
-  .submit-btn:hover {
-    background-color: #218838;
+  .dark .card {
+    background: rgb(30 41 59); /* slate-800 */
+    border-color: rgba(255,255,255,.06);
   }
 </style>
+{% endblock %}
 
-<!-- ========== SCRIPT ========== -->
+{% block breadcrumbs %}
+<nav aria-label="Breadcrumb" class="mb-3 text-sm text-gray-600 dark:text-gray-300">
+  <ol class="flex flex-wrap items-center gap-1">
+    <li><a class="underline hover:no-underline" href="{% url 'recipes:home' %}">Home</a></li>
+    <li class="opacity-60">/</li>
+    <li class="font-semibold">Create a Recipe</li>
+  </ol>
+</nav>
+{% endblock %}
+
+{% block content %}
+<h1 class="text-2xl md:text-3xl font-extrabold tracking-tight flex items-center gap-2">➕ Create a New Recipe</h1>
+
+<form method="post" enctype="multipart/form-data" id="recipeForm" class="form-modern mt-4 space-y-4">
+  {% csrf_token %}
+
+  <!-- Mode Switch -->
+  <section class="card p-4 md:p-5">
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      <div>
+        <h2 class="text-base font-semibold flex items-center gap-2">
+          🚀 Choose Input Mode
+          <details class="help-popover inline-block ml-1 align-middle">
+            <summary class="help-badge bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-200">?</summary>
+            <div class="mt-2 w-96 max-w-[90vw] p-3 bg-white dark:bg-slate-800 rounded-xl shadow-card ring-1 ring-black/5 text-sm leading-relaxed">
+              <p><strong>Manual</strong>: You fill ingredients & steps yourself (full control).</p>
+              <p class="mt-2"><strong>AI Assistance</strong>: Paste rough text and the AI structures it. You can add a custom instruction (e.g., “make it vegan”).</p>
+              <p class="mt-2">You can switch any time before saving.</p>
+            </div>
+          </details>
+        </h2>
+        <p class="text-sm text-slate-600 dark:text-slate-300 mt-1">
+          Prefer a quick AI assist or full manual control? Toggle it here.
+        </p>
+      </div>
+
+      <!-- Keep your existing boolean field: recipe_form.use_llm -->
+      <div class="flex items-center gap-3">
+        <label class="text-sm font-semibold">AI Assistance</label>
+        <!-- Render the real checkbox (kept for backend) but visually hide it -->
+        <input id="id_use_llm" name="{{ recipe_form.use_llm.name }}" type="checkbox" {% if recipe_form.use_llm.value %}checked{% endif %} class="hidden">
+        <button type="button" id="toggleLLM" class="toggle" aria-pressed="false"></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Basic Info -->
+  <section class="card p-4 md:p-5">
+    <div class="flex items-start justify-between gap-3">
+      <h2 class="text-base font-semibold">📝 Basic Info</h2>
+      <details class="help-popover">
+        <summary class="help-badge bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-200">?</summary>
+        <div class="mt-2 w-96 max-w-[90vw] p-3 bg-white dark:bg-slate-800 rounded-xl shadow-card ring-1 ring-black/5 text-sm leading-relaxed">
+          <ul class="list-disc pl-5 space-y-1">
+            <li><strong>Title</strong> — keep it clear and searchable.</li>
+            <li><strong>Image</strong> — optional cover photo.</li>
+            <li><strong>Cook time</strong> & <strong>Portions</strong> — help scale and plan recipes.</li>
+            <li><strong>Notes</strong> — private remarks or tips for yourself.</li>
+          </ul>
+        </div>
+      </details>
+    </div>
+
+    <div class="grid gap-3 md:grid-cols-2 mt-3">
+      <label class="block">
+        <span class="block text-sm font-semibold mb-1">{{ recipe_form.title.label }}</span>
+        {{ recipe_form.title }}
+        <span class="mt-1 block text-xs text-slate-500">A clear, searchable title helps you find the recipe later.</span>
+      </label>
+
+      <label class="block">
+        <span class="block text-sm font-semibold mb-1">{{ recipe_form.image.label }}</span>
+        {{ recipe_form.image }}
+        <span class="mt-1 block text-xs text-slate-500">Optional cover photo.</span>
+      </label>
+
+      <label class="block">
+        <span class="block text-sm font-semibold mb-1">{{ recipe_form.cook_time.label }} (minutes)</span>
+        {{ recipe_form.cook_time }}
+      </label>
+
+      <label class="block">
+        <span class="block text-sm font-semibold mb-1">{{ recipe_form.portions.label }}</span>
+        {{ recipe_form.portions }}
+      </label>
+
+      <label class="block md:col-span-2">
+        <span class="block text-sm font-semibold mb-1">{{ recipe_form.notes.label }}</span>
+        {{ recipe_form.notes }}
+        <span class="mt-1 block text-xs text-slate-500">Optional notes or tips (won’t be shown publicly unless you share the recipe).</span>
+      </label>
+    </div>
+  </section>
+
+  <!-- AI Section (shown when use_llm is ON) -->
+  <section class="llm-section card p-4 md:p-5 hidden">
+    <div class="flex items-start justify-between gap-4">
+      <h2 class="text-base font-semibold">🤖 LLM Assistance</h2>
+      <details class="help-popover">
+        <summary class="help-badge bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-200">?</summary>
+        <div class="mt-2 w-96 max-w-[90vw] p-3 bg-white dark:bg-slate-800 rounded-xl shadow-card ring-1 ring-black/5 text-sm leading-relaxed">
+          <p>Paste rough ingredients/instructions. The AI will structure, group, and format them.</p>
+          <p class="mt-2">You can also add a <strong>custom instruction</strong> (e.g., “translate to German”, “gluten-free”).</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="grid gap-3 md:grid-cols-2 mt-3">
+      <label class="block md:col-span-1">
+        <span class="block text-sm font-semibold mb-1">Ingredients (one per line)</span>
+        <textarea name="ingredients_text" rows="6" placeholder="e.g., 2 cups flour"></textarea>
+      </label>
+
+      <label class="block md:col-span-1">
+        <span class="block text-sm font-semibold mb-1">Instructions (one step per line)</span>
+        <textarea name="instructions_text" rows="6" placeholder="e.g., Preheat oven to 180°C"></textarea>
+      </label>
+
+      <label class="inline-flex items-center gap-2 md:col-span-2">
+        {{ recipe_form.transform_vegan }}
+        <span class="text-sm">🌱{{ recipe_form.transform_vegan.label }}</span>
+      </label>
+
+      <label class="block md:col-span-2">
+        <span class="block text-sm font-semibold mb-1">{{ recipe_form.custom_instruction.label }}</span>
+        {{ recipe_form.custom_instruction }}
+        <span class="mt-1 block text-xs text-slate-500">Optional: e.g., “translate to German”, “make my recipe gluten-free”, “group sauces separately”.</span>
+      </label>
+    </div>
+  </section>
+
+  <!-- Manual Section -->
+  <section class="manual-section space-y-4">
+    <!-- Ingredients -->
+    <div class="card p-4 md:p-5">
+      <div class="flex items-start justify-between gap-4">
+        <div>
+          <h2 class="text-base font-semibold">🥦 Ingredients</h2>
+          <p class="text-sm text-slate-600 dark:text-slate-300 mt-1">Add items line by line. You can optionally link an ingredient to another recipe or set the category of an ingredient such that related ingredients are grouped in the recipe that will be created for you!</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <details class="help-popover">
+            <summary class="help-badge bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-200">?</summary>
+            <div class="mt-2 w-96 max-w-[90vw] p-3 bg-white dark:bg-slate-800 rounded-xl shadow-card ring-1 ring-black/5 text-sm leading-relaxed">
+              <ul class="list-disc pl-5 space-y-1">
+                <li><strong>Quantity / Unit / Name</strong> — fill what you have; leave blank if not needed.</li>
+                <li><strong>Linked recipe</strong> — optional: reference another recipe as a sub-component (e.g., “basic tomato sauce”).</li>
+                <li>Use <strong>“Add Ingredient”</strong> to insert more rows; remove with the trash button.</li>
+              </ul>
+            </div>
+          </details>
+          <button type="button" class="add-row inline-flex items-center gap-1 rounded-xl bg-slate-800 text-white px-3 py-2 text-sm font-semibold hover:bg-slate-900" data-prefix="ingredients">
+            <span class="material-symbols-rounded text-base">add</span> Add Ingredient
+          </button>
+        </div>
+      </div>
+
+      {{ ingredient_formset.management_form }}
+      <div id="ingredients-formset" class="mt-3 space-y-2">
+        {% for form in ingredient_formset %}
+          <div class="entry rounded-xl ring-1 ring-black/5 bg-white dark:bg-slate-900 p-3 grid gap-3 md:grid-cols-5">
+            {% for field in form.visible_fields %}
+              {% if field.name != 'DELETE' %}
+                <label class="form-group block">
+                  <span class="block text-xs font-semibold mb-1">{{ field.label }}</span>
+                  {{ field }}
+                </label>
+              {% endif %}
+            {% endfor %}
+            <div class="md:col-span-5 flex justify-end">
+              <button type="button" class="delete-row inline-flex items-center gap-1 rounded-lg bg-rose-600 text-white px-2.5 py-1.5 text-sm font-semibold hover:bg-rose-700">
+                <span class="material-symbols-rounded text-base">delete</span> Remove
+              </button>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Instructions -->
+    <div class="card p-4 md:p-5">
+      <div class="flex items-start justify-between gap-4">
+        <div>
+          <h2 class="text-base font-semibold">📋 Instructions</h2>
+          <p class="text-sm text-slate-600 dark:text-slate-300 mt-1">Write clear, short steps. Steps will auto-number as you add them.</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <details class="help-popover">
+            <summary class="help-badge bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-200">?</summary>
+            <div class="mt-2 w-96 max-w-[90vw] p-3 bg-white dark:bg-slate-800 rounded-xl shadow-card ring-1 ring-black/5 text-sm leading-relaxed">
+              <ul class="list-disc pl-5 space-y-1">
+                <li>Keep each step focused on one action.</li>
+                <li>Use timers/temperatures as needed.</li>
+                <li>Click <strong>Add Instruction</strong> to append more steps. They’ll auto-number.</li>
+              </ul>
+            </div>
+          </details>
+          <button type="button" class="add-row inline-flex items-center gap-1 rounded-xl bg-slate-800 text-white px-3 py-2 text-sm font-semibold hover:bg-slate-900" data-prefix="instructions">
+            <span class="material-symbols-rounded text-base">add</span> Add Instruction
+          </button>
+        </div>
+      </div>
+
+      {{ instruction_formset.management_form }}
+      <div id="instructions-formset" class="mt-3 space-y-2">
+        {% for form in instruction_formset %}
+          <div class="entry instruction-entry rounded-xl ring-1 ring-black/5 bg-white dark:bg-slate-900 p-3 grid gap-3 md:grid-cols-6">
+            {% for field in form.visible_fields %}
+              {% if field.name != 'DELETE' %}
+                <label class="form-group block {% if field.name == 'description' %}md:col-span-5{% endif %}">
+                  <span class="block text-xs font-semibold mb-1">{{ field.label }}</span>
+                  {{ field }}
+                </label>
+              {% endif %}
+            {% endfor %}
+            <div class="md:col-span-6 flex justify-end">
+              <button type="button" class="delete-row inline-flex items-center gap-1 rounded-lg bg-rose-600 text-white px-2.5 py-1.5 text-sm font-semibold hover:bg-rose-700">
+                <span class="material-symbols-rounded text-base">delete</span> Remove
+              </button>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <!-- Sticky Action Bar -->
+  <div class="sticky-actions">
+    <div class="mx-auto w-full md:max-w-3xl rounded-2xl bg-white/90 dark:bg-slate-800/90 backdrop-blur ring-1 ring-black/10 shadow-card p-3 flex items-center justify-between gap-3">
+      <div class="text-xs md:text-sm text-slate-600 dark:text-slate-300">
+        <span class="inline-flex items-center gap-1"><span class="material-symbols-rounded text-base">tips_and_updates</span> You can switch AI / no AI mode any time.</span>
+      </div>
+      <button type="submit" class="inline-flex items-center gap-2 rounded-xl bg-emerald-600 text-white px-4 py-2 text-sm font-semibold hover:bg-emerald-700">
+        <span class="material-symbols-rounded">save</span> Save Recipe
+      </button>
+    </div>
+  </div>
+
+  {# Hidden templates for new formset rows #}
+  <div id="empty-ingredients-form" class="hidden">
+    <div class="entry rounded-xl ring-1 ring-black/5 bg-white dark:bg-slate-900 p-3 grid gap-3 md:grid-cols-5">
+      {% for field in ingredient_formset.empty_form.visible_fields %}
+        {% if field.name != 'DELETE' %}
+          <label class="form-group block">
+            <span class="block text-xs font-semibold mb-1">{{ field.label }}</span>
+            {{ field }}
+          </label>
+        {% endif %}
+      {% endfor %}
+      <div class="md:col-span-5 flex justify-end">
+        <button type="button" class="delete-row inline-flex items-center gap-1 rounded-lg bg-rose-600 text-white px-2.5 py-1.5 text-sm font-semibold hover:bg-rose-700">
+          <span class="material-symbols-rounded text-base">delete</span> Remove
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="empty-instructions-form" class="hidden">
+    <div class="entry instruction-entry rounded-xl ring-1 ring-black/5 bg-white dark:bg-slate-900 p-3 grid gap-3 md:grid-cols-6">
+      {% for field in instruction_formset.empty_form.visible_fields %}
+        {% if field.name != 'DELETE' %}
+          <label class="form-group block {% if field.name == 'description' %}md:col-span-5{% endif %}">
+            <span class="block text-xs font-semibold mb-1">{{ field.label }}</span>
+            {{ field }}
+          </label>
+        {% endif %}
+      {% endfor %}
+      <div class="md:col-span-6 flex justify-end">
+        <button type="button" class="delete-row inline-flex items-center gap-1 rounded-lg bg-rose-600 text-white px-2.5 py-1.5 text-sm font-semibold hover:bg-rose-700">
+          <span class="material-symbols-rounded text-base">delete</span> Remove
+        </button>
+      </div>
+    </div>
+  </div>
+</form>
+{% endblock %}
+
+{% block extra_scripts %}
 <script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const manualSections = document.querySelectorAll('.manual-section');
-    const aiSections = document.querySelectorAll('.llm-section');
+document.addEventListener('DOMContentLoaded', () => {
+  /* ========== Mode toggle wired to your boolean use_llm field ========== */
+  const checkbox = document.getElementById('id_use_llm');
+  const btn      = document.getElementById('toggleLLM');
+  const manualSections = document.querySelectorAll('.manual-section');
+  const aiSections     = document.querySelectorAll('.llm-section');
 
-    function toggleMode() {
-      const mode = document.querySelector('input[name="use_llm"]:checked').value;
-      manualSections.forEach(section => section.style.display = (mode === 'manual') ? 'block' : 'none');
-      aiSections.forEach(section => section.style.display = (mode === 'ai') ? 'block' : 'none');
-    }
+  function applyMode(){
+    const on = !!checkbox.checked;
+    btn.classList.toggle('on', on);
+    btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+    manualSections.forEach(s => s.classList.toggle('hidden', on));
+    aiSections.forEach(s => s.classList.toggle('hidden', !on));
+  }
+  btn.addEventListener('click', () => { checkbox.checked = !checkbox.checked; applyMode(); });
+  // If Django re-renders with errors and preserves checkbox state:
+  applyMode();
 
-    document.querySelectorAll('input[name="use_llm"]').forEach(input => {
-      input.addEventListener('change', toggleMode);
+  /* ========== Add/Remove rows for formsets (keeps your prefixes & management_form) ========== */
+  function attachDeleteButtons(scope){
+    (scope || document).querySelectorAll('.delete-row').forEach(btn => {
+      btn.onclick = () => {
+        const entry = btn.closest('.entry');
+        if (entry) entry.remove();
+        renumberInstructionSteps();
+      };
     });
+  }
 
-    toggleMode(); // Initial run
+  function addForm(prefix){
+    const total = document.getElementById(`id_${prefix}-TOTAL_FORMS`);
+    const formsetDiv = document.getElementById(`${prefix}-formset`);
+    const tpl = document.getElementById(`empty-${prefix}-form`);
+    if (!total || !formsetDiv || !tpl) return;
 
-    function attachDeleteButtons() {
-      document.querySelectorAll('.delete-row').forEach(button => {
-        button.onclick = () => button.closest('.form-inline').remove();
-      });
-    }
+    const newIndex = parseInt(total.value, 10);
+    let html = tpl.innerHTML.replace(/__prefix__/g, newIndex);
+    const wrapper = document.createElement('div');
+    wrapper.innerHTML = html;
+    const node = wrapper.firstElementChild;
+    formsetDiv.appendChild(node);
+    total.value = newIndex + 1;
+    attachDeleteButtons(node);
+    if (prefix === 'instructions') autoFillNewInstructionStep(node);
+  }
 
-    function addForm(prefix) {
-      const totalForms = document.getElementById(`id_${prefix}-TOTAL_FORMS`);
-      const formsetDiv = document.getElementById(`${prefix}-formset`);
-      const newIndex = parseInt(totalForms.value);
-      const template = document.getElementById(`empty-${prefix}-form`).innerHTML;
-      const newFormHtml = template.replace(/__prefix__/g, newIndex);
-      const wrapper = document.createElement('div');
-      wrapper.innerHTML = newFormHtml;
-      formsetDiv.appendChild(wrapper.firstElementChild);
-      totalForms.value = newIndex + 1;
-      attachDeleteButtons();
-    }
-
-    document.querySelectorAll('.add-row').forEach(button => {
-      button.addEventListener('click', () => {
-        addForm(button.dataset.prefix);
-      });
-    });
-
-    attachDeleteButtons();
+  document.querySelectorAll('.add-row').forEach(btn => {
+    btn.addEventListener('click', () => addForm(btn.dataset.prefix));
   });
+
+  function renumberInstructionSteps(){
+    const rows = document.querySelectorAll('#instructions-formset .instruction-entry');
+    let n = 1;
+    rows.forEach(row => {
+      const stepInput = row.querySelector('input[name*="-step_number"]');
+      if (stepInput) stepInput.value = n++;
+    });
+  }
+  function autoFillNewInstructionStep(row){
+    const stepInput = row.querySelector('input[name*="-step_number"]');
+    if (stepInput){
+      const currentMax = document.querySelectorAll('#instructions-formset .instruction-entry').length;
+      stepInput.value = currentMax;
+    }
+  }
+
+  attachDeleteButtons(); // initial rows
+  renumberInstructionSteps();
+
+  // Quality of life: allow Ctrl/Cmd+Enter to submit, but prevent plain Enter in single-line inputs from submitting accidentally.
+  document.getElementById('recipeForm').addEventListener('keydown', (e)=>{
+    if (e.key === 'Enter' && (e.target.tagName === 'INPUT') && !(e.metaKey || e.ctrlKey)) {
+      // Let Enter in inputs do nothing (so the page doesn’t submit unexpectedly)
+      e.preventDefault();
+    }
+  });
+});
 </script>
 {% endblock %}

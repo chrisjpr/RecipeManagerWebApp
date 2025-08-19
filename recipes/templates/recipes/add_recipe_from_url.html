@@ -1,31 +1,205 @@
 {% extends 'base.html' %}
 
+{% block title %}Add Recipe from URL{% endblock %}
+
+{% block extra_head %}
+<style>
+  /* Page-scoped modern form styles (no widget-tweaks needed) */
+  .form-modern input[type="url"],
+  .form-modern input[type="text"],
+  .form-modern textarea,
+  .form-modern input[type="checkbox"] {
+    accent-color: rgb(5 150 105); /* emerald-600 */
+  }
+  .form-modern input[type="url"],
+  .form-modern input[type="text"],
+  .form-modern textarea {
+    width: 100%;
+    border: 1px solid rgb(209 213 219); /* gray-300 */
+    border-radius: 0.75rem; /* rounded-xl */
+    padding: 0.625rem 0.75rem;
+    background: white;
+    color: rgb(30 41 59);
+  }
+  .dark .form-modern input[type="url"],
+  .dark .form-modern input[type="text"],
+  .dark .form-modern textarea {
+    background: rgb(15 23 42);   /* slate-900 */
+    color: rgb(226 232 240);     /* slate-200 */
+    border-color: rgb(51 65 85); /* slate-700 */
+  }
+
+  /* Cards */
+  .card { border-radius: 1rem; background: white; box-shadow: 0 1px 2px rgba(0,0,0,.06); border: 1px solid rgba(0,0,0,.05); }
+  .dark .card { background: rgb(30 41 59); border-color: rgba(255,255,255,.06); }
+
+  /* Help badge / popover */
+  .help-badge { display:inline-block; border-radius:.5rem; padding:.125rem .5rem; font-size:.75rem; font-weight:600; cursor:pointer; }
+  details.help-popover > summary { list-style:none; display:inline-flex; align-items:center; gap:.375rem; }
+  details.help-popover > summary::-webkit-details-marker { display:none; }
+
+  /* Subtle loading spinner for submit */
+  .spinner {
+    display:inline-block; width:1rem; height:1rem; border:2px solid currentColor; border-right-color:transparent; border-radius:9999px; animation: spin .6s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+</style>
+{% endblock %}
+
+{% block breadcrumbs %}
+<nav aria-label="Breadcrumb" class="mb-3 text-sm text-gray-600 dark:text-gray-300">
+  <ol class="flex flex-wrap items-center gap-1">
+    <li><a class="underline hover:no-underline" href="{% url 'recipes:home' %}">Home</a></li>
+    <li class="opacity-60">/</li>
+    <li class="font-semibold">Add from URL</li>
+  </ol>
+</nav>
+{% endblock %}
+
 {% block content %}
-  <h2>📥 Add Recipe from URL</h2>
+<h1 class="text-2xl md:text-3xl font-extrabold tracking-tight flex items-center gap-2">📥 Add Recipe from URL</h1>
 
-  <form method="post">
-    {% csrf_token %}
+<form method="post" id="urlImportForm" class="form-modern mt-4 space-y-4">
+  {% csrf_token %}
 
-    <div class="form-group">
-      <label for="recipe_url">Recipe URL</label>
-      <input type="url" name="recipe_url" required class="form-control" placeholder="https://..." style="width: 100%;">
+  <!-- How it works -->
+  <section class="card p-4 md:p-5">
+    <div class="flex items-start justify-between gap-3">
+      <h2 class="text-base font-semibold">How this works</h2>
+      <details class="help-popover">
+        <summary class="help-badge bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-200">?</summary>
+        <div class="mt-2 w-[38rem] max-w-[90vw] p-3 bg-white dark:bg-slate-800 rounded-xl shadow-card ring-1 ring-black/5 text-sm leading-relaxed space-y-2">
+          <p>Paste a recipe link from a supported site. We’ll fetch ingredients, instructions, title, and timing automatically.</p>
+          <ul class="list-disc pl-5 space-y-1">
+            <li><strong>Custom Title</strong> — optionally override the site’s title.</li>
+            <li><strong>Custom Instructions</strong> — tell the AI how to adapt (e.g., “make gluten-free”, “translate to German”).</li>
+            <li><strong>Transform to Vegan</strong> — automatically swap out animal products where possible.</li>
+          </ul>
+          <p class="text-xs opacity-80">Tip: If a site isn’t supported, you can still use <em>Create Manually</em> or <em>Import from Image</em>.</p>
+        </div>
+      </details>
     </div>
 
-    <div class="form-group">
-      <label for="custom_title">Custom Recipe Title (optional)</label>
-      <input type="text" name="custom_title" class="form-control" placeholder="e.g., Vegan Pasta Deluxe" style="width: 100%;">
+    <p class="text-sm text-slate-700 dark:text-slate-200 mt-1">
+      Supported websites include most major recipe portals. A community-maintained list is available
+      <a href="https://docs.recipe-scrapers.com/getting-started/supported-sites/" target="_blank" rel="noopener noreferrer"
+         class="underline text-emerald-700 dark:text-emerald-300 hover:no-underline">here</a>.
+    </p>
+  </section>
+
+  <!-- URL field -->
+  <section class="card p-4 md:p-5">
+    <div class="flex items-start justify-between gap-3">
+      <h2 class="text-base font-semibold">Recipe URL</h2>
+      <details class="help-popover">
+        <summary class="help-badge bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-200">?</summary>
+        <div class="mt-2 w-96 max-w-[90vw] p-3 bg-white dark:bg-slate-800 rounded-xl shadow-card ring-1 ring-black/5 text-sm leading-relaxed">
+          Paste the full link (including <code>https://</code>). Example: <code>https://www.example.com/best-lasagna</code>.
+        </div>
+      </details>
     </div>
 
-    <div class="form-group">
-      <label for="custom_instruction">Custom Instructions (optional)</label>
-      <textarea name="custom_instruction" class="form-control" rows="4" placeholder="E.g., avoid nuts, make gluten-free..."></textarea>
+    <label class="block mt-3">
+      <span class="block text-sm font-semibold mb-1">URL</span>
+      <input type="url" name="recipe_url" id="recipe_url" required placeholder="https://example.com/your-recipe"
+             inputmode="url" autocomplete="url">
+      <span class="mt-1 block text-xs text-slate-500">We’ll fetch the recipe details for you.</span>
+    </label>
+
+    <!-- Quick paste from clipboard -->
+    <div class="mt-3">
+      <button type="button" id="paste_url_btn"
+              class="inline-flex items-center gap-2 rounded-xl ring-1 ring-black/5 bg-white dark:bg-slate-800 px-3 py-2 text-sm font-semibold hover:shadow-card">
+        <span class="material-symbols-rounded text-base">content_paste</span> Paste from Clipboard
+      </button>
+    </div>
+  </section>
+
+  <!-- Optional tweaks -->
+  <section class="card p-4 md:p-5">
+    <div class="flex items-start justify-between gap-3">
+      <h2 class="text-base font-semibold">Optional Tweaks</h2>
+      <details class="help-popover">
+        <summary class="help-badge bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-200">?</summary>
+        <div class="mt-2 w-[32rem] max-w-[90vw] p-3 bg-white dark:bg-slate-800 rounded-xl shadow-card ring-1 ring-black/5 text-sm leading-relaxed space-y-2">
+          <p>Use these to personalize the imported recipe.</p>
+          <ul class="list-disc pl-5 space-y-1">
+            <li><strong>Custom Title</strong> — set your own name for the recipe.</li>
+            <li><strong>Custom Instructions</strong> — add guidance for the AI (e.g., “low-sodium”, “metric units”).</li>
+            <li><strong>Transform to Vegan</strong> — auto-convert where suitable.</li>
+          </ul>
+        </div>
+      </details>
     </div>
 
-    <div class="form-group">
-      <input type="checkbox" name="transform_vegan" id="transform_vegan">
-      <label for="transform_vegan">Transform to Vegan Recipe</label>
-    </div>
+    <div class="grid gap-3 md:grid-cols-2 mt-3">
+      <label class="block">
+        <span class="block text-sm font-semibold mb-1">Custom Recipe Title (optional)</span>
+        <input type="text" name="custom_title" id="custom_title" placeholder="e.g., Vegan Pasta Deluxe">
+        <span class="mt-1 block text-xs text-slate-500">Leave blank to keep the site’s title.</span>
+      </label>
 
-    <button type="submit" class="btn btn-primary">Add Recipe</button>
-  </form>
+      <label class="block md:col-span-2">
+        <span class="block text-sm font-semibold mb-1">Custom Instructions (optional)</span>
+        <textarea name="custom_instruction" id="custom_instruction" rows="4" placeholder="E.g., avoid nuts, make gluten-free, convert to metric…"></textarea>
+        <span class="mt-1 block text-xs text-slate-500">Short, specific requests work best.</span>
+      </label>
+
+      <label class="inline-flex items-center gap-2 md:col-span-2">
+        <input type="checkbox" name="transform_vegan" id="transform_vegan">
+        <span class="text-sm">🌱 Transform to Vegan Recipe</span>
+      </label>
+    </div>
+  </section>
+
+  <!-- Actions -->
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+    <p class="text-xs text-slate-600 dark:text-slate-300">
+      Having trouble? Try our <a href="{% url 'recipes:create_recipe' %}" class="underline">manual creator</a> or
+      <a href="{% url 'recipes:add_recipe_from_image' %}" class="underline">import from image</a>.
+    </p>
+    <button id="submitBtn" type="submit"
+            class="inline-flex items-center gap-2 rounded-xl bg-emerald-600 text-white px-4 py-2 text-sm font-semibold hover:bg-emerald-700">
+      <span class="material-symbols-rounded">download</span>
+      <span class="btn-text">Add Recipe</span>
+      <span class="spinner hidden" aria-hidden="true"></span>
+    </button>
+  </div>
+</form>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  // Auto-focus URL input
+  const urlInput = document.getElementById('recipe_url');
+  if (urlInput) urlInput.focus();
+
+  // Paste from clipboard
+  document.getElementById('paste_url_btn')?.addEventListener('click', async () => {
+    try {
+      const text = await navigator.clipboard.readText();
+      if (text) { urlInput.value = text.trim(); urlInput.dispatchEvent(new Event('input')); }
+    } catch (e) {
+      alert('Could not read from clipboard. Please paste manually (Ctrl/Cmd + V).');
+    }
+  });
+
+  // Prevent accidental submit by pressing Enter in text fields (except inside textarea)
+  document.getElementById('urlImportForm').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && e.target.tagName === 'INPUT') {
+      e.preventDefault();
+    }
+  });
+
+  // Loading state on submit
+  const submitBtn = document.getElementById('submitBtn');
+  document.getElementById('urlImportForm').addEventListener('submit', () => {
+    submitBtn.disabled = true;
+    submitBtn.classList.add('opacity-70');
+    submitBtn.querySelector('.btn-text').textContent = 'Importing…';
+    submitBtn.querySelector('.spinner').classList.remove('hidden');
+  });
+});
+</script>
 {% endblock %}
