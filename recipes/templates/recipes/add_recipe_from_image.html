@@ -1,25 +1,263 @@
 {% extends 'base.html' %}
 
-{% block content %}
-<h2>📸 Add Recipe From Image</h2>
+{% block title %}Add Recipe from Image{% endblock %}
 
-<form method="post" enctype="multipart/form-data">
+{% block extra_head %}
+<style>
+  /* Page-scoped modern form styles (no widget-tweaks needed) */
+  .form-modern input[type="text"],
+  .form-modern textarea {
+    width: 100%;
+    border: 1px solid rgb(209 213 219); /* gray-300 */
+    border-radius: 0.75rem; /* rounded-xl */
+    padding: 0.625rem 0.75rem;
+    background: white;
+    color: rgb(30 41 59);
+  }
+  .dark .form-modern input[type="text"],
+  .dark .form-modern textarea {
+    background: rgb(15 23 42);   /* slate-900 */
+    color: rgb(226 232 240);     /* slate-200 */
+    border-color: rgb(51 65 85); /* slate-700 */
+  }
+  .form-modern input[type="checkbox"] { accent-color: rgb(5 150 105); } /* emerald-600 */
+  .form-modern textarea { min-height: 90px; }
+
+  /* Cards */
+  .card { border-radius: 1rem; background: white; box-shadow: 0 1px 2px rgba(0,0,0,.06); border: 1px solid rgba(0,0,0,.05); }
+  .dark .card { background: rgb(30 41 59); border-color: rgba(255,255,255,.06); }
+
+  /* Help badge / popover */
+  .help-badge { display:inline-block; border-radius:.5rem; padding:.125rem .5rem; font-size:.75rem; font-weight:600; cursor:pointer; }
+  details.help-popover > summary { list-style:none; display:inline-flex; align-items:center; gap:.375rem; }
+  details.help-popover > summary::-webkit-details-marker { display:none; }
+
+  /* Dropzone */
+  .dropzone {
+    border: 2px dashed rgba(15, 23, 42, .15);
+    border-radius: 1rem;
+    padding: 1.25rem;
+    background: rgba(236, 253, 245, .4); /* emerald-50-ish */
+    transition: background .15s ease, border-color .15s ease;
+  }
+  .dropzone.dragover {
+    background: rgba(16,185,129,.08); /* emerald-500/8 */
+    border-color: rgba(16,185,129,.4);
+  }
+  .dark .dropzone {
+    background: rgba(30, 41, 59, .6);
+    border-color: rgba(255,255,255,.08);
+  }
+  .dark .dropzone.dragover {
+    background: rgba(5,150,105,.15);
+    border-color: rgba(16,185,129,.5);
+  }
+
+  /* Thumbnails grid */
+  .thumb { position: relative; overflow: hidden; border-radius: .75rem; }
+  .thumb img { width: 100%; height: 100%; object-fit: cover; display:block; }
+  .thumb .remove {
+    position:absolute; top:.35rem; right:.35rem;
+    background: rgba(15,23,42,.85); color:white;
+    border-radius:.5rem; padding:.15rem .4rem; font-size:.75rem; font-weight:700;
+  }
+  .dark .thumb .remove { background: rgba(0,0,0,.75); }
+
+  /* Submit spinner */
+  .spinner { display:inline-block; width:1rem; height:1rem; border:2px solid currentColor; border-right-color:transparent; border-radius:9999px; animation: spin .6s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+</style>
+{% endblock %}
+
+{% block breadcrumbs %}
+<nav aria-label="Breadcrumb" class="mb-3 text-sm text-gray-600 dark:text-gray-300">
+  <ol class="flex flex-wrap items-center gap-1">
+    <li><a class="underline hover:no-underline" href="{% url 'recipes:home' %}">Home</a></li>
+    <li class="opacity-60">/</li>
+    <li class="font-semibold">Add from Image</li>
+  </ol>
+</nav>
+{% endblock %}
+
+{% block content %}
+<h1 class="text-2xl md:text-3xl font-extrabold tracking-tight flex items-center gap-2">📸 Add Recipe from Image</h1>
+
+<form method="post" enctype="multipart/form-data" id="imageImportForm" class="form-modern mt-4 space-y-4">
   {% csrf_token %}
 
-  <label>Select image(s):</label><br>
-  <input type="file" name="images" accept="image/*" multiple required><br><br>
+<!-- How it works -->
+<section class="card p-4 md:p-5">
+  <div class="flex items-start justify-between gap-3">
+    <h2 class="text-base font-semibold">How this works</h2>
+    <details class="help-popover">
+      <summary class="help-badge bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-200">?</summary>
+      <div class="mt-2 w-[38rem] max-w-[90vw] p-3 bg-white dark:bg-slate-800 rounded-xl shadow-card ring-1 ring-black/5 text-sm leading-relaxed space-y-2">
+        <p>Upload one or more photos/screenshots of a recipe. The AI will extract the text (OCR) and build a structured recipe.</p>
+        <ul class="list-disc pl-5 space-y-1">
+          <li><strong>Multiple images</strong> are supported — add all pages/screens you have.</li>
+          <li><strong>Custom instructions</strong> help personalize (e.g., “metric units”, “make spicy”).</li>
+        </ul>
+      </div>
+    </details>
+  </div>
 
-  <label>Optional Title:</label><br>
-  <input type="text" name="custom_title" placeholder="e.g. Vegan Carbonara"><br><br>
+  <!-- Inline quick instructions always visible -->
+  <p class="mt-2 text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
+    Upload one or more recipe images. The AI will read the text and create a recipe for you.
+    <br><span class="font-semibold">Tip:</span> You can add multiple pages/screenshots at once.
+  </p>
 
-  <label>Optional Instructions:</label><br>
-  <textarea name="custom_instruction" placeholder="e.g. No onions, extra garlic" rows="3" cols="40"></textarea><br><br>
+  <!-- Dropzone + file input -->
+  <div id="dropzone" class="dropzone mt-3">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+      <div class="text-sm text-slate-700 dark:text-slate-200">
+        Drag & drop images here or click <span class="font-semibold">Select images</span>.
+        <div class="text-xs mt-1 opacity-80">Accepted: JPG, PNG, WEBP • You can select multiple files.</div>
+      </div>
+      <div>
+        <!-- Keep exact input name and multiple -->
+        <input id="imagesInput" class="hidden" type="file" name="images" accept="image/*" multiple required>
+        <button type="button" id="selectBtn" class="inline-flex items-center gap-2 rounded-xl bg-slate-800 text-white px-3 py-2 text-sm font-semibold hover:bg-slate-900">
+          <span class="material-symbols-rounded text-base">upload_file</span> Select images
+        </button>
+      </div>
+    </div>
 
-  <label>
-    <input type="checkbox" name="transform_vegan">
-    🌱 Transform to Vegan
-   </label><br><br>
+    <!-- Previews -->
+    <div id="thumbs" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 mt-4"></div>
+    <div id="imageCount" class="text-xs text-slate-600 dark:text-slate-300 mt-2"></div>
+  </div>
+</section>
 
-  <button type="submit">Add Recipe</button>
+  <!-- Optional Tweaks -->
+  <section class="card p-4 md:p-5">
+    <div class="flex items-start justify-between gap-3">
+      <h2 class="text-base font-semibold">Optional tweaks</h2>
+      <details class="help-popover">
+        <summary class="help-badge bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-200">?</summary>
+        <div class="mt-2 w-[32rem] max-w-[90vw] p-3 bg-white dark:bg-slate-800 rounded-xl shadow-card ring-1 ring-black/5 text-sm leading-relaxed space-y-2">
+          <p>Use these to personalize the generated recipe.</p>
+          <ul class="list-disc pl-5 space-y-1">
+            <li><strong>Optional Title</strong> — override the detected title.</li>
+            <li><strong>Custom Instructions</strong> — e.g., “translate to German”, “low-sodium”, “metric units”.</li>
+            <li><strong>Transform to Vegan</strong> — swap animal products where suitable.</li>
+          </ul>
+        </div>
+      </details>
+    </div>
+
+    <div class="grid gap-3 md:grid-cols-2 mt-3">
+      <label class="block md:col-span-1">
+        <span class="block text-sm font-semibold mb-1">Optional Title</span>
+        <input type="text" name="custom_title" placeholder="e.g., Vegan Carbonara">
+        <span class="mt-1 block text-xs text-slate-500">Leave blank to let the AI detect a title.</span>
+      </label>
+
+      <label class="block md:col-span-2">
+        <span class="block text-sm font-semibold mb-1">Optional Instructions</span>
+        <textarea name="custom_instruction" rows="4" placeholder="e.g., No onions, extra garlic, convert to metric…"></textarea>
+        <span class="mt-1 block text-xs text-slate-500">Short, specific guidance works best.</span>
+      </label>
+
+      <label class="inline-flex items-center gap-2 md:col-span-2">
+        <input type="checkbox" name="transform_vegan">
+        <span class="text-sm">🌱 Transform to Vegan</span>
+      </label>
+    </div>
+  </section>
+
+  <!-- Actions -->
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+    <p class="text-xs text-slate-600 dark:text-slate-300">
+      Prefer another method? Try <a href="{% url 'recipes:create_recipe' %}" class="underline">create manually</a> or
+      <a href="{% url 'recipes:add_recipe_from_url' %}" class="underline">add from URL</a>.
+    </p>
+    <button id="submitBtn" type="submit"
+            class="inline-flex items-center gap-2 rounded-xl bg-emerald-600 text-white px-4 py-2 text-sm font-semibold hover:bg-emerald-700">
+      <span class="material-symbols-rounded">download</span>
+      <span class="btn-text">Add Recipe</span>
+      <span class="spinner hidden" aria-hidden="true"></span>
+    </button>
+  </div>
 </form>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const dz        = document.getElementById('dropzone');
+  const fileInput = document.getElementById('imagesInput');
+  const selectBtn = document.getElementById('selectBtn');
+  const thumbs    = document.getElementById('thumbs');
+  const countLbl  = document.getElementById('imageCount');
+  const form      = document.getElementById('imageImportForm');
+  const submitBtn = document.getElementById('submitBtn');
+
+  /* --- Helpers to manage FileList via DataTransfer so we can remove items --- */
+  function currentFiles(){
+    return Array.from(fileInput.files || []);
+  }
+  function setFiles(filesArray){
+    const dt = new DataTransfer();
+    filesArray.forEach(f => dt.items.add(f));
+    fileInput.files = dt.files;
+    renderThumbs();
+  }
+
+  /* --- Render previews and count --- */
+  function renderThumbs(){
+    const files = currentFiles();
+    thumbs.innerHTML = '';
+    files.forEach((file, idx) => {
+      const url = URL.createObjectURL(file);
+      const item = document.createElement('div');
+      item.className = 'thumb aspect-[4/3] ring-1 ring-black/5';
+      item.innerHTML = `
+        <img src="${url}" alt="preview ${idx+1}">
+        <button type="button" class="remove" data-idx="${idx}" title="Remove">×</button>
+      `;
+      thumbs.appendChild(item);
+    });
+    countLbl.textContent = files.length ? `${files.length} image${files.length===1?'':'s'} selected` : 'No images selected yet';
+    // Attach remove handlers
+    thumbs.querySelectorAll('.remove').forEach(btn=>{
+      btn.addEventListener('click', (e)=>{
+        const i = parseInt(e.currentTarget.dataset.idx, 10);
+        const files = currentFiles().filter((_, k) => k !== i);
+        setFiles(files);
+      });
+    });
+  }
+
+  /* --- Click & Drag-and-Drop --- */
+  selectBtn.addEventListener('click', () => fileInput.click());
+  dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('dragover'); });
+  dz.addEventListener('dragleave', () => dz.classList.remove('dragover'));
+  dz.addEventListener('drop', e => {
+    e.preventDefault();
+    dz.classList.remove('dragover');
+    if (!e.dataTransfer?.files?.length) return;
+    const files = currentFiles().concat(Array.from(e.dataTransfer.files));
+    setFiles(files);
+  });
+
+  fileInput.addEventListener('change', renderThumbs);
+
+  /* --- Prevent accidental Enter submit in inputs --- */
+  form.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && e.target.tagName === 'INPUT') e.preventDefault();
+  });
+
+  /* --- Loading state on submit --- */
+  form.addEventListener('submit', () => {
+    submitBtn.disabled = true;
+    submitBtn.classList.add('opacity-70');
+    submitBtn.querySelector('.btn-text').textContent = 'Uploading…';
+    submitBtn.querySelector('.spinner').classList.remove('hidden');
+  });
+
+  // Initial state
+  renderThumbs();
+});
+</script>
 {% endblock %}
