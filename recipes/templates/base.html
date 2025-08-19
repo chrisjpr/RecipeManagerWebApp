@@ -52,10 +52,14 @@
       --text-color:#2c3e50;
       --card-bg:#fff;
       --shadow:0 10px 25px rgba(0,0,0,.08);
-      --header-h:64px;
+      --header-h:64px;               /* desktop default */
       --bottom-nav-h:64px;
       --safe-top: env(safe-area-inset-top, 0px);
       --safe-bottom: env(safe-area-inset-bottom, 0px);
+    }
+    /* Smaller header on phones */
+    @media (max-width: 767px){
+      :root{ --header-h:52px; }
     }
     *{box-sizing:border-box}
     html,body{font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
@@ -87,7 +91,8 @@
       <div class="flex items-center gap-2">
         <a href="{% url 'recipes:home' %}" class="flex items-center gap-2 text-white no-underline">
           <span class="text-2xl">🍳</span>
-          <span class="text-xl lg:text-2xl font-extrabold tracking-tight">Recipe&nbsp;Manager</span>
+          <!-- Hide brand text on phones to save vertical space -->
+          <span class="hidden sm:inline text-xl lg:text-2xl font-extrabold tracking-tight">Recipe&nbsp;Manager</span>
         </a>
       </div>
 
@@ -137,15 +142,15 @@
       </div>
     </div>
 
-    <!-- Mobile menu: slide-down panel -->
+    <!-- Mobile menu: fixed sheet under header -->
     <div id="mobileMenu"
-         class="md:hidden hidden border-t border-white/10 bg-white text-gray-800 will-change-transform origin-top">
+         class="md:hidden hidden fixed top-[calc(var(--safe-top)+var(--header-h))] inset-x-0 z-50 border-t border-gray-200 bg-white text-gray-800 will-change-transform origin-top max-h-[70vh] overflow-auto shadow-card">
       <div class="container-max mx-auto px-4 py-3 grid gap-1">
-        <a class="px-3 py-3 rounded-lg hover:bg-gray-50 font-semibold" href="{% url 'recipes:home' %}">🏠 Home</a>
-        <a class="px-3 py-3 rounded-lg hover:bg-gray-50 font-semibold" href="{% url 'recipes:recipe_list' %}">📖 My Recipes</a>
-        <a class="px-3 py-3 rounded-lg hover:bg-gray-50 font-semibold" href="{% url 'recipes:public_recipes' %}">🌍 Public Recipes</a>
-        <a class="px-3 py-3 rounded-lg hover:bg-gray-50 font-semibold" href="{% url 'recipes:create_recipe_landing' %}">➕ Create Recipe</a>
-        <a class="px-3 py-3 rounded-lg hover:bg-gray-50 font-semibold" href="{% url 'accounts:friend_dashboard' %}">👥 Friends</a>
+        <a class="px-3 py-2 rounded-lg hover:bg-gray-50 font-semibold" href="{% url 'recipes:home' %}">🏠 Home</a>
+        <a class="px-3 py-2 rounded-lg hover:bg-gray-50 font-semibold" href="{% url 'recipes:recipe_list' %}">📖 My Recipes</a>
+        <a class="px-3 py-2 rounded-lg hover:bg-gray-50 font-semibold" href="{% url 'recipes:public_recipes' %}">🌍 Public Recipes</a>
+        <a class="px-3 py-2 rounded-lg hover:bg-gray-50 font-semibold" href="{% url 'recipes:create_recipe_landing' %}">➕ Create Recipe</a>
+        <a class="px-3 py-2 rounded-lg hover:bg-gray-50 font-semibold" href="{% url 'accounts:friend_dashboard' %}">👥 Friends</a>
 
         <div class="mt-2 rounded-xl border border-gray-200 bg-gray-50 p-3 flex items-center justify-between">
           {% if user.is_authenticated %}
@@ -216,14 +221,15 @@
     (function(){
       const btn = document.getElementById('navToggle');
       const panel = document.getElementById('mobileMenu');
-
       if(!btn || !panel) return;
 
       let open = false;
-      // Create overlay for outside click
+
+      // Create overlay for outside click; keep header tappable
       const overlay = document.createElement('div');
       overlay.id = 'mobileOverlay';
-      overlay.className = 'md:hidden hidden fixed inset-0 bg-black/30';
+      overlay.className = 'md:hidden hidden fixed inset-x-0 bottom-0 bg-black/30';
+      overlay.style.top = 'calc(var(--safe-top) + var(--header-h))';
       document.body.appendChild(overlay);
 
       function lockScroll(lock){
@@ -234,8 +240,7 @@
         open = true;
         btn.setAttribute('aria-expanded','true');
         overlay.classList.remove('hidden');
-        panel.classList.remove('hidden');
-        panel.classList.remove('animate-slideUp');
+        panel.classList.remove('hidden','animate-slideUp');
         panel.classList.add('animate-slideDown');
         lockScroll(true);
       }
@@ -244,7 +249,6 @@
         btn.setAttribute('aria-expanded','false');
         panel.classList.remove('animate-slideDown');
         panel.classList.add('animate-slideUp');
-        // wait for animation then hide
         setTimeout(()=>{ panel.classList.add('hidden'); overlay.classList.add('hidden'); lockScroll(false); }, 130);
       }
 
@@ -255,9 +259,7 @@
 
     // --- Flash messages (icons + auto dismiss) --------------------------
     (function(){
-      const iconFor = (tag)=>({
-        success:'check_circle', error:'error', warning:'warning', info:'info'
-      })[tag]||'info';
+      const iconFor = (tag)=>({ success:'check_circle', error:'error', warning:'warning', info:'info' }[tag]||'info');
       const colorFor = (tag)=>({
         success:['bg-emerald-50','text-emerald-800'],
         error:['bg-rose-50','text-rose-800'],
@@ -286,7 +288,7 @@
       })
     })();
 
-    // --- Tiny helper: "?" popovers (kept for all pages) ------------------
+    // --- Tiny helper: "?" popovers --------------------------------------
     // <details class="help-popover inline-block align-middle">
     //   <summary class="help-badge bg-brand/15 text-brand hover:bg-brand/20 select-none">?</summary>
     //   <div class="mt-2 w-72 max-w-[80vw] p-3 bg-white rounded-xl shadow-card ring-1 ring-black/5 text-sm">
