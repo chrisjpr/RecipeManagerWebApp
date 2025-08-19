@@ -496,7 +496,7 @@ def add_recipe_from_url(request):
 
         except Exception as e:
             print("❌ Error enqueueing add_recipe_from_url:", e)
-            messages.error(request, "❌ Your URL seems to not be supported by the system! Try other recipe providers, like biancazapatka.com")
+            messages.error(request, "❌ The recipe generation services are currently in maintenance. Try again later!")
             return redirect('recipes:recipe_list')
 
     # GET: render the form page
@@ -538,7 +538,7 @@ def add_recipe_from_image(request):
 
         except Exception as e:
             print("❌ Error enqueueing add_recipe_from_image:", e)
-            messages.error(request, "❌ Could not start recipe import from image.")
+            messages.error(request, "❌ The recipe generation services are currently in maintenance. Try again later!")
             return redirect('recipes:recipe_list')
 
     # GET: render the form page
@@ -573,7 +573,7 @@ def add_recipe_from_text(request):
 
             except Exception as e:
                 print("❌ Error enqueueing add_recipe_from_text:", e)
-                messages.error(request, "❌ Could not start recipe import from text.")
+                messages.error(request, "❌ The recipe generation services are currently in maintenance. Try again later!")
                 return redirect('recipes:recipe_list')
         else:
             messages.error(request, "Please correct the form errors.")
