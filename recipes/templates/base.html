@@ -1,17 +1,40 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-full scroll-smooth">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>{% block title %}Recipe Manager{% endblock %}</title>
-
-  <!-- Make it responsive on phones -->
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <!-- Material Symbols for profile icons -->
+  <!-- Material Symbols for icons (incl. profile icon names like "restaurant") -->
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:wght@400;700" rel="stylesheet">
 
+  <!-- Tailwind (forms + typography plugins for nicer forms/content) -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,typography,container-queries"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: '#4CAF50',
+            brandDark: '#388E3C',
+            brandAccent: '#FFC107',
+          },
+          boxShadow: {
+            card: '0 10px 25px rgba(0,0,0,0.08)',
+          },
+          borderRadius: {
+            xl: '0.75rem',
+            '2xl': '1rem',
+          },
+        }
+      },
+      darkMode: 'class'
+    }
+  </script>
+
+  <!-- App design tokens (keep for backward-compat with existing templates) -->
   <style>
     :root{
       --primary-color:#4CAF50;
@@ -21,221 +44,222 @@
       --text-color:#2c3e50;
       --muted-text:#6c757d;
       --card-bg:#fff;
-      --shadow:0 4px 10px rgba(0,0,0,.08);
+      --shadow:0 10px 25px rgba(0,0,0,.08);
+      --header-h:64px;
     }
-    *{margin:0;padding:0;box-sizing:border-box}
-    html,body{font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:var(--background-color);color:var(--text-color);line-height:1.6}
-
-    /* ====== Header / Top bar ====== */
-    header{
-      position:sticky; top:0; z-index:1000;
-      background:var(--primary-color); color:#fff;
-      padding:0.75rem 1rem;
-      box-shadow:0 2px 10px rgba(0,0,0,.06);
-    }
-    .nav-wrap{
-      max-width:1100px; margin:0 auto;
-      display:flex; align-items:center; justify-content:space-between; gap:.75rem;
-    }
-    .brand-link{color:inherit;text-decoration:none;display:flex;align-items:center;gap:.5rem}
-    .brand-link h1{font-size:1.6rem;white-space:nowrap}
-
-    /* Desktop nav group */
-    nav{display:flex; align-items:center; gap:1rem}
-    .nav-links{display:flex; gap:.75rem; align-items:center; white-space:nowrap; font-size:.95rem}
-    .nav-links a{color:#fff; text-decoration:none; font-weight:600; padding:.3rem .6rem; border-radius:6px; transition:background-color .2s}
-    .nav-links a:hover{background:rgba(255,255,255,.15)}
-    .user-box{
-      background:rgba(255,255,255,.15);
-      padding:.4rem .8rem; border-radius:8px; display:flex; align-items:center; gap:.6rem;
-      color:#f1f1f1;
-    }
-    .user-box a{color:inherit; text-decoration:none}
-    .username-label{font-weight:500; font-size:.95rem}
-
-    /* Material Symbols base style */
-    .material-symbols-rounded{
-      font-variation-settings:'FILL' 0,'wght' 600,'GRAD' 0,'opsz' 24;
-      line-height:1;
-    }
-    /* Icon colors per context */
-    .user-icon--desktop{color:#fff; font-size:22px}
-    .user-icon--mobile{color:var(--primary-color); font-size:22px}
-
-    /* Mobile hamburger button (hidden on desktop) */
-    .nav-toggle{
-      display:none; border:1px solid rgba(255,255,255,.6); background:transparent; color:#fff;
-      padding:.35rem .55rem; border-radius:8px; font-size:1.1rem; cursor:pointer;
-    }
-    .nav-toggle:focus{outline:2px solid #fff2}
-
-    /* Mobile dropdown panel */
-    .mobile-menu{
-      display:none;
-      position:absolute; left:0; right:0; top:100%;
-      background:#ffffff; color:var(--text-color);
-      box-shadow:0 10px 24px rgba(0,0,0,.12);
-      border-bottom:1px solid #eaeaea;
-    }
-    .mobile-inner{
-      max-width:1100px; margin:0 auto; padding:.75rem 1rem; display:grid; gap:.5rem;
-    }
-    .mobile-links a{
-      display:block; padding:.6rem .5rem; border-radius:8px; text-decoration:none; color:#1f2937; font-weight:600;
-    }
-    .mobile-links a:hover{background:#f3f4f6}
-    .mobile-user{
-      margin-top:.25rem; padding:.6rem .5rem; border:1px solid #e5e7eb; border-radius:10px; background:#f9fafb;
-      display:flex; justify-content:space-between; align-items:center; gap:.5rem; flex-wrap:wrap;
-    }
-    .mobile-user .left{
-      display:flex; align-items:center; gap:.5rem;
-    }
-    .mobile-user .username{font-weight:600; color:#111827}
-    .mobile-user a{color:#111827; text-decoration:none; font-weight:600}
-
-    /* ====== Main / Card ====== */
-    main{max-width:960px; margin:1.25rem auto; padding:0 1rem}
-    .card{background:var(--card-bg); padding:1.25rem; border-radius:12px; box-shadow:var(--shadow); margin-bottom:2rem}
-
-    /* Messages */
-    .message{padding:1rem; margin-bottom:1rem; border-radius:8px}
-    .message.success{background:#d4edda;color:#155724}
-    .message.error{background:#f8d7da;color:#721c24}
-
-    footer{
-      background:#e9ecef; color:var(--muted-text);
-      text-align:center; padding:1rem 0; margin-top:3rem;
-    }
-
-    /* ====== Responsive ====== */
-    @media (max-width: 900px){
-      .brand-link h1{font-size:1.4rem}
-    }
-    @media (max-width: 768px){
-      /* Hide desktop nav; show hamburger */
-      .nav-links, .user-box{display:none}
-      .nav-toggle{display:inline-flex; align-items:center; gap:.5rem}
-      /* Make main a bit tighter on phones */
-      main{margin:1rem auto}
-      .card{padding:1rem}
-    }
-
-    /* When menu is open */
-    .mobile-open .mobile-menu{display:block}
-    .mobile-open .nav-toggle[aria-expanded="true"]{background:rgba(255,255,255,.18)}
+    *{box-sizing:border-box}
+    html,body{font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
+    /* Legacy utility (used by existing pages) */
+    .card{background:var(--card-bg); padding:1.25rem; border-radius:12px; box-shadow:var(--shadow);}
+    .message{padding:1rem; border-radius:10px; font-weight:600}
+    .message.success{background:#d1fae5; color:#065f46}
+    .message.error{background:#fee2e2; color:#7f1d1d}
+    .material-symbols-rounded{font-variation-settings:'FILL' 0,'wght' 600,'GRAD' 0,'opsz' 24; line-height:1}
+    .help-popover{position:relative;}
+    .help-popover[open] > summary {background:rgba(76,175,80,.12)}
+    .help-badge{display:inline-flex; align-items:center; justify-content:center; width:20px; height:20px; border-radius:999px; font-size:12px; font-weight:800}
+    @media (min-width:1024px){.container-max{max-width:1100px}}
+    .skip-link{position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden}
+    .skip-link:focus{position:fixed; left:1rem; top:1rem; z-index:9999; width:auto; height:auto; padding:.5rem .75rem; background:#111827; color:#fff; border-radius:.5rem}
   </style>
+
+  {% block extra_head %}{% endblock %}
 </head>
-<body>
-  <header>
-    <div class="nav-wrap">
-      <a href="{% url 'recipes:home' %}" class="brand-link"><h1>🍳 Recipe Manager</h1></a>
+<body class="min-h-screen bg-[var(--background-color)] text-[var(--text-color)] antialiased flex flex-col">
+  <!-- Accessibility: skip straight to main content -->
+  <a href="#main" class="skip-link">Skip to content</a>
 
-      <!-- Desktop navigation -->
-      <nav aria-label="Primary">
-        <div class="nav-links">
-          <a href="{% url 'recipes:home' %}">🏠 Home</a>
-          <a href="{% url 'recipes:recipe_list' %}">📖 My Recipes</a>
-          <a href="{% url 'recipes:public_recipes' %}">🌍 Public Recipes</a>
-          <a href="{% url 'recipes:create_recipe_landing' %}">➕ Create Recipe</a>
-          <a href="{% url 'accounts:friend_dashboard' %}">👥 Friends</a>
-        </div>
-
-      <div class="user-box">
-        {% if user.is_authenticated %}
-          <span class="material-symbols-rounded user-icon--desktop">
-            {% firstof user.profile_icon "restaurant" %}
-          </span>
-          <!-- Username links to Account Settings (no blue/underline due to existing .user-box a CSS) -->
-          <a href="{% url 'accounts:settings' %}" class="username-label">@{{ user.username|cut:"_" }}</a>
-          <a href="{% url 'accounts:logout' %}">🚪 Logout</a>
-        {% else %}
-          <a href="{% url 'accounts:login' %}">🔑 Login</a>
-        {% endif %}
+  <!-- Header / Top bar -->
+  <header class="sticky top-0 z-50 bg-brand text-white shadow">
+    <div class="container-max mx-auto px-4 h-[var(--header-h)] flex items-center justify-between gap-3">
+      <div class="flex items-center gap-2">
+        <a href="{% url 'recipes:home' %}" class="flex items-center gap-2 text-white no-underline">
+          <span class="text-2xl">🍳</span>
+          <span class="text-xl lg:text-2xl font-extrabold tracking-tight">Recipe&nbsp;Manager</span>
+        </a>
       </div>
 
-        <!-- Mobile hamburger -->
-        <button id="navToggle" class="nav-toggle" aria-expanded="false" aria-controls="mobileMenu" aria-label="Open menu">☰</button>
+      <!-- Desktop nav -->
+      <nav class="hidden md:flex items-center gap-1 lg:gap-2" aria-label="Primary">
+        <a href="{% url 'recipes:home' %}" class="px-3 py-2 rounded-lg font-semibold hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/40">🏠 Home</a>
+        <a href="{% url 'recipes:recipe_list' %}" class="px-3 py-2 rounded-lg font-semibold hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/40">📖 My Recipes</a>
+        <a href="{% url 'recipes:public_recipes' %}" class="px-3 py-2 rounded-lg font-semibold hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/40">🌍 Public</a>
+        <a href="{% url 'recipes:create_recipe_landing' %}" class="px-3 py-2 rounded-lg font-semibold hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/40">➕ Create</a>
+        <a href="{% url 'accounts:friend_dashboard' %}" class="px-3 py-2 rounded-lg font-semibold hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/40">👥 Friends</a>
       </nav>
+
+      <!-- Right cluster: theme + user -->
+      <div class="hidden md:flex items-center gap-2">
+
+
+        <!-- User area -->
+        <div class="relative">
+          {% if user.is_authenticated %}
+            <details class="group relative">
+              <summary class="list-none cursor-pointer flex items-center gap-2 px-3 py-2 rounded-lg bg-white/10 hover:bg-white/15 focus:outline-none focus:ring-2 focus:ring-white/40">
+                <span class="material-symbols-rounded">{% firstof user.profile_icon "restaurant" %}</span>
+                <span class="font-semibold">@{{ user.username|cut:"_" }}</span>
+                <span class="material-symbols-rounded text-sm">expand_more</span>
+              </summary>
+              <div class="absolute right-0 mt-2 w-56 bg-white text-gray-800 rounded-xl shadow-card ring-1 ring-black/5 overflow-hidden">
+                <a href="{% url 'accounts:settings' %}" class="flex items-center gap-2 px-4 py-3 hover:bg-gray-50">
+                  <span class="material-symbols-rounded">settings</span>
+                  <span>Account Settings</span>
+                </a>
+                <a href="{% url 'accounts:logout' %}" class="flex items-center gap-2 px-4 py-3 hover:bg-gray-50">
+                  <span class="material-symbols-rounded">logout</span>
+                  <span>Logout</span>
+                </a>
+              </div>
+            </details>
+          {% else %}
+            <a href="{% url 'accounts:login' %}" class="px-3 py-2 rounded-lg bg-white/15 hover:bg-white/20 font-semibold">🔑 Login</a>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Mobile controls -->
+      <div class="md:hidden flex items-center gap-1">
+        <button id="themeToggleMobile" class="p-2 rounded-lg bg-white/10" aria-label="Toggle dark mode"><span class="material-symbols-rounded">dark_mode</span></button>
+        <button id="navToggle" class="p-2 rounded-lg bg-white/10" aria-expanded="false" aria-controls="mobileMenu" aria-label="Open menu">
+          <span class="material-symbols-rounded">menu</span>
+        </button>
+      </div>
     </div>
 
-    <!-- Mobile dropdown contents -->
-    <div id="mobileMenu" class="mobile-menu" role="menu" aria-label="Mobile menu">
-      <div class="mobile-inner">
-        <div class="mobile-links">
-          <a href="{% url 'recipes:home' %}" role="menuitem">🏠 Home</a>
-          <a href="{% url 'recipes:recipe_list' %}" role="menuitem">📖 My Recipes</a>
-          <a href="{% url 'recipes:public_recipes' %}" role="menuitem">🌍 Public Recipes</a>
-          <a href="{% url 'recipes:create_recipe_landing' %}" role="menuitem">➕ Create Recipe</a>
-          <a href="{% url 'accounts:friend_dashboard' %}" role="menuitem">👥 Friends</a>
-        </div>
+    <!-- Mobile menu panel -->
+    <div id="mobileMenu" class="hidden md:hidden border-t border-white/10 bg-white text-gray-800">
+      <div class="container-max mx-auto px-4 py-3 grid gap-1">
+        <a class="px-3 py-3 rounded-lg hover:bg-gray-50 font-semibold" href="{% url 'recipes:home' %}">🏠 Home</a>
+        <a class="px-3 py-3 rounded-lg hover:bg-gray-50 font-semibold" href="{% url 'recipes:recipe_list' %}">📖 My Recipes</a>
+        <a class="px-3 py-3 rounded-lg hover:bg-gray-50 font-semibold" href="{% url 'recipes:public_recipes' %}">🌍 Public Recipes</a>
+        <a class="px-3 py-3 rounded-lg hover:bg-gray-50 font-semibold" href="{% url 'recipes:create_recipe_landing' %}">➕ Create Recipe</a>
+        <a class="px-3 py-3 rounded-lg hover:bg-gray-50 font-semibold" href="{% url 'accounts:friend_dashboard' %}">👥 Friends</a>
 
-    <div class="mobile-user">
-      {% if user.is_authenticated %}
-        <div class="left">
-          <span class="material-symbols-rounded user-icon--mobile">
-            {% firstof user.profile_icon "restaurant" %}
-          </span>
-          <!-- Username links to Account Settings on mobile too -->
-          <a href="{% url 'accounts:settings' %}" class="username">@{{ user.username|cut:"_" }}</a>
+        <div class="mt-2 rounded-xl border border-gray-200 bg-gray-50 p-3 flex items-center justify-between">
+          {% if user.is_authenticated %}
+            <div class="flex items-center gap-2">
+              <span class="material-symbols-rounded text-brand">{% firstof user.profile_icon "restaurant" %}</span>
+              <a href="{% url 'accounts:settings' %}" class="font-semibold">@{{ user.username|cut:"_" }}</a>
+            </div>
+            <a href="{% url 'accounts:logout' %}" class="font-semibold">🚪 Logout</a>
+          {% else %}
+            <a href="{% url 'accounts:login' %}" class="font-semibold">🔑 Login</a>
+          {% endif %}
         </div>
-        <a href="{% url 'accounts:logout' %}">🚪 Logout</a>
-      {% else %}
-        <a href="{% url 'accounts:login' %}">🔑 Login</a>
-      {% endif %}
-    </div>
       </div>
     </div>
   </header>
 
-  <main>
-    {% if messages %}
-      {% for message in messages %}
-        <div class="message {{ message.tags }}">{{ message }}</div>
-      {% endfor %}
-    {% endif %}
+  <main id="main" class="flex-1">
+    <div class="container-max mx-auto px-4 py-4 md:py-6">
+      <!-- Django messages (toasts + inline) -->
+      {% if messages %}
+        <div class="space-y-3" id="flashRegion">
+          {% for message in messages %}
+            <div class="flex items-start gap-3 rounded-2xl p-4 shadow-card ring-1 ring-black/5"
+                 data-flash
+                 data-tag="{{ message.tags }}">
+              <span class="material-symbols-rounded mt-0.5"></span>
+              <div class="flex-1">{{ message }}</div>
+              <button class="shrink-0 p-1 rounded hover:bg-black/5" aria-label="Dismiss"><span class="material-symbols-rounded">close</span></button>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
 
-    <section class="card">
-      {% block content %}{% endblock %}
-    </section>
+      <!-- Optional breadcrumbs slot -->
+      {% block breadcrumbs %}{% endblock %}
+
+      <!-- Main content wrapper (keeps legacy .card while adopting Tailwind) -->
+      <section class="card md:rounded-2xl md:shadow-card md:ring-1 md:ring-black/5 md:bg-white md:p-6">
+        {% block content %}{% endblock %}
+      </section>
+
+      {% block modals %}{% endblock %}
+    </div>
   </main>
 
-  <footer>
-    &copy; {{ year|default:"2025" }} RecipeManager. Crafted with ❤️.
+  <!-- Bottom mobile nav (big touch targets) -->
+  <nav class="md:hidden fixed inset-x-0 bottom-0 z-40 bg-white border-t border-gray-200">
+    <ul class="grid grid-cols-4 text-sm text-gray-700">
+      <li><a href="{% url 'recipes:home' %}" class="flex flex-col items-center gap-1 py-2.5">
+        <span class="material-symbols-rounded">home</span><span>Home</span></a></li>
+      <li><a href="{% url 'recipes:recipe_list' %}" class="flex flex-col items-center gap-1 py-2.5">
+        <span class="material-symbols-rounded">menu_book</span><span>My</span></a></li>
+      <li><a href="{% url 'recipes:create_recipe_landing' %}" class="flex flex-col items-center gap-1 py-2.5">
+        <span class="material-symbols-rounded">add_circle</span><span>Create</span></a></li>
+      <li><a href="{% url 'accounts:friend_dashboard' %}" class="flex flex-col items-center gap-1 py-2.5">
+        <span class="material-symbols-rounded">group</span><span>Friends</span></a></li>
+    </ul>
+  </nav>
+
+  <footer class="mt-10 border-t border-gray-200 bg-gray-50">
+    <div class="container-max mx-auto px-4 py-6 text-center text-sm text-gray-600">
+      &copy; {{ year|default:"2025" }} RecipeManager · Crafted with ❤️ · <a href="{% url 'recipes:public_recipes' %}" class="underline">Browse public recipes</a>
+    </div>
   </footer>
 
   <script>
-    // Mobile menu toggle (accessible)
-    (function(){
+
+
+      // --- Mobile menu toggle ---------------------------------------------
+      (function(){
       const btn = document.getElementById('navToggle');
-      const menu = document.getElementById('mobileMenu');
-      if(!btn || !menu) return;
-
-      function closeMenu(){
-        document.body.classList.remove('mobile-open');
-        btn.setAttribute('aria-expanded','false');
-      }
-      function openMenu(){
-        document.body.classList.add('mobile-open');
-        btn.setAttribute('aria-expanded','true');
-      }
-      btn.addEventListener('click', function(){
-        const expanded = btn.getAttribute('aria-expanded') === 'true';
-        expanded ? closeMenu() : openMenu();
+      const panel = document.getElementById('mobileMenu');
+      if(!btn || !panel) return;
+      btn.addEventListener('click', () => {
+      const open = panel.classList.toggle('hidden') === false;
+      btn.setAttribute('aria-expanded', String(open));
       });
+      // Close on escape / outside click
+      document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') { panel.classList.add('hidden'); btn.setAttribute('aria-expanded','false'); }});
+      })();
 
-      // Close on outside click
-      document.addEventListener('click', function(e){
-        if(!document.body.classList.contains('mobile-open')) return;
-        const withinHeader = e.target.closest('header');
-        if(!withinHeader) closeMenu();
-      });
-
-      // Close on Escape
-      document.addEventListener('keydown', function(e){
-        if(e.key === 'Escape') closeMenu();
+    // --- Dismissible banners & map icons by tag -------------------------
+    (function(){
+      const iconFor = (tag)=>({
+        success:'check_circle', error:'error', warning:'warning', info:'info'
+      })[tag]||'info';
+      const colorFor = (tag)=>({
+        success:['bg-emerald-50','text-emerald-800'],
+        error:['bg-rose-50','text-rose-800'],
+        warning:['bg-amber-50','text-amber-800'],
+        info:['bg-sky-50','text-sky-800']
+      })[tag]||['bg-gray-50','text-gray-800'];
+      document.querySelectorAll('[data-flash]').forEach(el=>{
+        const tag = el.getAttribute('data-tag');
+        const [bg, fg] = colorFor(tag);
+        el.classList.add(bg, fg);
+        const icon = el.querySelector('.material-symbols-rounded');
+        if (icon) icon.textContent = iconFor(tag);
+        el.querySelector('button')?.addEventListener('click', ()=> el.remove());
+        // Auto-dismiss after 6s
+        setTimeout(()=>{ if(document.body.contains(el)) el.remove(); }, 6000);
       });
     })();
+
+    // --- Global tips bar dismiss ----------------------------------------
+    (function(){
+      document.querySelectorAll('[data-dismiss]')?.forEach(btn=>{
+        btn.addEventListener('click', ()=>{
+          const id = btn.getAttribute('data-dismiss');
+          const el = document.getElementById(id);
+          if (el) el.style.display = 'none';
+        });
+      })
+    })();
+
+    // --- Tiny helper: expandable "?" explanations -----------------------
+    // Usage in any template:
+    // <details class="help-popover inline-block align-middle">
+    //   <summary class="help-badge bg-brand/15 text-brand hover:bg-brand/20 select-none">?</summary>
+    //   <div class="mt-2 w-72 max-w-[80vw] p-3 bg-white rounded-xl shadow-card ring-1 ring-black/5 text-sm">
+    //     Brief guidance about the adjacent field.
+    //   </div>
+    // </details>
   </script>
+
+  {% block extra_scripts %}{% endblock %}
 </body>
 </html>
