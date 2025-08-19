@@ -4,16 +4,18 @@
   <meta charset="UTF-8" />
   <title>{% block title %}Recipe Manager{% endblock %}</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#4CAF50" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)">
 
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <!-- Material Symbols for icons (incl. profile icon names like "restaurant") -->
+  <!-- Material Symbols (still used in a few spots) -->
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:wght@400;700" rel="stylesheet">
 
+  <!-- Iconify (kept for compatibility) -->
   <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js" defer></script>
 
-
-  <!-- Tailwind (forms + typography plugins for nicer forms/content) -->
+  <!-- Tailwind -->
   <script src="https://cdn.tailwindcss.com?plugins=forms,typography,container-queries"></script>
   <script>
     tailwind.config = {
@@ -24,20 +26,23 @@
             brandDark: '#388E3C',
             brandAccent: '#FFC107',
           },
-          boxShadow: {
-            card: '0 10px 25px rgba(0,0,0,0.08)',
+          boxShadow: { card: '0 10px 25px rgba(0,0,0,0.08)' },
+          borderRadius: { xl: '0.75rem', '2xl': '1rem' },
+          keyframes: {
+            slideDown: { '0%': { transform: 'translateY(-8px)', opacity: 0 }, '100%': { transform: 'translateY(0)', opacity: 1 } },
+            slideUp: { '0%': { transform: 'translateY(0)', opacity: 1 }, '100%': { transform: 'translateY(-8px)', opacity: 0 } }
           },
-          borderRadius: {
-            xl: '0.75rem',
-            '2xl': '1rem',
-          },
+          animation: {
+            slideDown: 'slideDown .16s ease-out forwards',
+            slideUp: 'slideUp .14s ease-in forwards',
+          }
         }
       },
       darkMode: 'class'
     }
   </script>
 
-  <!-- App design tokens (keep for backward-compat with existing templates) -->
+  <!-- App tokens -->
   <style>
     :root{
       --primary-color:#4CAF50;
@@ -45,14 +50,15 @@
       --accent-color:#FFC107;
       --background-color:#f8f9fa;
       --text-color:#2c3e50;
-      --muted-text:#6c757d;
       --card-bg:#fff;
       --shadow:0 10px 25px rgba(0,0,0,.08);
       --header-h:64px;
+      --bottom-nav-h:64px;
+      --safe-top: env(safe-area-inset-top, 0px);
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
     }
     *{box-sizing:border-box}
     html,body{font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
-    /* Legacy utility (used by existing pages) */
     .card{background:var(--card-bg); padding:1.25rem; border-radius:12px; box-shadow:var(--shadow);}
     .message{padding:1rem; border-radius:10px; font-weight:600}
     .message.success{background:#d1fae5; color:#065f46}
@@ -64,16 +70,19 @@
     @media (min-width:1024px){.container-max{max-width:1100px}}
     .skip-link{position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden}
     .skip-link:focus{position:fixed; left:1rem; top:1rem; z-index:9999; width:auto; height:auto; padding:.5rem .75rem; background:#111827; color:#fff; border-radius:.5rem}
+    /* Make space for bottom nav on small screens */
+    @media (max-width: 767px){
+      main{ padding-bottom: calc(var(--bottom-nav-h) + var(--safe-bottom) + 12px); }
+    }
   </style>
 
   {% block extra_head %}{% endblock %}
 </head>
 <body class="min-h-screen bg-[var(--background-color)] text-[var(--text-color)] antialiased flex flex-col">
-  <!-- Accessibility: skip straight to main content -->
   <a href="#main" class="skip-link">Skip to content</a>
 
-  <!-- Header / Top bar -->
-  <header class="sticky top-0 z-50 bg-brand text-white shadow">
+  <!-- Header -->
+  <header class="sticky top-0 z-50 bg-brand text-white shadow" style="padding-top: var(--safe-top);">
     <div class="container-max mx-auto px-4 h-[var(--header-h)] flex items-center justify-between gap-3">
       <div class="flex items-center gap-2">
         <a href="{% url 'recipes:home' %}" class="flex items-center gap-2 text-white no-underline">
@@ -82,7 +91,7 @@
         </a>
       </div>
 
-      <!-- Desktop nav -->
+      <!-- Desktop nav (unchanged) -->
       <nav class="hidden md:flex items-center gap-1 lg:gap-2" aria-label="Primary">
         <a href="{% url 'recipes:home' %}" class="px-3 py-2 rounded-lg font-semibold hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/40">🏠 Home</a>
         <a href="{% url 'recipes:recipe_list' %}" class="px-3 py-2 rounded-lg font-semibold hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/40">📖 My Recipes</a>
@@ -91,11 +100,8 @@
         <a href="{% url 'accounts:friend_dashboard' %}" class="px-3 py-2 rounded-lg font-semibold hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/40">👥 Friends</a>
       </nav>
 
-      <!-- Right cluster: theme + user -->
+      <!-- Right (desktop) -->
       <div class="hidden md:flex items-center gap-2">
-
-
-        <!-- User area -->
         <div class="relative">
           {% if user.is_authenticated %}
             <details class="group relative">
@@ -123,15 +129,17 @@
 
       <!-- Mobile controls -->
       <div class="md:hidden flex items-center gap-1">
-        <button id="themeToggleMobile" class="p-2 rounded-lg bg-white/10" aria-label="Toggle dark mode"><span class="material-symbols-rounded">dark_mode</span></button>
-        <button id="navToggle" class="p-2 rounded-lg bg-white/10" aria-expanded="false" aria-controls="mobileMenu" aria-label="Open menu">
+        <button id="navToggle"
+                class="p-2 rounded-lg bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/40"
+                aria-expanded="false" aria-controls="mobileMenu" aria-label="Open menu">
           <span class="material-symbols-rounded">menu</span>
         </button>
       </div>
     </div>
 
-    <!-- Mobile menu panel -->
-    <div id="mobileMenu" class="hidden md:hidden border-t border-white/10 bg-white text-gray-800">
+    <!-- Mobile menu: slide-down panel -->
+    <div id="mobileMenu"
+         class="md:hidden hidden border-t border-white/10 bg-white text-gray-800 will-change-transform origin-top">
       <div class="container-max mx-auto px-4 py-3 grid gap-1">
         <a class="px-3 py-3 rounded-lg hover:bg-gray-50 font-semibold" href="{% url 'recipes:home' %}">🏠 Home</a>
         <a class="px-3 py-3 rounded-lg hover:bg-gray-50 font-semibold" href="{% url 'recipes:recipe_list' %}">📖 My Recipes</a>
@@ -156,7 +164,6 @@
 
   <main id="main" class="flex-1">
     <div class="container-max mx-auto px-4 py-4 md:py-6">
-      <!-- Django messages (toasts + inline) -->
       {% if messages %}
         <div class="space-y-3" id="flashRegion">
           {% for message in messages %}
@@ -165,16 +172,16 @@
                  data-tag="{{ message.tags }}">
               <span class="material-symbols-rounded mt-0.5"></span>
               <div class="flex-1">{{ message }}</div>
-              <button class="shrink-0 p-1 rounded hover:bg-black/5" aria-label="Dismiss"><span class="material-symbols-rounded">close</span></button>
+              <button class="shrink-0 p-1 rounded hover:bg-black/5" aria-label="Dismiss">
+                <span class="material-symbols-rounded">close</span>
+              </button>
             </div>
           {% endfor %}
         </div>
       {% endif %}
 
-      <!-- Optional breadcrumbs slot -->
       {% block breadcrumbs %}{% endblock %}
 
-      <!-- Main content wrapper (keeps legacy .card while adopting Tailwind) -->
       <section class="card md:rounded-2xl md:shadow-card md:ring-1 md:ring-black/5 md:bg-white md:p-6">
         {% block content %}{% endblock %}
       </section>
@@ -183,9 +190,10 @@
     </div>
   </main>
 
-  <!-- Bottom mobile nav (big touch targets) -->
-  <nav class="md:hidden fixed inset-x-0 bottom-0 z-40 bg-white border-t border-gray-200">
-    <ul class="grid grid-cols-4 text-sm text-gray-700">
+  <!-- Bottom mobile nav -->
+  <nav class="md:hidden fixed inset-x-0 bottom-0 z-40 bg-white border-t border-gray-200"
+       style="padding-bottom: var(--safe-bottom);">
+    <ul class="grid grid-cols-4 text-sm text-gray-700" style="height: calc(var(--bottom-nav-h) + var(--safe-bottom));">
       <li><a href="{% url 'recipes:home' %}" class="flex flex-col items-center gap-1 py-2.5">
         <span class="material-symbols-rounded">home</span><span>Home</span></a></li>
       <li><a href="{% url 'recipes:recipe_list' %}" class="flex flex-col items-center gap-1 py-2.5">
@@ -197,29 +205,55 @@
     </ul>
   </nav>
 
-  <footer class="mt-10 border-t border-gray-200 bg-gray-50">
+  <footer class="mt-10 border-t border-gray-200 bg-gray-50" style="padding-bottom: var(--safe-bottom);">
     <div class="container-max mx-auto px-4 py-6 text-center text-sm text-gray-600">
       &copy; {{ year|default:"2025" }} RecipeManager 🌱🦎·
     </div>
   </footer>
 
   <script>
-
-
-      // --- Mobile menu toggle ---------------------------------------------
-      (function(){
+    // --- Mobile menu toggle (animated, overlay, escape) -----------------
+    (function(){
       const btn = document.getElementById('navToggle');
       const panel = document.getElementById('mobileMenu');
-      if(!btn || !panel) return;
-      btn.addEventListener('click', () => {
-      const open = panel.classList.toggle('hidden') === false;
-      btn.setAttribute('aria-expanded', String(open));
-      });
-      // Close on escape / outside click
-      document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') { panel.classList.add('hidden'); btn.setAttribute('aria-expanded','false'); }});
-      })();
 
-    // --- Dismissible banners & map icons by tag -------------------------
+      if(!btn || !panel) return;
+
+      let open = false;
+      // Create overlay for outside click
+      const overlay = document.createElement('div');
+      overlay.id = 'mobileOverlay';
+      overlay.className = 'md:hidden hidden fixed inset-0 bg-black/30';
+      document.body.appendChild(overlay);
+
+      function lockScroll(lock){
+        document.documentElement.style.overflow = lock ? 'hidden' : '';
+        document.body.style.overflow = lock ? 'hidden' : '';
+      }
+      function show(){
+        open = true;
+        btn.setAttribute('aria-expanded','true');
+        overlay.classList.remove('hidden');
+        panel.classList.remove('hidden');
+        panel.classList.remove('animate-slideUp');
+        panel.classList.add('animate-slideDown');
+        lockScroll(true);
+      }
+      function hide(){
+        open = false;
+        btn.setAttribute('aria-expanded','false');
+        panel.classList.remove('animate-slideDown');
+        panel.classList.add('animate-slideUp');
+        // wait for animation then hide
+        setTimeout(()=>{ panel.classList.add('hidden'); overlay.classList.add('hidden'); lockScroll(false); }, 130);
+      }
+
+      btn.addEventListener('click', ()=> open ? hide() : show());
+      overlay.addEventListener('click', hide);
+      document.addEventListener('keydown', (e)=>{ if(e.key==='Escape' && open) hide(); });
+    })();
+
+    // --- Flash messages (icons + auto dismiss) --------------------------
     (function(){
       const iconFor = (tag)=>({
         success:'check_circle', error:'error', warning:'warning', info:'info'
@@ -237,12 +271,11 @@
         const icon = el.querySelector('.material-symbols-rounded');
         if (icon) icon.textContent = iconFor(tag);
         el.querySelector('button')?.addEventListener('click', ()=> el.remove());
-        // Auto-dismiss after 6s
         setTimeout(()=>{ if(document.body.contains(el)) el.remove(); }, 6000);
       });
     })();
 
-    // --- Global tips bar dismiss ----------------------------------------
+    // --- Dismiss helper --------------------------------------------------
     (function(){
       document.querySelectorAll('[data-dismiss]')?.forEach(btn=>{
         btn.addEventListener('click', ()=>{
@@ -253,8 +286,7 @@
       })
     })();
 
-    // --- Tiny helper: expandable "?" explanations -----------------------
-    // Usage in any template:
+    // --- Tiny helper: "?" popovers (kept for all pages) ------------------
     // <details class="help-popover inline-block align-middle">
     //   <summary class="help-badge bg-brand/15 text-brand hover:bg-brand/20 select-none">?</summary>
     //   <div class="mt-2 w-72 max-w-[80vw] p-3 bg-white rounded-xl shadow-card ring-1 ring-black/5 text-sm">
