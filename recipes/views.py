@@ -496,7 +496,7 @@ def add_recipe_from_url(request):
 
         except Exception as e:
             print("❌ Error enqueueing add_recipe_from_url:", e)
-            messages.error(request, "❌ Could not start recipe import.")
+            messages.error(request, "❌ Your URL seems to not be supported by the system! Try other recipe providers, like biancazapatka.com")
             return redirect('recipes:recipe_list')
 
     # GET: render the form page
