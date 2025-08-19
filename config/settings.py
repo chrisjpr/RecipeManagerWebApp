@@ -172,10 +172,17 @@ RQ_QUEUES = {
 if DEBUG:
     try:
         import redis
-        redis.Redis.from_url(REDIS_URL).ping()
+        # Add timeouts (in seconds)
+        client = redis.Redis.from_url(
+            REDIS_URL,
+            socket_connect_timeout=7,  # timeout for initial connection
+            socket_timeout=7           # timeout for commands (like ping)
+        )
+        client.ping()
         print("✅ Redis preflight check successful")
     except Exception as e:
         print("❌ Redis preflight check failed:", e)
+
 
 # ------------------------------------------------------------
 # Passwords / auth

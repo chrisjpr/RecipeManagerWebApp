@@ -1,69 +1,59 @@
 {% extends "base.html" %}
+{% block title %}Log in | Recipe Manager{% endblock %}
 
-{% if messages %}
-  <ul class="messages">
-    {% for message in messages %}
-      <li class="message {{ message.tags }}">{{ message }}</li>
-    {% endfor %}
-  </ul>
-{% endif %}
-
-{% if form.errors %}
-  <ul class="form-errors">
-    {% for field in form %}
-      {% for error in field.errors %}
-        <li>{{ field.label }}: {{ error }}</li>
-      {% endfor %}
-    {% endfor %}
-    {% for error in form.non_field_errors %}
-      <li>{{ error }}</li>
-    {% endfor %}
-  </ul>
-{% endif %}
-
-{% block content %}
-<div class="card" style="max-width: 500px; margin: 2rem auto; text-align: center;">
-  <h2 style="margin-bottom: 1rem;">🔐 Welcome Back</h2>
-  <p class="subtitle">Please enter your credentials to log in.</p>
-
-  <form method="post" style="margin-top: 1.5rem; text-align: left;">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" style="width: 100%; background-color: var(--primary-color); color: white; padding: 0.6rem; border: none; border-radius: 8px; font-size: 1rem;">
-      🚪 Log In
-    </button>
-  </form>
-
-  <!-- 🔁 Forgot Password Link -->
-  <p style="margin-top: 1rem;">
-    <a href="{% url 'accounts:password_reset' %}" style="color: var(--primary-color); font-weight: 500; text-decoration: none;">🔁 Forgot Password?</a>
-  </p>
-
-  <p style="margin-top: 1.5rem;">Don't have an account? 
-    <a href="{% url 'accounts:register' %}" style="color: var(--primary-color); font-weight: 600; text-decoration: none;">Register here</a>.
-  </p>
-</div>
+{% block extra_head %}
+<style>
+  .form-modern input[type="text"],
+  .form-modern input[type="password"],
+  .form-modern input[type="email"]{
+    width:100%; border:1px solid rgb(209 213 219); border-radius:0.75rem;
+    padding:0.625rem 0.75rem; background:#fff; color:rgb(30 41 59);
+  }
+  .dark .form-modern input[type="text"],
+  .dark .form-modern input[type="password"],
+  .dark .form-modern input[type="email"]{
+    background:rgb(15 23 42); color:rgb(226 232 240); border-color:rgb(51 65 85);
+  }
+</style>
 {% endblock %}
 
-<style>
-.messages {
-  list-style: none;
-  padding: 0;
-  margin: 1rem 0;
-}
-.message {
-  padding: 0.8rem 1rem;
-  border-radius: 5px;
-  margin-bottom: 0.5rem;
-}
-.message.info {
-  background-color: #e7f3fe;
-  color: #084298;
-  border: 1px solid #b6d4fe;
-}
-.message.error {
-  background-color: #f8d7da;
-  color: #842029;
-  border: 1px solid #f5c2c7;
-}
-</style>
+{% block content %}
+<div class="mx-auto max-w-md mt-6">
+  <div class="rounded-2xl bg-white dark:bg-slate-800 ring-1 ring-black/5 shadow-card p-5 form-modern">
+    <h1 class="text-2xl font-extrabold">🔐 Welcome back</h1>
+    <p class="text-sm text-slate-600 dark:text-slate-300 mt-1">Please enter your credentials to log in.</p>
+
+    {% if form.non_field_errors %}
+      <div class="mt-3 rounded-lg bg-rose-50 dark:bg-rose-900/30 text-rose-800 dark:text-rose-200 px-3 py-2 text-sm">
+        {{ form.non_field_errors|join:", " }}
+      </div>
+    {% endif %}
+
+    <form method="post" class="mt-4 space-y-3">
+      {% csrf_token %}
+      {% for field in form.visible_fields %}
+        <label class="block">
+          <span class="block text-sm font-semibold mb-1">{{ field.label }}</span>
+          {{ field }}
+          {% if field.errors %}
+            <span class="mt-1 block text-xs text-rose-600 dark:text-rose-300">{{ field.errors|join:", " }}</span>
+          {% endif %}
+        </label>
+      {% endfor %}
+
+      <button type="submit" class="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-600 text-white px-4 py-2 font-semibold hover:bg-emerald-700">
+        <span>Log In</span>
+      </button>
+    </form>
+
+    <div class="mt-4 flex flex-col gap-2 text-sm">
+      <a href="{% url 'accounts:password_reset' %}" class="inline-flex items-center gap-1 text-emerald-700 dark:text-emerald-300 font-semibold hover:underline">
+        <span>Forgot password?</span>
+      </a>
+      <p>Don’t have an account?
+        <a href="{% url 'accounts:register' %}" class="font-semibold text-emerald-700 dark:text-emerald-300 hover:underline">Create one</a>.
+      </p>
+    </div>
+  </div>
+</div>
+{% endblock %}
