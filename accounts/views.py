@@ -282,10 +282,13 @@ from .forms import AccountProfileForm, ICON_CHOICES
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
+
+from .forms import AccountProfileForm, ICON_CHOICES
+
+
 @login_required
 def account_settings(request):
     user = request.user
-
     profile_form = AccountProfileForm(instance=user)
     password_form = PasswordChangeForm(user=user)
 
@@ -302,18 +305,20 @@ def account_settings(request):
             password_form = PasswordChangeForm(user=user, data=request.POST)
             if password_form.is_valid():
                 user = password_form.save()
-                update_session_auth_hash(request, user)  # keep the session
+                update_session_auth_hash(request, user)
                 messages.success(request, "🔒 Password changed successfully.")
                 return redirect("accounts:settings")
             else:
                 messages.error(request, "❌ Please correct the password form.")
 
-    context = {
+    # Send emoji strings (not tuples) to the template
+    icon_strings = [k for k, _ in ICON_CHOICES]
+
+    return render(request, "accounts/settings.html", {
         "profile_form": profile_form,
         "password_form": password_form,
-        "icon_choices": ICON_CHOICES,  # for nice icon grid
-    }
-    return render(request, "accounts/settings.html", context)
+        "icon_choices": icon_strings,   # <— used by the radio grid in template
+    })
 
 ###################### /ACCOUNT SETTINGS #####################
 #endregion
