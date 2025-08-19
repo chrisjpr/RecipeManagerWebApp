@@ -42,6 +42,166 @@
     }
   </script>
 
+  <script>
+/**
+ * Global RQ job poller.
+ * - Picks up one or more job IDs from a short-lived cookie `last_import_job`
+ *   (comma-separated), moves them into localStorage for persistence, and polls
+ *   until "finished" or "failed" (max ~12 minutes by default).
+ * - On failure, injects a red flash banner matching your existing styles.
+ */
+(function(){
+  const STATUS_URL = "{% url 'recipes:job_status' %}";
+
+  // --- Helpers -----------------------------------------------------------
+  const storageKey = "pendingImportJobs";
+  function readCookieJobs(){
+    const m = document.cookie.match(/(?:^|; )last_import_job=([^;]+)/);
+    if (!m) return [];
+    // Clear cookie
+    document.cookie = "last_import_job=; Max-Age=0; path=/; SameSite=Lax";
+    try {
+      const raw = decodeURIComponent(m[1]);
+      return raw.split(",").map(s => s.trim()).filter(Boolean);
+    } catch { return []; }
+  }
+  function loadQueue(){
+    try { return JSON.parse(localStorage.getItem(storageKey) || "[]"); }
+    catch { return []; }
+  }
+  function saveQueue(arr){
+    localStorage.setItem(storageKey, JSON.stringify(Array.from(new Set(arr))));
+  }
+  function enqueueJobs(ids){
+    const q = loadQueue();
+    ids.forEach(id => { if (id && !q.includes(id)) q.push(id); });
+    saveQueue(q);
+  }
+  function removeJob(id){
+    saveQueue(loadQueue().filter(x => x !== id));
+  }
+
+  function flash(kind, text){
+    // Use your #flashRegion container + Tailwind classes mapped in base.html
+    const host = document.getElementById("flashRegion") || (function(){
+      const div = document.createElement('div');
+      div.id = 'flashRegion';
+      div.className = 'space-y-3';
+      const container = document.querySelector('.container-max .px-4') || document.body;
+      container.prepend(div);
+      return div;
+    })();
+
+    const wrapper = document.createElement('div');
+    wrapper.className = 'flex items-start gap-3 rounded-2xl p-4 shadow-card ring-1 ring-black/5';
+    wrapper.setAttribute('data-flash','');
+    wrapper.setAttribute('data-tag', kind);
+
+    const icon = document.createElement('span');
+    icon.className = 'material-symbols-rounded mt-0.5';
+    const iconFor = (tag)=>({ success:'check_circle', error:'error', warning:'warning', info:'info' }[tag]||'info');
+    icon.textContent = iconFor(kind);
+
+    const body = document.createElement('div');
+    body.className = 'flex-1';
+    body.textContent = text;
+
+    const close = document.createElement('button');
+    close.className = 'shrink-0 p-1 rounded hover:bg-black/5';
+    close.setAttribute('aria-label','Dismiss');
+    close.innerHTML = '<span class="material-symbols-rounded">close</span>';
+    close.addEventListener('click', ()=> wrapper.remove());
+
+    wrapper.append(icon, body, close);
+    host.prepend(wrapper);
+
+    // Apply the same colorization & auto-dismiss you already do
+    (function(el){
+      const tag = el.getAttribute('data-tag');
+      const colorFor = (t)=>({
+        success:['bg-emerald-50','text-emerald-800'],
+        error:['bg-rose-50','text-rose-800'],
+        warning:['bg-amber-50','text-amber-800'],
+        info:['bg-sky-50','text-sky-800']
+      })[t]||['bg-gray-50','text-gray-800'];
+      const [bg, fg] = colorFor(tag);
+      el.classList.add(bg, fg);
+      setTimeout(()=>{ if(document.body.contains(el)) el.remove(); }, 10000);
+    })(wrapper);
+  }
+
+  // Map error_code -> human text (same messages you wanted)
+  function humanError(error){
+    const map = {
+      webpage_not_found: "❌ The recipe could not be imported. The webpage could not be found.",
+      url_import_failed: "❌ The recipe could not be imported from the URL.",
+      no_main_image: "❌ The recipe could not be imported. No main image of the dish could be extracted.",
+      image_import_failed: "❌ The recipe could not be imported from the image.",
+      manual_too_ambiguous: "❌ The recipe could not be imported. Manual import is more prone to errors and the provided text was too ambiguous.",
+      manual_import_failed: "❌ The recipe could not be imported from manual input."
+    };
+    return map[error?.error_code] || ("❌ The recipe could not be imported." + (error?.error_message ? " " + error.error_message : ""));
+  }
+
+  // --- Boot: pull cookies into persistent queue -------------------------
+  const newIds = readCookieJobs();
+  if (newIds.length) enqueueJobs(newIds);
+
+  // If nothing to poll, bail early
+  if (!loadQueue().length) return;
+
+  // --- Poll loop with gentle backoff ------------------------------------
+  // Strategy: poll each job every 5s, backoff to 10s after 2 minutes.
+  // Hard stop after 12 minutes (typical 1–3 min jobs are covered; errors at 2m are caught).
+  const firstSeenAt = {};
+  const timers = {};
+
+  function pollOne(jobId){
+    if (!firstSeenAt[jobId]) firstSeenAt[jobId] = Date.now();
+    fetch(STATUS_URL + "?job_id=" + encodeURIComponent(jobId), { credentials: 'same-origin' })
+      .then(r => r.json())
+      .then(data => {
+        if (data.status === "failed") {
+          flash('error', humanError(data));
+          removeJob(jobId);
+          clearTimeout(timers[jobId]);
+          delete timers[jobId];
+          return;
+        }
+        if (data.status === "finished") {
+          // We already show a success banner on enqueue, so stay quiet here.
+          removeJob(jobId);
+          clearTimeout(timers[jobId]);
+          delete timers[jobId];
+          return;
+        }
+
+        // Keep polling while queued/started
+        const elapsed = Date.now() - firstSeenAt[jobId];
+        const next = elapsed > 120000 ? 10000 : 5000; // 2min -> 10s backoff
+        // Hard timeout at ~12 minutes: show a soft error
+        if (elapsed > 12 * 60 * 1000) {
+          flash('error', "❌ The recipe import may have stalled. You’ll be notified if it ultimately fails.");
+          removeJob(jobId);
+          clearTimeout(timers[jobId]);
+          delete timers[jobId];
+          return;
+        }
+        timers[jobId] = setTimeout(()=> pollOne(jobId), next);
+      })
+      .catch(() => {
+        // Network hiccup: retry in 10s without dropping the job
+        timers[jobId] = setTimeout(()=> pollOne(jobId), 10000);
+      });
+  }
+
+  loadQueue().forEach(id => pollOne(id));
+})();
+</script>
+
+
+  
+
   <!-- App tokens -->
   <style>
     :root{
