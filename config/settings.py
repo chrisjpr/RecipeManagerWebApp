@@ -175,8 +175,8 @@ if DEBUG:
         # Add timeouts (in seconds)
         client = redis.Redis.from_url(
             REDIS_URL,
-            socket_connect_timeout=7,  # timeout for initial connection
-            socket_timeout=7           # timeout for commands (like ping)
+            socket_connect_timeout=3,  # timeout for initial connection
+            socket_timeout=3           # timeout for commands (like ping)
         )
         client.ping()
         print("✅ Redis preflight check successful")
