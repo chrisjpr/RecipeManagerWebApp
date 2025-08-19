@@ -1,13 +1,81 @@
 {% extends "base.html" %}
-{% block content %}
-  <div class="card" style="max-width: 500px; margin: auto; padding: 2rem;">
-    <h2>📧 Email Verification Required</h2>
-    <p>Your account is not verified yet. A verification link was sent to:</p>
-    <p><strong>{{ email }}</strong></p>
+{% block title %}Verify Your Email | Recipe Manager{% endblock %}
 
-    <form method="post" style="margin-top: 1rem;">
+{% block breadcrumbs %}
+<nav aria-label="Breadcrumb" class="mb-3 text-sm text-gray-600 dark:text-gray-300">
+  <ol class="flex flex-wrap items-center gap-1">
+    <li><a class="underline hover:no-underline" href="{% url 'recipes:home' %}">Home</a></li>
+    <li class="opacity-60">/</li>
+    <li class="font-semibold">Verify Email</li>
+  </ol>
+</nav>
+{% endblock %}
+
+{% block extra_head %}
+<style>
+  .card { border-radius: 1rem; background: white; box-shadow: 0 1px 2px rgba(0,0,0,.06); border: 1px solid rgba(0,0,0,.05); }
+  .dark .card { background: rgb(30 41 59); border-color: rgba(255,255,255,.06); }
+  .btn-primary { border-radius: .75rem; background: rgb(5 150 105); color: white; padding: .625rem 1rem; font-weight: 700; }
+  .btn-primary:hover { background: rgb(4 120 87); }
+  .btn-ghost { border-radius: .75rem; background: rgb(248 250 252); color: rgb(15 23 42); padding: .625rem 1rem; font-weight: 700; border: 1px solid rgba(0,0,0,.06); }
+  .dark .btn-ghost { background: rgb(15 23 42); color: rgb(226 232 240); border-color: rgba(255,255,255,.08); }
+  .spinner { display:inline-block; width:1rem; height:1rem; border:2px solid currentColor; border-right-color:transparent; border-radius:9999px; animation:spin .6s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="mx-auto max-w-md mt-6">
+  <div class="card p-5">
+    <div class="flex items-center gap-3">
+      <div class="text-2xl">📧</div>
+      <h1 class="text-xl md:text-2xl font-extrabold">Email Verification Required</h1>
+    </div>
+
+    <p class="mt-3 text-sm text-slate-700 dark:text-slate-200">
+      Your account isn’t verified yet. We sent a verification link to:
+    </p>
+    <p class="mt-1 font-semibold break-words">{{ email }}</p>
+
+    <div class="mt-4 rounded-xl bg-emerald-50 text-emerald-900 dark:bg-emerald-900/30 dark:text-emerald-100 p-3 text-sm">
+      <ul class="list-disc pl-5 space-y-1">
+        <li>Check your inbox and click the link to verify.</li>
+        <li>Didn’t get it? Look in your spam/junk folder.</li>
+        <li>You can request a new email below.</li>
+      </ul>
+    </div>
+
+    <form method="post" class="mt-4" id="resendForm">
       {% csrf_token %}
-      <button type="submit" class="btn btn-primary">🔁 Resend Verification Email</button>
+      <button type="submit" id="resendBtn" class="btn-primary inline-flex items-center gap-2">
+        <span class="spinner hidden" aria-hidden="true"></span>
+        <span class="btn-text">Resend verification email</span>
+      </button>
+      <a href="{% url 'accounts:logout' %}" class="btn-ghost inline-flex items-center gap-2 ml-2">
+        Use a different email
+      </a>
     </form>
+
+    <p class="mt-3 text-xs text-slate-500 dark:text-slate-400">
+      Tip: some providers delay emails for a minute or two. If nothing arrives, try resending.
+    </p>
   </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+  // Small UX touch: show loading state when resending
+  (function(){
+    const form = document.getElementById('resendForm');
+    const btn = document.getElementById('resendBtn');
+    if (!form || !btn) return;
+    form.addEventListener('submit', () => {
+      btn.disabled = true;
+      btn.classList.add('opacity-70');
+      btn.querySelector('.spinner').classList.remove('hidden');
+      btn.querySelector('.btn-text').textContent = 'Sending…';
+    });
+  })();
+</script>
 {% endblock %}
