@@ -41,21 +41,24 @@ class CustomLoginForm(AuthenticationForm):
 # --- Account Settings (username + icon) ---
 
 # 30 Material Symbols names (no images needed)
-ICON_CHOICES = [
-    "restaurant","local_pizza","icecream","ramen_dining","bakery_dining",
-    "sushi","emoji_food_beverage","coffee","brunch_dining","dinner_dining",
-    "fastfood","takeout_dining","kitchen","set_meal","soup_kitchen",
-    "cake","cookie","nutrition","rice_bowl","egg_alt",
-    "espresso","flatware","breakfast_dining","wine_bar","liquor",
-    "emoji_people","face","sentiment_satisfied","person","restaurant_menu"
-]
+# --- NEW: emoji choices as (value, label) tuples ---
+ICON_CHOICES = [(e, e) for e in [
+    "🐶","🐱","🐭","🐹","🐰","🦊","🐻","🐼","🐻‍❄️","🐨","🐯","🦁","🐮","🐷","🐽","🐸","🐵",
+    "🙈","🙉","🙊","🐒","🐔","🐧","🐦","🐦‍⬛","🐤","🐣","🐥","🦆","🦅","🦉","🦇","🐺","🐗","🐴","🦄",
+    "🐝","🪱","🐛","🦋","🐌","🐞","🐜","🪰","🪲","🪳","🦟","🦗","🕷","🕸","🦂","🐢","🐍","🦎","🦖","🦕",
+    "🐙","🦑","🦐","🦞","🦀","🪼","🪸","🐡","🐠","🐟","🐬","🐳","🐋","🦈","🐊","🐅","🐆","🦓","🫏","🦍",
+    "🦧","🦣","🐘","🦛","🦏","🐪","🐫","🦒","🦘","🦬","🐃","🐂","🐄","🐎","🐖","🐏","🐑","🦙","🐐","🦌",
+    "🫎","🐕","🐩","🦮","🐕‍🦺","🐈","🐈‍⬛","🪽","🪶","🐓","🦃","🦤","🦚","🦜","🦢","🪿","🦩","🕊","🐇",
+    "🦝","🦨","🦡","🦫","🦦","🦥","🐁","🐀","🐿","🦔","🐾","🐉","🐲","🐦‍🔥","🌵","🎄","🌲","🌳","🪾","🌴",
+    "🪹","🪺","🪵","🌱","🌿","☘️","🍀","🎍","🪴","🎋","🍃","🍂","🍁","🍄","🍄‍🟫","🐚","🪨","🌾","💐",
+    "🌷","🪷","🌹","🥀","🌺","🌸","🪻","🌼","🌻","🌞","🌝","🌛","🌜","🌚","🌕","🌖","🌗","🌘","🌑","🌒",
+    "🌓","🌔","🌙","🌎","🌍","🌏","🪐","💫","⭐️","🌟","✨","⚡️","☄️","💥","🔥","🌪","🌈","☀️","🌤",
+    "⛅️","🌥","☁️","🌦","🌧","⛈","🌩","🌨","❄️","☃️","⛄️","🌬","💨","💧","💦","🫧","☔️","☂️","🌊"
+]]
 
 class AccountProfileForm(forms.ModelForm):
-    profile_icon = forms.ChoiceField(
-        choices=[(i, i) for i in ICON_CHOICES],
-        required=True,
-        label="Profile icon"
-    )
+    # If your model has a CharField profile_icon, keep it but enforce our choices
+    profile_icon = forms.ChoiceField(choices=ICON_CHOICES, widget=forms.RadioSelect)
 
     class Meta:
         model = CustomUser
