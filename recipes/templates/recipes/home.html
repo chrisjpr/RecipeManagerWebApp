@@ -3,249 +3,255 @@
 {% block title %}Home | Recipe Manager{% endblock %}
 
 {% block content %}
-{# Icon font (no images to host): Material Symbols Rounded #}
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:wght@400;700" rel="stylesheet">
-
-<div class="home-header">
-  <h2>👋 Welcome to RecipeManager, {{ user.username|default:"Guest" }}!</h2>
-  <p class="subtitle">Your personal assistant for delicious, organized, and AI-powered recipes.</p>
-</div>
-
-{% if user.is_authenticated %}
-  {# keep logout behavior consistent with the rest of the app (GET link) #}
-  <div class="auth-links">
-    <a href="{% url 'accounts:logout' %}" class="btn-auth" style="background:#dc3545">🚪 Logout</a>
-  </div>
-{% else %}
-  <div class="auth-links">
-    <a href="{% url 'accounts:login' %}" class="btn-auth">🔑 Login</a>
-    <a href="{% url 'accounts:register' %}" class="btn-auth">📝 Register</a>
-  </div>
-{% endif %}
-
-<!-- 🍽️ Featured Recipes (unchanged behavior) -->
-<div class="card">
-  <h3 class="section-title">🍽️ Featured Recipes</h3>
-  <div id="image-showcase" class="image-grid">
-    {% for recipe in random_images|slice:":6" %}
-      <div>
-        <a href="{% url 'recipes:recipe_detail' recipe.recipe_id %}">
-          <img src="{{ recipe.image.url }}" alt="{{ recipe.title }}" class="recipe-thumb" loading="lazy">
-        </a>
-        <div class="username-under-thumb">
-          <span>@{{ recipe.user.username|cut:"_" }}</span>
-        </div>
-      </div>
-    {% endfor %}
-  </div>
-</div>
-
-<!-- 🧰 Toolbox (unchanged) -->
-<div class="card">
-  <h3 class="section-title">🧰 Toolbox</h3>
-  <p class="subtitle">Create or import recipes using AI assistance:</p>
-  <div class="toolbox">
-    <a href="{% url 'recipes:create_recipe' %}" class="tool-btn">👽 Create Recipe</a>
-    <a href="{% url 'recipes:add_recipe_from_url' %}" class="tool-btn">🤖 Import from URL</a>
-    <a href="{% url 'recipes:add_recipe_from_image' %}" class="tool-btn">📷 Import from Image</a>
-  </div>
-</div>
-
-{# 🔥 Friends List #}
-{% if user.is_authenticated %}
-  <div class="card">
-    <h3 class="section-title">👥 Your Friends</h3>
-
-    {% if friends %}
-      <div class="friends-grid">
-        {% for friend in friends %}
-          <div class="friend-card">
-            <div class="friend-avatar">
-              <span class="material-symbols-rounded icon-avatar">
-                {{ friend.profile_icon|default:"restaurant" }}
-              </span>
-            </div>
-            <div class="friend-info">
-              <div class="friend-name">
-                {# Robust name display: username -> full_name -> email local part -> fallback #}
-                {% if friend.username %}
-                  @{{ friend.username|cut:"_" }}
-                {% elif friend.get_full_name %}
-                  {{ friend.get_full_name }}
-                {% elif friend.email %}
-                  @{{ friend.email|cut:"@" }}
-                {% else %}
-                  @friend
-                {% endif %}
-              </div>
-              <div class="friend-actions">
-                {# Link to your existing friends_recipes route (works like dashboard) #}
-                <a class="friend-btn" href="{% url 'recipes:friends_recipes' friend.id %}">
-                  📖 See recipes
-                </a>
-              </div>
-            </div>
-          </div>
-        {% endfor %}
-      </div>
-    {% else %}
-      <p class="subtitle">
-        No friends yet. Visit your
-        <a class="inline-link" href="{% url 'accounts:friend_dashboard' %}">Friends dashboard</a>
-        to add some!
+<!-- Hero / Welcome -->
+<section class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-50 to-emerald-100 dark:from-slate-800 dark:to-slate-900 p-6 md:p-8 ring-1 ring-black/5">
+  <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+    <div>
+      <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight text-emerald-900 dark:text-emerald-200">
+        👋 Welcome to RecipeManager, {{ user.username|default:"Guest" }}!
+      </h1>
+      <p class="mt-2 text-slate-700 dark:text-slate-300">
+        Your personal hub for delicious, organized, and AI‑assisted recipes.
       </p>
-    {% endif %}
+      <div class="mt-4 flex flex-wrap gap-2">
+        <a href="{% url 'recipes:recipe_list' %}" class="inline-flex items-center gap-2 rounded-xl bg-white text-emerald-700 dark:bg-slate-700 dark:text-slate-100 px-3 py-2 font-semibold ring-1 ring-black/5 hover:shadow-card">
+          <span class="material-symbols-rounded">menu_book</span> My Recipes
+        </a>
+        <a href="{% url 'recipes:public_recipes' %}" class="inline-flex items-center gap-2 rounded-xl bg-white text-emerald-700 dark:bg-slate-700 dark:text-slate-100 px-3 py-2 font-semibold ring-1 ring-black/5 hover:shadow-card">
+          <span class="material-symbols-rounded">public</span> Explore Public Recipes
+        </a>
+      </div>
+    </div>
 
-    <div class="account-settings-cta">
-      <a href="{% url 'accounts:settings' %}" class="settings-btn">⚙️ Account Settings</a>
-      <span class="muted-note">Change your username, password, and pick your profile icon.</span>
+    <!-- Quick Account Actions -->
+    <div class="shrink-0">
+      {% if user.is_authenticated %}
+        <div class="flex items-center gap-2">
+          <a href="{% url 'accounts:logout' %}" class="inline-flex items-center gap-2 rounded-xl bg-rose-600 text-white px-3 py-2 font-semibold hover:bg-rose-700">
+            <span class="material-symbols-rounded">logout</span> Logout
+          </a>
+          <a href="{% url 'accounts:settings' %}" class="inline-flex items-center gap-2 rounded-xl bg-white text-slate-800 dark:bg-slate-700 dark:text-slate-100 px-3 py-2 font-semibold ring-1 ring-black/5 hover:shadow-card">
+            <span class="material-symbols-rounded">settings</span> Settings
+          </a>
+        </div>
+      {% else %}
+        <div class="flex items-center gap-2">
+          <a href="{% url 'accounts:login' %}" class="inline-flex items-center gap-2 rounded-xl bg-emerald-600 text-white px-3 py-2 font-semibold hover:bg-emerald-700">
+            <span class="material-symbols-rounded">login</span> Login
+          </a>
+          <a href="{% url 'accounts:register' %}" class="inline-flex items-center gap-2 rounded-xl bg-white text-emerald-700 dark:bg-slate-700 dark:text-slate-100 px-3 py-2 font-semibold ring-1 ring-black/5 hover:shadow-card">
+            <span class="material-symbols-rounded">how_to_reg</span> Register
+          </a>
+        </div>
+      {% endif %}
     </div>
   </div>
+</section>
+
+<!-- Featured Recipes -->
+<section class="mt-8">
+  <div class="flex items-center justify-between">
+    <h2 class="text-lg md:text-xl font-bold">🌮 Featured Recipes</h2>
+    <details class="help-popover inline-block align-middle">
+      <summary class="help-badge bg-brand/15 text-brand hover:bg-brand/20 select-none">?</summary>
+      <div class="mt-2 w-80 max-w-[90vw] p-3 bg-white dark:bg-slate-800 rounded-xl shadow-card ring-1 ring-black/5 text-sm leading-relaxed">
+        Here you can find random public recipes shared by other users. Click on a recipe to view its details, or change the visibility of your recipes to public, to also be featured in this section!
+      </div>
+    </details>
+  </div>
+
+  {% if random_images %}
+    <div id="image-showcase" class="mt-4 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+      {% for recipe in random_images|slice:":6" %}
+        <div class="group relative overflow-hidden rounded-xl ring-1 ring-black/5 bg-white dark:bg-slate-800">
+          <a href="{% url 'recipes:recipe_detail' recipe.recipe_id %}" class="block aspect-[4/3]">
+            <img src="{{ recipe.image.url }}" alt="{{ recipe.title }}" class="h-full w-full object-cover transition duration-300 group-hover:scale-105" loading="lazy">
+          </a>
+          <div class="absolute inset-x-0 bottom-0 p-2 text-xs font-semibold bg-gradient-to-t from-black/60 to-transparent text-white">
+            @{{ recipe.user.username|cut:"_" }}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="mt-4 rounded-xl bg-white dark:bg-slate-800 ring-1 ring-black/5 p-6 text-slate-600 dark:text-slate-300">
+      No featured images yet. Try <a href="{% url 'recipes:add_recipe_from_url' %}" class="underline font-semibold">importing your first recipe</a> or <a href="{% url 'recipes:public_recipes' %}" class="underline font-semibold">browsing public recipes</a>.
+    </div>
+  {% endif %}
+</section>
+
+<!-- Add Recipes -->
+<section class="mt-6 grid gap-4">
+  <div class="flex items-center justify-between">
+    <h2 class="text-lg md:text-xl font-bold">➕ Add new Recipes!</h2>
+    <!-- Inline help popover (reusable pattern from base.html) -->
+    <details class="help-popover inline-block align-middle">
+      <summary class="help-badge bg-brand/15 text-brand hover:bg-brand/20 select-none">?</summary>
+      <div class="mt-2 w-80 max-w-[90vw] p-3 bg-white dark:bg-slate-800 rounded-xl shadow-card ring-1 ring-black/5 text-sm leading-relaxed">
+        Use <strong>Create</strong> to write a recipe from scratch. <strong>Import from URL</strong> extracts ingredients & steps from recipes from over 900 different supported cooking websites. Find all supported websites 
+          <a href="https://docs.recipe-scrapers.com/getting-started/supported-sites/"
+        class="inline-link" target="_blank" rel="noopener noreferrer">here</a>.
+        <strong>Import from Image</strong> works best with a full‑page photo or screenshot of a recipe.
+      </div>
+    </details>
+  </div>
+
+  <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+    <a href="{% url 'recipes:create_recipe' %}" class="group rounded-2xl p-4 ring-1 ring-black/5 bg-white dark:bg-slate-800 hover:shadow-card transition">
+      <div class="flex items-center gap-3">
+        <span class="material-symbols-rounded text-2xl">psychiatry</span>
+        <div>
+          <div class="font-semibold">Create Recipe</div>
+          <p class="text-sm text-slate-600 dark:text-slate-300">Start blank or paste ingredients. AI can help fill in steps.</p>
+        </div>
+      </div>
+    </a>
+    <a href="{% url 'recipes:add_recipe_from_url' %}" class="group rounded-2xl p-4 ring-1 ring-black/5 bg-white dark:bg-slate-800 hover:shadow-card transition">
+      <div class="flex items-center gap-3">
+        <span class="material-symbols-rounded text-2xl">travel_explore</span>
+        <div>
+          <div class="font-semibold">Import from URL</div>
+          <p class="text-sm text-slate-600 dark:text-slate-300">Paste a recipe link. We’ll extract title, image, ingredients & steps.</p>
+        </div>
+      </div>
+    </a>
+    <a href="{% url 'recipes:add_recipe_from_image' %}" class="group rounded-2xl p-4 ring-1 ring-black/5 bg-white dark:bg-slate-800 hover:shadow-card transition">
+      <div class="flex items-center gap-3">
+        <span class="material-symbols-rounded text-2xl">add_a_photo</span>
+        <div>
+          <div class="font-semibold">Import from Image</div>
+          <p class="text-sm text-slate-600 dark:text-slate-300">Upload a photo/screenshot of a recipe. Works with JPG/PNG.</p>
+        </div>
+      </div>
+    </a>
+  </div>
+</section>
+
+
+
+<!-- Friends -->
+{% if user.is_authenticated %}
+<section class="mt-8">
+  <div class="flex items-center justify-between">
+    <h2 class="text-lg md:text-xl font-bold">👫 Your Friends</h2>
+    <details class="help-popover inline-block align-middle">
+      <summary class="help-badge bg-brand/15 text-brand hover:bg-brand/20 select-none">?</summary>
+      <div class="mt-2 w-80 max-w-[90vw] p-3 bg-white dark:bg-slate-800 rounded-xl shadow-card ring-1 ring-black/5 text-sm leading-relaxed">
+        Friends can see all the recipes you actively share with them! And of course, you can browse theirs. Add or accept requests in your Friends dashboard and ask them to share recipes with you by setting their recipe's visibility to "Friends" or "Public".
+      </div>
+    </details>
+  </div>
+
+  {% if friends %}
+    <ul class="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      {% for friend in friends %}
+        <li class="rounded-2xl ring-1 ring-black/5 bg-white dark:bg-slate-800 p-4 flex items-center gap-3">
+          <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-50 dark:bg-slate-700 ring-1 ring-black/5">
+            <span class="material-symbols-rounded text-2xl text-emerald-600 dark:text-emerald-300">{{ friend.profile_icon|default:"restaurant" }}</span>
+          </div>
+          <div class="min-w-0 flex-1">
+            <div class="font-semibold truncate">
+              {% if friend.username %}
+                @{{ friend.username|cut:"_" }}
+              {% elif friend.get_full_name %}
+                {{ friend.get_full_name }}
+              {% elif friend.email %}
+                @{{ friend.email|cut:"@" }}
+              {% else %}
+                @friend
+              {% endif %}
+            </div>
+            <div class="mt-1 flex flex-wrap gap-2">
+              <a class="inline-flex items-center gap-1 rounded-lg bg-emerald-600 text-white px-2.5 py-1.5 text-sm font-semibold hover:bg-emerald-700" href="{% url 'recipes:friends_recipes' friend.id %}">
+                <span class="material-symbols-rounded text-base">menu_book</span> See recipes
+              </a>
+            </div>
+          </div>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <div class="mt-4 rounded-xl bg-white dark:bg-slate-800 ring-1 ring-black/5 p-6 text-slate-600 dark:text-slate-300">
+      No friends yet. Visit your <a class="underline font-semibold" href="{% url 'accounts:friend_dashboard' %}">Friends dashboard</a> to add some!
+    </div>
+  {% endif %}
+</section>
 {% endif %}
 
-{# ====== Data for rotator (images + links + usernames) ====== #}
-<script id="image-data" type="application/json">
-  [
-    {% for r in random_images %}
-      "{{ r.image.url|escapejs }}"{% if not forloop.last %},{% endif %}
-    {% endfor %}
-  ]
-</script>
-<script id="link-data" type="application/json">
-  [
-    {% for r in random_images %}
-      "{% url 'recipes:recipe_detail' r.recipe_id %}"{% if not forloop.last %},{% endif %}
-    {% endfor %}
-  ]
-</script>
-<script id="user-data" type="application/json">
-  [
-    {% for r in random_images %}
-      "@{{ r.user.username|cut:'_'|escapejs }}"{% if not forloop.last %},{% endif %}
-    {% endfor %}
-  ]
-</script>
+<!-- Hidden JSON data for rotator -->
+<script id="image-data" type="application/json">[
+  {% for r in random_images %}
+    "{{ r.image.url|escapejs }}"{% if not forloop.last %},{% endif %}
+  {% endfor %}
+]</script>
+<script id="link-data" type="application/json">[
+  {% for r in random_images %}
+    "{% url 'recipes:recipe_detail' r.recipe_id %}"{% if not forloop.last %},{% endif %}
+  {% endfor %}
+]</script>
+<script id="user-data" type="application/json">[
+  {% for r in random_images %}
+    "@{{ r.user.username|cut:'_'|escapejs }}"{% if not forloop.last %},{% endif %}
+  {% endfor %}
+]</script>
+{% endblock %}
 
+{% block extra_scripts %}
 <script>
-  // 🔁 Random image rotator – keeps usernames visible after each rotation
+  // Rotating featured images every 10s, preserving existing behavior
   (function(){
     const imgNode  = document.getElementById('image-data');
     const linkNode = document.getElementById('link-data');
     const userNode = document.getElementById('user-data');
     if (!imgNode || !linkNode || !userNode) return;
 
-    const images = JSON.parse(imgNode.textContent || "[]");
-    const links  = JSON.parse(linkNode.textContent || "[]");
-    const users  = JSON.parse(userNode.textContent || "[]");
+    const images = JSON.parse(imgNode.textContent || '[]');
+    const links  = JSON.parse(linkNode.textContent || '[]');
+    const users  = JSON.parse(userNode.textContent || '[]');
     if (!images.length) return;
 
     let index = 0;
-    setInterval(() => {
-      const container = document.getElementById('image-showcase');
+    const container = document.getElementById('image-showcase');
+    function render(){
       if (!container) return;
-      container.innerHTML = '';
-      for (let i = 0; i < 6 && i < images.length; i++) {
-        const idx = (index + i) % images.length;
+      container.style.opacity = '0';
+      setTimeout(()=>{
+        container.innerHTML = '';
+        for (let i = 0; i < 6 && i < images.length; i++) {
+          const idx = (index + i) % images.length;
+          const outer = document.createElement('div');
+          outer.className = 'group relative overflow-hidden rounded-xl ring-1 ring-black/5 bg-white dark:bg-slate-800';
 
-        const img = document.createElement('img');
-        img.src = images[idx];
-        img.className = 'recipe-thumb';
-        img.loading = 'lazy';
+          const a = document.createElement('a');
+          a.href = links[idx] || '#';
+          a.className = 'block aspect-[4/3]';
 
-        const a = document.createElement('a');
-        a.href = links[idx] || '#';
-        a.appendChild(img);
+          const img = document.createElement('img');
+          img.src = images[idx];
+          img.alt = users[idx] || 'Recipe image';
+          img.loading = 'lazy';
+          img.className = 'h-full w-full object-cover transition duration-300 group-hover:scale-105';
+          a.appendChild(img);
 
-        const name = document.createElement('div');
-        name.className = 'username-under-thumb';
-        name.textContent = users[idx] || '';
+          const label = document.createElement('div');
+          label.className = 'absolute inset-x-0 bottom-0 p-2 text-xs font-semibold bg-gradient-to-t from-black/60 to-transparent text-white';
+          label.textContent = users[idx] || '';
 
-        const wrapper = document.createElement('div');
-        wrapper.appendChild(a);
-        wrapper.appendChild(name);
-        container.appendChild(wrapper);
-      }
-      index = (index + 6) % images.length;
-    }, 10000);
+          outer.appendChild(a);
+          outer.appendChild(label);
+          container.appendChild(outer);
+        }
+        container.style.opacity = '1';
+        index = (index + 6) % images.length;
+      }, 150);
+    }
+    render();
+    setInterval(render, 10000);
   })();
 </script>
 
-<style>
-  /* Make Material Symbols render nicely */
-  .material-symbols-rounded {
-    font-variation-settings: 'FILL' 0, 'wght' 600, 'GRAD' 0, 'opsz' 24;
-  }
 
-  .home-header { text-align: center; margin-bottom: 1.25rem; }
-  .auth-links { text-align: center; margin-bottom: 1.25rem; }
-  .btn-auth {
-    padding: 0.5rem 1rem; margin: 0 0.5rem;
-    background: var(--primary-color); color: #fff; border-radius: 6px;
-    text-decoration: none; font-weight: 600;
-  }
-
-  .image-grid {
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-    gap: 1rem; margin-top: 1rem;
-  }
-  .recipe-thumb {
-    width: 100%; height: 100px; object-fit: cover; border-radius: 8px;
-    border: 2px solid #ddd; box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-    transition: transform 0.2s;
-  }
-  .recipe-thumb:hover { transform: scale(1.05); }
-  .username-under-thumb { font-size: .9rem; margin-top: .35rem; color: #555; text-decoration: none; }
-
-  .toolbox { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 1rem; }
-  .tool-btn {
-    flex: 1; padding: 0.75rem; background: #f5f5f5; border-radius: 8px; border: 1px solid #ddd;
-    text-align: center; text-decoration: none; font-weight: 600; color: #333; transition: background-color .2s;
-  }
-  .tool-btn:hover { background: #e0e0e0; }
-
-  /* ===== Friends list ===== */
-  .friends-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: .75rem; margin-top: .75rem;
-  }
-  .friend-card {
-    display: grid; grid-template-columns: auto 1fr; gap: .75rem;
-    align-items: center; padding: .6rem .75rem;
-    border: 1px solid #e5e7eb; border-radius: 10px; background: #fafafa;
-  }
-  .friend-avatar {
-    width: 50px; height: 50px; border-radius: 12px;
-    background: #eef7ee; display: grid; place-items: center; border: 1px solid #e0f0e0;
-  }
-  .icon-avatar { font-size: 28px; line-height: 1; color: var(--primary-color); }
-  .friend-info { display: grid; gap: .25rem; }
-  .friend-name { font-weight: 700; color: #1f2937; }
-  .friend-actions { display: flex; gap: .5rem; flex-wrap: wrap; }
-  .friend-btn {
-    display: inline-block; padding: .35rem .6rem; border-radius: 8px; border: 1px solid #cfe4d0;
-    background: #f1f9f2; color: #1f2937; text-decoration: none; font-weight: 600; font-size: .9rem;
-  }
-  .friend-btn:hover { background: #e5f3e6; }
-
-  /* Account settings CTA aligned nicely with its text */
-  .account-settings-cta {
-    display: flex; align-items: center; gap: .6rem; flex-wrap: wrap;
-    margin-top: .9rem;
-  }
-  .settings-btn {
-    display: inline-block; padding: .55rem .9rem; border-radius: 10px; border: 1px solid #d7dee3;
-    background: #f4f6f8; color: var(--text-color); text-decoration: none; font-weight: 700;
-  }
-  .settings-btn:hover { background: #e9eef2; }
-  .inline-link { color: var(--primary-color); text-decoration: none; font-weight: 600; }
-  .inline-link:hover { text-decoration: underline; }
-  .muted-note { color: var(--muted-text); font-size: .9rem; }
-
-  /* Mobile tweaks */
-  @media (max-width: 768px){
-    .recipe-thumb { height: 110px; }
-    .friends-grid { grid-template-columns: 1fr; }
-  }
+<style> 
+  .inline-link { color: #1a73e8; text-decoration: underline; }
 </style>
 {% endblock %}

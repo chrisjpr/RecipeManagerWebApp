@@ -1,325 +1,509 @@
 {% extends 'base.html' %}
-{% block title %}Friends' Recipes | Recipe Manager{% endblock %}
+{% block title %}{{ friend.username|title }}’s Recipes | Recipe Manager{% endblock %}
+
+{% block extra_head %}
+<style>
+  /* Column alignment: fixed layout so <colgroup> widths are respected */
+  #recipe-table { table-layout: fixed; border-collapse: separate; border-spacing: 0; }
+
+  /* Hide the real thead visually but keep it for semantics (screen readers/sorting links) */
+  #recipe-table thead.sr-only-thead{
+    position:absolute; width:1px; height:1px; padding:0; margin:-1px;
+    overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0;
+  }
+
+  /* Floating sticky header (single green bar; no overlap) */
+  #floatingHead{
+    position: sticky;
+    top: calc(var(--site-header-h, 64px) + 8px);
+    z-index: 40; /* above rows, below ingredient suggestions */
+    background: rgba(236,253,245,.95);   /* emerald-50 */
+    backdrop-filter: saturate(1.05) blur(2px);
+    border-bottom: 1px solid rgba(0,0,0,.06);
+  }
+  .dark #floatingHead{
+    background: rgba(51,65,85,.85);      /* slate-700 */
+    border-bottom-color: rgba(255,255,255,.08);
+  }
+  #floatingHead .fh-grid{
+    display: grid;
+    grid-template-columns: var(--col-template, 5.5rem 1fr 6rem 7rem 8rem 6.5rem);
+    align-items: center;
+    column-gap: .25rem;
+  }
+
+  /* Push table down exactly by floating header height (prevents overlap) */
+  #tableWrapper{ padding-top: var(--fh-h, 0px); }
+
+  /* Ingredient suggestions must appear above everything */
+  #ingredient-suggestions{ z-index: 9999 !important; }
+</style>
+{% endblock %}
+
+{% block breadcrumbs %}
+<nav aria-label="Breadcrumb" class="mb-3 text-sm text-gray-600 dark:text-gray-300">
+  <ol class="flex flex-wrap items-center gap-1">
+    <li><a class="underline hover:no-underline" href="{% url 'recipes:home' %}">Home</a></li>
+    <li class="opacity-60">/</li>
+    <li class="font-semibold">{{ friend.username|title }}’s Recipes</li>
+  </ol>
+</nav>
+{% endblock %}
 
 {% block content %}
-<h2>👩‍🍳 {{ friend.username|title }}'s Shared Recipes</h2>
+<h1 class="text-2xl md:text-3xl font-extrabold tracking-tight flex items-center gap-2">👩‍🍳 {{ friend.username|title }}’s Recipes</h1>
 
-<!-- Filter & Control Panel -->
-<div class="controls">
-  <div class="search-group">
-    <label for="search"><strong>Search by Title:</strong></label>
-    <input type="text" id="search" placeholder="Search by title">
-  </div>
+<section class="mt-4 grid gap-3 md:grid-cols-2">
+  <!-- Filters -->
+  <div class="rounded-2xl bg-white dark:bg-slate-800 ring-1 ring-black/5 p-4 md:p-5 shadow-card">
+    <h2 class="text-base font-semibold mb-3 flex items-center gap-2">🔎 Filters</h2>
+    <div class="grid gap-3">
+      <!-- Title search -->
+      <label class="block">
+        <span class="block text-sm font-semibold mb-1">Search by Title</span>
+        <div class="relative">
+          <span class="material-symbols-rounded absolute left-2 top-1/2 -translate-y-1/2 pointer-events-none">search</span>
+          <input type="text" id="search" class="w-full rounded-xl border-gray-300 pl-9" placeholder="e.g., Pancakes, Carbonara" autocomplete="off">
+        </div>
+      </label>
 
-  <div class="search-group ingredient-group">
-    <label for="ingredient-search"><strong>Search by Ingredients:</strong></label>
-    <div id="ingredient-search-container">
-      <div id="ingredient-tokens"></div>
-      <input type="text" id="ingredient-search" placeholder="Type ingredient..." autocomplete="off">
-      <div id="ingredient-suggestions" class="suggestions-box"></div>
+      <!-- Ingredient search + suggestions -->
+      <label class="block">
+        <div class="flex items-center gap-2 mb-1">
+          <span class="text-sm font-semibold">Filter by Ingredients</span>
+          <details class="help-popover inline-block align-middle">
+            <summary class="help-badge bg-brand/15 text-brand hover:bg-brand/20 select-none">?</summary>
+            <div class="mt-2 w-80 max-w-[90vw] p-3 bg-white dark:bg-slate-800 rounded-xl shadow-card ring-1 ring-black/5 text-sm leading-relaxed">
+              Click a suggestion or press <kbd>Enter</kbd> to add an ingredient. Active filters appear below; click <strong>×</strong> to remove. Matching requires <strong>all</strong> selected ingredients.
+            </div>
+          </details>
+        </div>
+        <div id="ingredient-search-container" class="relative rounded-xl border border-gray-300 p-2">
+          <input type="text" id="ingredient-search" placeholder="Type ingredient…" autocomplete="off" class="w-full border-0 focus:ring-0 p-0">
+          <div id="ingredient-suggestions" class="absolute left-0 right-0 top-full mt-1 z-20 hidden rounded-xl border border-gray-200 bg-white dark:bg-slate-800 shadow-card max-h-56 overflow-auto"></div>
+        </div>
+        <div id="ingredient-active-bar" class="mt-2 flex flex-wrap gap-1"></div>
+
+        <!-- Drop filters -->
+        <button id="drop_filters_btn" type="button"
+          class="hidden mt-3 inline-flex items-center gap-2 rounded-xl ring-1 ring-black/5 bg-white dark:bg-slate-800 px-3 py-2 text-sm font-semibold hover:shadow-card">
+          <span class="material-symbols-rounded text-base">filter_alt_off</span> Drop filters
+        </button>
+      </label>
     </div>
   </div>
-</div>
 
-{% if page_obj %}
-  <table id="recipe-table">
-    <thead>
-      <tr>
-        <th>Preview</th>
-        <th>
+  <!-- Info card -->
+  <div class="rounded-2xl bg-white dark:bg-slate-800 ring-1 ring-black/5 p-4 md:p-5 shadow-card">
+    <h2 class="text-base font-semibold mb-2">About {{ friend.username|title }}’s Recipes</h2>
+    <p class="text-sm text-gray-700 dark:text-gray-200">
+      These are recipes your friend shared. You can view details and <strong>copy</strong> any recipe to your own collection. Set the visibility of your own recipes to "Friends" or "Public" to let your friends see your recipies as well. <strong>Note:</strong> Remind your friends to make their recipes visible to you, otherwise you won't see their recipes here!
+    </p>
+  </div>
+</section>
+
+<!-- Floating header (populated by JS from the real thead) -->
+<div id="floatingHead" class="rounded-t-xl mt-4"></div>
+
+<!-- Table -->
+<div id="tableWrapper" class="mt-2 overflow-x-auto relative">
+  {% if page_obj %}
+  <table id="recipe-table" class="min-w-full text-sm">
+    <!-- Column widths sync header & rows -->
+    <colgroup>
+      <col style="width:5.5rem">   <!-- preview -->
+      <col style="width:auto">     <!-- title -->
+      <col style="width:6rem">     <!-- portions -->
+      <col style="width:7rem">     <!-- cook time -->
+      <col style="width:8rem">     <!-- created at -->
+      <col style="width:6.5rem">   <!-- copy -->
+    </colgroup>
+
+    <!-- Keep semantics; JS will hide this thead and render a floating copy -->
+    <thead id="real_thead">
+      <tr class="bg-emerald-50/80 dark:bg-slate-700/60 backdrop-blur">
+        <th class="w-20 p-3 text-left">Preview</th>
+        <th class="p-3 text-left">
           {% if current_sort == 'title' %}
-            <a href="?sort=title&dir={% if current_dir == 'asc' %}desc{% else %}asc{% endif %}&page={{ page_obj.number }}">Title {% if current_dir == 'asc' %}▲{% else %}▼{% endif %}</a>
+            {% if current_dir == 'asc' %}
+              <a href="?sort=title&dir=desc" class="font-semibold">Title ▲</a>
+            {% else %}
+              <a href="?sort=title&dir=asc" class="font-semibold">Title ▼</a>
+            {% endif %}
           {% else %}
-            <a href="?sort=title&dir=asc&page={{ page_obj.number }}">Title</a>
+            <a href="?sort=title&dir=asc" class="font-semibold">Title</a>
           {% endif %}
         </th>
-        <th>
+        <th class="p-3 text-center">
           {% if current_sort == 'portions' %}
-            <a href="?sort=portions&dir={% if current_dir == 'asc' %}desc{% else %}asc{% endif %}&page={{ page_obj.number }}">Portions {% if current_dir == 'asc' %}▲{% else %}▼{% endif %}</a>
+            {% if current_dir == 'asc' %}
+              <a href="?sort=portions&dir=desc" class="font-semibold">Portions ▲</a>
+            {% else %}
+              <a href="?sort=portions&dir=asc" class="font-semibold">Portions ▼</a>
+            {% endif %}
           {% else %}
-            <a href="?sort=portions&dir=asc&page={{ page_obj.number }}">Portions</a>
+            <a href="?sort=portions&dir=asc" class="font-semibold">Portions</a>
           {% endif %}
         </th>
-        <th>
+        <th class="p-3 text-center">
           {% if current_sort == 'cook_time' %}
-            <a href="?sort=cook_time&dir={% if current_dir == 'asc' %}desc{% else %}asc{% endif %}&page={{ page_obj.number }}">Cook Time {% if current_dir == 'asc' %}▲{% else %}▼{% endif %}</a>
+            {% if current_dir == 'asc' %}
+              <a href="?sort=cook_time&dir=desc" class="font-semibold">Cook Time ▲</a>
+            {% else %}
+              <a href="?sort=cook_time&dir=asc" class="font-semibold">Cook Time ▼</a>
+            {% endif %}
           {% else %}
-            <a href="?sort=cook_time&dir=asc&page={{ page_obj.number }}">Cook Time</a>
+            <a href="?sort=cook_time&dir=asc" class="font-semibold">Cook Time</a>
           {% endif %}
         </th>
-        <th>
+        <th class="p-3 text-center">
           {% if current_sort == 'created_at' %}
-            <a href="?sort=created_at&dir={% if current_dir == 'asc' %}desc{% else %}asc{% endif %}&page={{ page_obj.number }}">Created At {% if current_dir == 'asc' %}▲{% else %}▼{% endif %}</a>
+            {% if current_dir == 'asc' %}
+              <a href="?sort=created_at&dir=desc" class="font-semibold">Created At ▲</a>
+            {% else %}
+              <a href="?sort=created_at&dir=asc" class="font-semibold">Created At ▼</a>
+            {% endif %}
           {% else %}
-            <a href="?sort=created_at&dir=asc&page={{ page_obj.number }}">Created At</a>
+            <a href="?sort=created_at&dir=asc" class="font-semibold">Created At</a>
           {% endif %}
         </th>
-        <th>Visibility</th>
-        <th>Copy</th>
+        <th class="p-3 text-center">Copy</th>
       </tr>
     </thead>
-    <tbody>
+
+    <tbody class="divide-y divide-gray-100 dark:divide-slate-700">
       {% for recipe in page_obj %}
-        <tr data-ingredients="{{ recipe.ingredients_csv|default:'' }}">
-          <td>
-            {% if recipe.image %}
-              <img src="{{ recipe.image.url }}" alt="{{ recipe.title }}" width="50" height="50" style="object-fit: cover; border-radius: 4px;">
-            {% else %}
-              <span style="color: #999;">N/A</span>
-            {% endif %}
-          </td>
-          <td class="title-cell">
-            <a href="{% url 'recipes:recipe_detail' recipe.recipe_id %}">{{ recipe.title }}</a>
-          </td>
-          <td>{{ recipe.portions }}</td>
-          <td>{{ recipe.cook_time }}</td>
-          <td>{{ recipe.created_at|date:"d.m.Y" }}</td>
-          <td>{{ recipe.get_visibility_display }}</td>
-          <td>
-            <a href="{% url 'recipes:copy_recipe' recipe.recipe_id %}?next={{ request.get_full_path|urlencode }}" class="copy-btn">📋 Copy</a>
-          </td>
-        </tr>
+      <tr class="hover:bg-gray-50/80 dark:hover:bg-slate-800/60" data-ingredients="{{ recipe.ingredients_csv|default:''|lower }}">
+        <td class="p-3 align-middle">
+          {% if recipe.image %}
+            <img src="{{ recipe.image.url }}" alt="{{ recipe.title }} preview" class="h-12 w-16 object-cover rounded-lg ring-1 ring-black/5" loading="lazy">
+          {% else %}
+            <div class="h-12 w-16 grid place-items-center rounded-lg bg-gray-100 text-gray-400 ring-1 ring-black/5">N/A</div>
+          {% endif %}
+        </td>
+        <td class="p-3 align-middle min-w-[16rem]">
+          <div class="leading-tight">
+            <a href="{% url 'recipes:recipe_detail' recipe.recipe_id %}" class="font-semibold hover:underline">{{ recipe.title }}</a>
+          </div>
+          <div class="text-xs text-gray-500 mt-1">Added {{ recipe.created_at|date:"d.m.Y" }}</div>
+        </td>
+        <td class="p-3 align-middle text-center">{{ recipe.portions }}</td>
+        <td class="p-3 align-middle text-center">{{ recipe.cook_time }}</td>
+        <td class="p-3 align-middle text-center">{{ recipe.created_at|date:"d.m.Y" }}</td>
+        <td class="p-3 align-middle text-center">
+          <a href="{% url 'recipes:copy_recipe' recipe.recipe_id %}?next={{ request.get_full_path|urlencode }}"
+             class="inline-flex items-center gap-1 rounded-lg bg-emerald-600 text-white px-2.5 py-1.5 text-sm font-semibold hover:bg-emerald-700">
+            <span class="material-symbols-rounded text-base">content_copy</span> Copy
+          </a>
+        </td>
+      </tr>
       {% endfor %}
     </tbody>
   </table>
 
-  <!-- Pagination -->
-  <div class="pagination">
+  <!-- Pagination (JS updates this in filtered mode) -->
+  <div id="pagination" class="mt-4 flex flex-wrap items-center justify-center gap-2 text-sm">
     {% if page_obj.has_previous %}
-      <a href="?page=1&sort={{ current_sort }}&dir={{ current_dir }}">« First</a>
-      <a href="?page={{ page_obj.previous_page_number }}&sort={{ current_sort }}&dir={{ current_dir }}">Previous</a>
+      <a class="inline-flex items-center gap-1 rounded-lg ring-1 ring-black/5 bg-white dark:bg-slate-700 px-3 py-2 font-semibold hover:shadow-card" href="?page=1{% if current_sort %}&sort={{ current_sort }}{% endif %}{% if current_dir %}&dir={{ current_dir }}{% endif %}">&laquo; First</a>
+      <a class="inline-flex items-center gap-1 rounded-lg ring-1 ring-black/5 bg-white dark:bg-slate-700 px-3 py-2 font-semibold hover:shadow-card" href="?page={{ page_obj.previous_page_number }}{% if current_sort %}&sort={{ current_sort }}{% endif %}{% if current_dir %}&dir={{ current_dir }}{% endif %}">Previous</a>
     {% endif %}
-    <span class="current-page">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+    <span id="pageLabel" class="px-3 py-2 rounded-lg bg-gray-50 dark:bg-slate-800 ring-1 ring-black/5">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
     {% if page_obj.has_next %}
-      <a href="?page={{ page_obj.next_page_number }}&sort={{ current_sort }}&dir={{ current_dir }}">Next</a>
-      <a href="?page={{ page_obj.paginator.num_pages }}&sort={{ current_sort }}&dir={{ current_dir }}">Last »</a>
+      <a class="inline-flex items-center gap-1 rounded-lg ring-1 ring-black/5 bg-white dark:bg-slate-700 px-3 py-2 font-semibold hover:shadow-card" href="?page={{ page_obj.next_page_number }}{% if current_sort %}&sort={{ current_sort }}{% endif %}{% if current_dir %}&dir={{ current_dir }}{% endif %}">Next</a>
+      <a class="inline-flex items-center gap-1 rounded-lg ring-1 ring-black/5 bg-white dark:bg-slate-700 px-3 py-2 font-semibold hover:shadow-card" href="?page={{ page_obj.paginator.num_pages }}{% if current_sort %}&sort={{ current_sort }}{% endif %}{% if current_dir %}&dir={{ current_dir }}{% endif %}">Last &raquo;</a>
     {% endif %}
   </div>
-{% else %}
-  <p class="subtitle">No shared recipes from your friend yet. Encourage them to share something delicious! 🍲</p>
-{% endif %}
+  {% else %}
+    <p class="subtitle mt-4">No shared recipes from {{ friend.username|title }} yet. 🍲</p>
+  {% endif %}
+</div>
+{% endblock %}
 
-<!-- Title Search -->
+{% block extra_scripts %}
 <script>
-  document.getElementById('search').addEventListener('input', function () {
-    const term = this.value.toLowerCase();
-    const rows = document.querySelectorAll('#recipe-table tbody tr');
-    rows.forEach(row => {
-      const title = row.querySelector('.title-cell').textContent.toLowerCase();
-      row.style.display = title.includes(term) ? '' : 'none';
-    });
+/* ---------- 0) Build floating header from the real thead, then hide the thead ---------- */
+(function(){
+  const table = document.getElementById('recipe-table');
+  const thead = document.getElementById('real_thead');
+  const fh    = document.getElementById('floatingHead');
+  if (!table || !thead || !fh) return;
+
+  // a) Build column template from <colgroup>
+  const cols = Array.from(table.querySelectorAll('colgroup col'));
+  const template = cols.map(c => c.style.width || 'auto').join(' ');
+  fh.style.setProperty('--col-template', template);
+
+  // b) Build grid with same content as thead
+  const tr = thead.querySelector('tr');
+  const ths = Array.from(tr.children);
+  const grid = document.createElement('div');
+  grid.className = 'fh-grid px-3 py-3 text-sm font-semibold';
+  ths.forEach((th) => {
+    const cell = document.createElement('div');
+    if (th.classList.contains('text-center')) cell.classList.add('text-center');
+    if (th.classList.contains('text-right'))  cell.classList.add('text-right');
+    cell.innerHTML = th.innerHTML;
+    grid.appendChild(cell);
   });
-</script>
+  fh.appendChild(grid);
 
-<!-- Ingredient Filter -->
-<script>
-document.addEventListener('DOMContentLoaded', function () {
+  // c) Hide the original thead (keep for semantics/sorting)
+  thead.classList.add('sr-only-thead');
+})();
+
+/* ---------- 1) Sticky offsets + push table down by floating header height ---------- */
+(function(){
+  const fh = document.getElementById('floatingHead');
+  const wrapper = document.getElementById('tableWrapper');
+  const header  = document.querySelector('header');
+
+  function applyOffsets(){
+    const siteH = header ? header.getBoundingClientRect().height : 64;
+    document.documentElement.style.setProperty('--site-header-h', siteH);
+    const fhH = fh.getBoundingClientRect().height || 56;
+    wrapper.style.setProperty('--fh-h', '10px');
+  }
+  applyOffsets();
+  if (header) new ResizeObserver(applyOffsets).observe(header);
+  new ResizeObserver(applyOffsets).observe(fh);
+  window.addEventListener('resize', applyOffsets);
+})();
+
+/* ---------- 2) Prevent Enter from submitting while typing ---------- */
+(function(){
+  const stop = e => { if (e.key === 'Enter') e.preventDefault(); };
+  document.getElementById('search')?.addEventListener('keydown', stop);
+  document.getElementById('ingredient-search')?.addEventListener('keydown', stop);
+})();
+
+/* ---------- 3) Filtering (title + ingredients) ---------- */
+const state = { selectedIngredients: new Set() };
+const getRows = () => document.querySelectorAll('#recipe-table tbody tr');
+const rowIngredients = row => (row.getAttribute('data-ingredients')||'').split(',').map(s=>s.trim().toLowerCase()).filter(Boolean);
+const titleOf = row => (row.querySelector('td:nth-child(2)')?.innerText || '').toLowerCase(); // title is 2nd col (after preview)
+function applyFilters(){
+  const term = (document.getElementById('search').value||'').toLowerCase();
+  const need = Array.from(state.selectedIngredients);
+  let visible = 0;
+  getRows().forEach(row=>{
+    const matchTitle = titleOf(row).includes(term);
+    const matchIngs  = need.every(x=> rowIngredients(row).includes(x));
+    const show = matchTitle && matchIngs;
+    row.style.display = show ? '' : 'none';
+    if (show) visible++;
+  });
+  if (agg.active) updateFilteredPager(visible);
+  showHideDropFilters();
+}
+
+/* ---------- 4) Persist filters (key is namespaced per friend) ---------- */
+function storageKey(){
+  return 'friends_list_filters_{{ friend.username|default:"friend"|lower|escapejs }}_v1';
+}
+function persistFilters(){
+  const key = storageKey();
+  const title = document.getElementById('search')?.value || '';
+  localStorage.setItem(key, JSON.stringify({ title, ingredients: Array.from(state.selectedIngredients) }));
+}
+(function restore(){
+  const key = storageKey();
+  try{
+    const saved = JSON.parse(localStorage.getItem(key) || '{}');
+    if (saved.title) document.getElementById('search').value = saved.title;
+    if (saved.ingredients) saved.ingredients.forEach(v => addIngredientChip(v, true));
+    applyFilters();
+    showHideDropFilters();
+  }catch(e){}
+})();
+
+/* ---------- 5) Ingredient suggestions + chips ---------- */
+(function(){
   const input = document.getElementById('ingredient-search');
-  const suggestionsBox = document.getElementById('ingredient-suggestions');
-  const tokensContainer = document.getElementById('ingredient-tokens');
-  const selectedIngredients = new Set();
-  const allIngredients = JSON.parse('{{ all_ing_json|escapejs }}');
+  const box   = document.getElementById('ingredient-suggestions');
+  const bar   = document.getElementById('ingredient-active-bar');
 
-  function renderSuggestions(term) {
-    const termLC = term.toLowerCase();
-    const matches = allIngredients.filter(i => i.startsWith(termLC) && !selectedIngredients.has(i));
-    suggestionsBox.innerHTML = '';
-    matches.forEach(m => {
-      const div = document.createElement('div');
-      div.className = 'suggestion';
-      div.textContent = term + m.slice(term.length);
-      div.addEventListener('click', () => {
-        addIngredientToken(m);
-        input.value = '';
-        suggestionsBox.innerHTML = '';
-        filterRecipes();
-      });
-      suggestionsBox.appendChild(div);
-    });
-    suggestionsBox.style.display = matches.length > 0 ? 'block' : 'none';
+  let allIngredients = [];
+  try { allIngredients = JSON.parse("{{ all_ing_json|default:'[]'|escapejs }}"); } catch(e) { allIngredients = []; }
+  if (!allIngredients.length){
+    const set = new Set(); getRows().forEach(r=> rowIngredients(r).forEach(i=> set.add(i)));
+    allIngredients = Array.from(set).sort();
   }
 
-  function addIngredientToken(ingredient) {
-    const ingLC = ingredient.toLowerCase();
-    if (selectedIngredients.has(ingLC)) return;
-    selectedIngredients.add(ingLC);
-    const token = document.createElement('div');
-    token.className = 'ingredient-token';
-    token.textContent = ingredient;
-    const close = document.createElement('span');
-    close.textContent = '×';
-    close.className = 'remove';
-    close.addEventListener('click', () => {
-      selectedIngredients.delete(ingLC);
-      tokensContainer.removeChild(token);
-      filterRecipes();
-    });
-    token.appendChild(close);
-    tokensContainer.appendChild(token);
+  function renderSuggestions(term){
+    const t = (term||'').toLowerCase().trim();
+    const matches = t ? allIngredients.filter(i=> i.startsWith(t) && !state.selectedIngredients.has(i)) : [];
+    box.innerHTML = matches.map(m=>`<button type="button" class="block w-full text-left px-3 py-2 hover:bg-gray-50 dark:hover:bg-slate-700">${m}</button>`).join('');
+    box.classList.toggle('hidden', matches.length===0);
+    Array.from(box.children).forEach(btn => btn.addEventListener('click', ()=>{
+      addIngredientChip(btn.textContent);
+      input.value=''; renderSuggestions('');
+    }));
   }
 
-  function filterRecipes() {
-    const rows = document.querySelectorAll('#recipe-table tbody tr');
-    rows.forEach(row => {
-      const rowIngredients = row.getAttribute('data-ingredients').toLowerCase().split(',').map(i => i.trim());
-      const matchesAll = [...selectedIngredients].every(sel => rowIngredients.includes(sel));
-      row.style.display = matchesAll ? '' : 'none';
-    });
-  }
-
-  input.addEventListener('input', () => renderSuggestions(input.value.trim()));
-  input.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' && input.value.trim()) {
+  input?.addEventListener('input', ()=> renderSuggestions(input.value));
+  input?.addEventListener('keydown', (e)=>{
+    if(e.key==='Enter' && input.value.trim()){
       e.preventDefault();
-      addIngredientToken(input.value.trim());
-      input.value = '';
-      suggestionsBox.innerHTML = '';
-      filterRecipes();
+      addIngredientChip(input.value.trim());
+      input.value=''; renderSuggestions('');
     }
   });
-  document.addEventListener('click', (e) => {
-    if (!e.target.closest('#ingredient-search-container')) {
-      suggestionsBox.innerHTML = '';
-    }
+  document.addEventListener('click', (e)=>{ if(!e.target.closest('#ingredient-search-container')) box.classList.add('hidden'); });
+
+  document.getElementById('drop_filters_btn')?.addEventListener('click', dropFilters);
+  window.__addIngredientChip = addIngredientChip; // for restore
+})();
+
+function addIngredientChip(raw, isRestore=false){
+  const bar = document.getElementById('ingredient-active-bar');
+  const v = String(raw).toLowerCase().trim();
+  if (!v || state.selectedIngredients.has(v)) return;
+  state.selectedIngredients.add(v);
+  const chip = document.createElement('span');
+  chip.className = 'chip inline-flex items-center gap-1 rounded-lg bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-200 px-2 py-1 text-xs font-semibold';
+  chip.dataset.value = v;
+  chip.innerHTML = `${v}<button type="button" class="ml-1 rounded hover:bg-black/10 px-1">×</button>`;
+  chip.querySelector('button').addEventListener('click', ()=>{
+    state.selectedIngredients.delete(v);
+    chip.remove();
+    filtersChanged();
   });
-});
+  bar.appendChild(chip);
+  if (!isRestore) filtersChanged();
+}
+
+/* ---------- 6) Aggregated filtering across ALL pages ---------- */
+const agg = { active:false, loaded:false, rowsHTML:'', pagerHTML:'' };
+
+function findPager(){ return document.getElementById('pagination'); }
+function getTotalPages(){
+  const last = Array.from(document.querySelectorAll('#pagination a')).find(a=> /Last/i.test(a.textContent) && a.href.includes('page='));
+  if (last){ const m = last.href.match(/page=(\d+)/i); if (m) return parseInt(m[1],10); }
+  const lbl = document.getElementById('pageLabel');
+  if (lbl){ const m = (lbl.textContent||'').match(/of\s+(\d+)/i); if (m) return parseInt(m[1],10); }
+  return 1;
+}
+
+async function loadAllPagesOnce(){
+  if (agg.loaded) return;
+  const tbody = document.querySelector('#recipe-table tbody');
+  agg.originalTbodyHTML = tbody.innerHTML;
+
+  const total = getTotalPages();
+  const curURL = new URL(window.location.href);
+  const curPage = curURL.searchParams.get('page') || '1';
+
+  const chunks = [tbody.innerHTML];
+  for (let p=1; p<=total; p++){
+    if (String(p) === String(curPage)) continue;
+    curURL.searchParams.set('page', p);
+    try{
+      const res = await fetch(curURL.toString(), { credentials:'same-origin' });
+      const html = await res.text();
+      const doc  = new DOMParser().parseFromString(html, 'text/html');
+      const t    = doc.querySelector('#recipe-table tbody');
+      if (t) chunks.push(t.innerHTML);
+    }catch(_){}
+  }
+  agg.rowsHTML = chunks.join('');
+  agg.loaded = true;
+}
+
+async function enterAggregatedMode(){
+  if (!agg.active){
+    const pager = findPager();
+    if (pager) agg.pagerHTML = pager.innerHTML;
+  }
+  await loadAllPagesOnce();
+  const tbody = document.querySelector('#recipe-table tbody');
+  tbody.innerHTML = agg.rowsHTML;
+  agg.active = true;
+  updateFilteredPager();
+}
+
+function exitAggregatedMode(){
+  if (!agg.active) return;
+  const tbody = document.querySelector('#recipe-table tbody');
+  tbody.innerHTML = agg.originalTbodyHTML || tbody.innerHTML;
+  const pager = findPager();
+  if (pager && agg.pagerHTML) pager.innerHTML = agg.pagerHTML;
+  agg.active = false;
+}
+
+function updateFilteredPager(count){
+  const pager = findPager(); if (!pager) return;
+  pager.querySelectorAll('a').forEach(a=> a.style.display = 'none');
+  let label = document.getElementById('pageLabel');
+  if (!label){
+    label = document.createElement('span');
+    label.id = 'pageLabel';
+    label.className = 'px-3 py-2 rounded-lg bg-gray-50 dark:bg-slate-800 ring-1 ring-black/5';
+    pager.appendChild(label);
+  }
+  const rows = document.querySelectorAll('#recipe-table tbody tr');
+  let visible = (typeof count === 'number') ? count : 0;
+  if (typeof count !== 'number'){ rows.forEach(r=>{ if (r.style.display !== 'none') visible++; }); }
+  label.textContent = `Showing all ${visible} filtered result${visible===1?'':'s'}`;
+}
+
+/* Orchestration when filters change */
+let lastKey = null, resetT = null;
+function filtersChanged(){
+  applyFilters(); persistFilters();
+  const term = (document.getElementById('search').value||'').trim().toLowerCase();
+  const ings = Array.from(state.selectedIngredients).sort().join(',');
+  const key  = term + '|' + ings;
+
+  if (!term && !ings){
+    exitAggregatedMode();
+    const url = new URL(window.location.href); url.searchParams.set('page','1'); history.replaceState(null,'',url.toString());
+    showHideDropFilters();
+    return;
+  }
+
+  (async ()=>{
+    await enterAggregatedMode();
+    applyFilters();
+    if (key !== lastKey){
+      clearTimeout(resetT);
+      resetT = setTimeout(()=>{
+        const url = new URL(window.location.href);
+        url.searchParams.set('page','1');
+        history.replaceState(null,'',url.toString());
+      }, 120);
+    }
+    lastKey = key;
+  })();
+}
+
+function showHideDropFilters(){
+  const btn = document.getElementById('drop_filters_btn');
+  if (!btn) return;
+  const hasTitle = !!(document.getElementById('search').value||'').trim();
+  const hasIngs  = state.selectedIngredients.size > 0;
+  btn.classList.toggle('hidden', !(hasTitle || hasIngs));
+}
+
+function dropFilters(){
+  // Clear UI + state
+  document.getElementById('search').value = '';
+  state.selectedIngredients.clear();
+  document.querySelectorAll('#ingredient-active-bar .chip').forEach(c=> c.remove());
+
+  // Clear any persisted filter keys for this friend
+  try {
+    const toDelete = [];
+    for (let i=0;i<localStorage.length;i++){
+      const k = localStorage.key(i);
+      if (k && k.startsWith('friends_list_filters_')) toDelete.push(k);
+    }
+    toDelete.forEach(k => localStorage.removeItem(k));
+  } catch(e){}
+
+  // Reload base URL (no params)
+  window.location.replace(window.location.pathname);
+}
+
+document.getElementById('search')?.addEventListener('input', filtersChanged);
 </script>
-
-<!-- Styling -->
-<style>
-  .controls {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-    margin-bottom: 1rem;
-  }
-
-  .search-group {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-
-  .ingredient-group {
-    align-items: flex-start;
-    flex-direction: column;
-  }
-
-  #recipe-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 1rem;
-  }
-
-  #recipe-table th, #recipe-table td {
-    border: 1px solid #ddd;
-    padding: 0.6rem;
-    text-align: center;
-  }
-
-  .title-cell {
-    text-align: left;
-    white-space: nowrap;
-  }
-
-  .copy-btn {
-    background-color: #007bff;
-    color: white;
-    padding: 4px 8px;
-    border-radius: 6px;
-    text-decoration: none;
-    font-weight: bold;
-    display: inline-block;
-  }
-
-  .copy-btn:hover {
-    background-color: #0056b3;
-  }
-
-  .suggestions-box {
-    position: absolute;
-    background: white;
-    border: 1px solid #ccc;
-    z-index: 10;
-    width: 100%;
-    max-height: 150px;
-    overflow-y: auto;
-  }
-
-  .suggestion {
-    padding: 4px;
-    cursor: pointer;
-  }
-
-  .suggestion:hover {
-    background-color: #eee;
-  }
-
-  .ingredient-token {
-    display: inline-block;
-    background: #e0e0e0;
-    border-radius: 4px;
-    padding: 2px 6px;
-    margin: 2px 4px 2px 0;
-    font-size: 0.9em;
-  }
-
-  .ingredient-token .remove {
-    margin-left: 4px;
-    cursor: pointer;
-    font-weight: bold;
-  }
-
-  .pagination {
-    text-align: center;
-    margin-top: 1rem;
-  }
-
-  .pagination a {
-    margin: 0 5px;
-    text-decoration: none;
-    color: #007bff;
-  }
-
-  .pagination .current-page {
-    font-weight: bold;
-    margin: 0 5px;
-  }
-
-  @media (max-width: 600px) {
-    .controls {
-      flex-direction: column;
-    }
-    .title-cell {
-      white-space: normal;
-    }
-    #recipe-table {
-      overflow-x: auto;
-      display: block;
-    }
-  }
-  
-  #recipe-table th a {
-  color: inherit;
-  text-decoration: none;
-  font-weight: bold;
- }
-
- #recipe-table th a:hover {
-  color: inherit;
-  text-decoration: none;
- }
-
- .title-cell a {
-  color: inherit;
-  text-decoration: none;
-  font-weight: 500;
-}
-
-.title-cell a:hover {
-  color: inherit;
-  text-decoration: none;
-}
-  
-  </style>
 {% endblock %}
