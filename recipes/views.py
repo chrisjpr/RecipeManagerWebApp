@@ -139,9 +139,15 @@ def home(request):
     )
     
 
-#region BACKGRGOUND JOBS
-######################## BACKGROUND JOBS ########################
-# ---------- Status polling endpoint ----------
+#region BACKGR JOB STATUS
+######################### BACKGROUND JOB STATUS #########################  
+# views.py — imports (add if missing)
+from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_GET
+from django_rq import get_connection
+from rq.job import Job
+
 @require_GET
 @login_required
 def job_status(request):
@@ -157,14 +163,30 @@ def job_status(request):
 
     if job.is_finished:
         result = job.result or {}
-        return JsonResponse({"status": "finished", **result})
+        # ensure we return a dict even if result isn't one
+        payload = {"status": "finished"}
+        if isinstance(result, dict):
+            payload.update(result)
+        return JsonResponse(payload)
+
     if job.is_failed:
-        return JsonResponse({"status": "failed"}, status=500)
+        meta = getattr(job, "meta", {}) or {}
+        return JsonResponse({
+            "status": "failed",
+            "error_code": meta.get("error_code", "unknown"),
+            "error_message": meta.get("error_message", "Import failed.")
+        })
+
     if job.is_started:
         return JsonResponse({"status": "started"})
+
+    # queued/deferred
     return JsonResponse({"status": "queued"})
-######################## /BACKGROUND JOBS ########################
-#endregion BACKGROUND JOBS
+
+
+########################### /JOB STATUS #########################
+#endregion JOB STATUS
+
 
 #region MANAGE RECIPES
 ########################## MANAGING RECIPES ##########################
@@ -440,6 +462,11 @@ def create_recipe(request):
 
 #region AI RECIPES
 ################## AI RECIPE FEATURES ##################
+# views.py
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect
+from django.contrib import messages
+
 @login_required
 def add_recipe_from_url(request):
     if request.method == 'POST':
@@ -458,15 +485,24 @@ def add_recipe_from_url(request):
                 custom_instruction,
                 custom_title
             )
-            messages.success(request, f"Recipe import started! Job ID: {job.id}")
-            return redirect('recipes:recipe_list')
+            messages.success(request, "✅ Import request was succesfullys bumitted. It can take a few minutes. If something goes wrong with the import, you will be notified.")
+            resp = redirect('recipes:recipe_list')
+
+            # append job id into cookie (comma-separated), ~15 minutes
+            existing = request.COOKIES.get('last_import_job')
+            val = job.id if not existing else f"{existing},{job.id}"
+            resp.set_cookie('last_import_job', val, max_age=900, samesite='Lax')
+            return resp
 
         except Exception as e:
             print("❌ Error enqueueing add_recipe_from_url:", e)
-            messages.error(request, "Error starting recipe import.")
+            messages.error(request, "❌ Could not start recipe import.")
+            return redirect('recipes:recipe_list')
 
+    # GET: render the form page
     return render(request, 'recipes/add_recipe_from_url.html')
 
+# views.py
 @login_required
 def add_recipe_from_image(request):
     if request.method == 'POST':
@@ -476,7 +512,6 @@ def add_recipe_from_image(request):
         custom_title = request.POST.get('custom_title', '')
 
         try:
-            # read uploads to bytes (RQ can serialize these)
             images_as_bytes = []
             for f in images:
                 b = f.read()
@@ -493,19 +528,24 @@ def add_recipe_from_image(request):
                 custom_title,
             )
 
-            messages.success(request, f"📷 Image import started! Job ID: {job.id}")
-            return redirect('recipes:recipe_list')
+            messages.success(request, "✅ Import request was succesfullys bumitted. It can take a few minutes. If something goes wrong with the import, you will be notified.")
+            resp = redirect('recipes:recipe_list')
+
+            existing = request.COOKIES.get('last_import_job')
+            val = job.id if not existing else f"{existing},{job.id}"
+            resp.set_cookie('last_import_job', val, max_age=900, samesite='Lax')
+            return resp
 
         except Exception as e:
             print("❌ Error enqueueing add_recipe_from_image:", e)
-            messages.error(request, "Error while creating recipe from image.")
+            messages.error(request, "❌ Could not start recipe import from image.")
+            return redirect('recipes:recipe_list')
 
+    # GET: render the form page
     return render(request, 'recipes/add_recipe_from_image.html')
 
 
-
-
-
+# views.py
 @login_required
 def add_recipe_from_text(request):
     if request.method == 'POST':
@@ -514,7 +554,6 @@ def add_recipe_from_text(request):
             raw_text = form.cleaned_data['raw_recipe_text']
             use_llm = form.cleaned_data['use_llm']
             custom_instruction = form.cleaned_data['custom_instruction']
-
             try:
                 queue = get_safe_rq_queue('default')
                 job = queue.enqueue(
@@ -524,18 +563,28 @@ def add_recipe_from_text(request):
                     use_llm,
                     custom_instruction,
                 )
-                messages.success(request, f"⌨️ Text import started! Job ID: {job.id}")
-                return redirect('recipes:recipe_list')
+                messages.success(request, "✅ Import request was succesfullys bumitted. It can take a few minutes. If something goes wrong with the import, you will be notified.")
+                resp = redirect('recipes:recipe_list')
+
+                existing = request.COOKIES.get('last_import_job')
+                val = job.id if not existing else f"{existing},{job.id}"
+                resp.set_cookie('last_import_job', val, max_age=900, samesite='Lax')
+                return resp
 
             except Exception as e:
                 print("❌ Error enqueueing add_recipe_from_text:", e)
-                messages.error(request, "Error while creating recipe from text input.")
+                messages.error(request, "❌ Could not start recipe import from text.")
+                return redirect('recipes:recipe_list')
         else:
             messages.error(request, "Please correct the form errors.")
+            # fall through to GET render with the bound form below
     else:
         form = ParseWithLLMForm()
 
+    # GET (or invalid POST): render the form page
     return render(request, 'recipes/add_recipe_from_text.html', {"form": form})
+
+
 
 
 ################## /AI RECIPE FEATURES ##################
@@ -777,3 +826,6 @@ def recipe_pdf(request, recipe_id):
 
 
 ######################### /PDF EXPORT ########################
+
+
+

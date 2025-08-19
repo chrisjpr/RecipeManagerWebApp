@@ -24,8 +24,7 @@ urlpatterns = [
     path('create-options/', views.create_recipe_landing, name='create_recipe_landing'),
     path("public/", views.public_recipes, name="public_recipes"),
     path("recipe/<int:recipe_id>/pdf/", views.recipe_pdf, name="recipe_pdf_xhtml2pdf"),
-
-
+    path("job-status/", views.job_status, name="job_status"),
 ]
 
 
