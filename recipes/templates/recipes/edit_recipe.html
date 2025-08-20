@@ -1,254 +1,393 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block content %}
-<h2>Edit Recipe: {{ recipe.title }}</h2>
+{% block title %}Edit Recipe: {{ recipe.title }}{% endblock %}
 
-<form method="post" enctype="multipart/form-data" id="recipeForm" style="max-width: 900px;">
+{% block extra_head %}
+<style>
+  /* Prevent any child from bleeding out of cards */
+  .card { overflow: hidden; }
+
+  /* Defensive: images never exceed their containers */
+  .card img { max-width: 100%; height: auto; }
+  /* Modern form look without widget-tweaks */
+  .form-modern input[type="text"],
+  .form-modern input[type="number"],
+  .form-modern input[type="file"],
+  .form-modern input[type="url"],
+  .form-modern textarea,
+  .form-modern select{
+    width:100%; border:1px solid rgb(209 213 219); border-radius:0.75rem;
+    padding:0.625rem 0.75rem; background:#fff; color:rgb(30 41 59);
+  }
+  .dark .form-modern input[type="text"],
+  .dark .form-modern input[type="number"],
+  .dark .form-modern input[type="file"],
+  .dark .form-modern input[type="url"],
+  .dark .form-modern textarea,
+  .dark .form-modern select{
+    background:rgb(15 23 42); color:rgb(226 232 240); border-color:rgb(51 65 85);
+  }
+  .form-modern textarea{ min-height:96px; }
+
+  /* Cards */
+  .card{ border-radius:1rem; background:white; box-shadow:0 1px 2px rgba(0,0,0,.06); border:1px solid rgba(0,0,0,.05); }
+  .dark .card{ background:rgb(30 41 59); border-color:rgba(255,255,255,.06); }
+
+  /* Help badge + details popover */
+  .help-badge{ display:inline-block; border-radius:.5rem; padding:.125rem .5rem; font-size:.75rem; font-weight:600; cursor:pointer; }
+  details.help-popover>summary{ list-style:none; display:inline-flex; align-items:center; gap:.375rem; }
+  details.help-popover>summary::-webkit-details-marker{ display:none; }
+
+  /* Sticky action bar */
+  .sticky-actions{ position:sticky; bottom:1rem; z-index:30; }
+
+  /* Deleted entry visual */
+  .entry.is-deleted{ opacity:.55; filter:grayscale(0.2); }
+
+  /* --- Hide the noisy "Currently / Clear / Change" text from Django's ClearableFileInput --- */
+  .clearable-file-input{
+    font-size:0;              /* hides raw text like "Currently:" / "Change:" */
+  }
+  .clearable-file-input a,
+  .clearable-file-input input[type="checkbox"],
+  .clearable-file-input label{ display:none !important; } /* hide link + clear checkbox + its label */
+  .clearable-file-input input[type="file"]{
+    font-size:14px;           /* restore font for the actual file input */
+  }
+</style>
+{% endblock %}
+
+{% block breadcrumbs %}
+<nav aria-label="Breadcrumb" class="mb-3 text-sm text-gray-600 dark:text-gray-300">
+  <ol class="flex flex-wrap items-center gap-1">
+    <li><a class="underline hover:no-underline" href="{% url 'recipes:home' %}">Home</a></li>
+    <li class="opacity-60">/</li>
+    <li><a class="underline hover:no-underline" href="{% url 'recipes:recipe_list' %}">My Recipes</a></li>
+    <li class="opacity-60">/</li>
+    <li class="font-semibold">Edit: {{ recipe.title }}</li>
+  </ol>
+</nav>
+{% endblock %}
+
+{% block content %}
+<h1 class="text-2xl md:text-3xl font-extrabold tracking-tight flex items-center gap-2">✏️ Edit Recipe</h1>
+<p class="text-sm text-slate-600 dark:text-slate-300 mt-1">Update basic info, ingredients, and steps. Remove items with the trash button, or add new rows at the bottom of each section.</p>
+
+<form method="post" enctype="multipart/form-data" id="recipeForm" class="form-modern mt-4 space-y-4">
   {% csrf_token %}
 
-  <div class="card">
-    <h3>📝 Basic Info</h3>
-    {{ recipe_form.title.label_tag }} {{ recipe_form.title }}<br><br>
-    {{ recipe_form.cook_time.label_tag }} {{ recipe_form.cook_time }}<br><br>
-    {{ recipe_form.portions.label_tag }} {{ recipe_form.portions }}<br><br>
-    {{ recipe_form.image.label_tag }} {{ recipe_form.image }}<br><br>
-    {{ recipe_form.notes.label_tag }} {{ recipe_form.notes }}
-  </div>
+  <!-- Basic Info -->
+  <section class="card p-4 md:p-5">
+    <div class="flex items-start justify-between gap-3">
+      <h2 class="text-base font-semibold">📝 Basic Info</h2>
+      <details class="help-popover">
+        <summary class="help-badge bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-200">?</summary>
+        <div class="mt-2 w-96 max-w-[90vw] p-3 bg-white dark:bg-slate-800 rounded-xl shadow-card ring-1 ring-black/5 text-sm leading-relaxed">
+          <ul class="list-disc pl-5 space-y-1">
+            <li><strong>Title</strong> — keep it clear and searchable.</li>
+            <li><strong>Image</strong> — optional cover photo shown on lists.</li>
+            <li><strong>Cook time</strong> & <strong>Portions</strong> — help plan and scale the recipe.</li>
+            <li><strong>Notes</strong> — private remarks for yourself.</li>
+          </ul>
+        </div>
+      </details>
+    </div>
 
-<div class="card">
-  <h3>🥦 Ingredients</h3>
-  {{ ingredient_formset.management_form }}
-  <div id="ingredients-formset">
-    {% for form in ingredient_formset %}
-      <div class="form-inline entry">
-        {% for hidden in form.hidden_fields %}
-          {{ hidden }}
-        {% endfor %}
-        {% for field in form.visible_fields %}
-          {% if field.name != 'DELETE' %}
-            <div class="form-group">
-              {{ field.label_tag }}
-              {{ field }}
-              {% if field.name == 'linked_recipe' %}
-                <small style="color: #888;">(Optional link to another recipe)</small>
-              {% endif %}
-            </div>
-          {% endif %}
-        {% endfor %}
-        <input type="hidden" name="{{ form.prefix }}-DELETE" id="id_{{ form.prefix }}-DELETE">
-        <button type="button" class="delete-row">❌</button>
-      </div>
-    {% endfor %}
-  </div>
-  <button type="button" class="add-row" data-prefix="ingredients">➕ Add Ingredient</button>
-</div>
+    <div class="grid gap-3 md:grid-cols-2 mt-3">
+      <label class="block">
+        <span class="block text-sm font-semibold mb-1">{{ recipe_form.title.label }}</span>
+        {{ recipe_form.title }}
+        <span class="mt-1 block text-xs text-slate-500">Make it easy to find later.</span>
+      </label>
 
+      <!-- Image input with thumbnail preview (no "Currently" text) -->
+      <div class="block">
+        <span class="block text-sm font-semibold mb-1">{{ recipe_form.image.label }}</span>
 
-  <div class="card">
-    <h3>📋 Instructions</h3>
-    {{ instruction_formset.management_form }}
-    <div id="instructions-formset">
-      {% for form in instruction_formset %}
-        <div class="form-inline entry instruction-entry">
-          {% for hidden in form.hidden_fields %}
-            {{ hidden }}
-          {% endfor %}
-          {% for field in form.visible_fields %}
-            {% if field.name != 'DELETE' %}
-              <div class="form-group {% if field.name == 'description' %}instruction-text{% endif %}">
-                {{ field.label_tag }} {{ field }}
+        <!-- Current image preview (if any) -->
+        <div class="flex items-center gap-3">
+          <div id="imagePreview" class="shrink-0">
+            {% if recipe.image %}
+              <img src="{{ recipe.image.url }}" alt="Current image preview"
+                   class="h-24 w-32 object-cover rounded-lg ring-1 ring-black/5">
+            {% else %}
+              <div class="h-24 w-32 grid place-items-center rounded-lg bg-gray-100 text-gray-400 ring-1 ring-black/5">
+                No image
               </div>
             {% endif %}
+          </div>
+
+          <!-- File input (ClearableFileInput stripped of noisy text via CSS) -->
+      <div class="flex-1 clearable-file-input">
+        {{ recipe_form.image }}
+        <p class="mt-1 text-xs text-slate-500">Choose a new image to replace the current one.</p>
+      </div>
+        </div>
+      </div>
+
+      <label class="block">
+        <span class="block text-sm font-semibold mb-1">{{ recipe_form.cook_time.label }} (minutes)</span>
+        {{ recipe_form.cook_time }}
+      </label>
+
+      <label class="block">
+        <span class="block text-sm font-semibold mb-1">{{ recipe_form.portions.label }}</span>
+        {{ recipe_form.portions }}
+      </label>
+
+      <label class="block md:col-span-2">
+        <span class="block text-sm font-semibold mb-1">{{ recipe_form.notes.label }}</span>
+        {{ recipe_form.notes }}
+      </label>
+    </div>
+  </section>
+
+  <!-- Ingredients -->
+  <section class="card p-4 md:p-5">
+    <div class="flex items-start justify-between gap-4">
+      <div>
+        <h2 class="text-base font-semibold">🥦 Ingredients</h2>
+        <p class="text-sm text-slate-600 dark:text-slate-300 mt-1">
+          Add items line by line. You can optionally link an ingredient to another recipe or set a category to group related items.
+        </p>
+      </div>
+      <div class="flex items-center gap-2">
+        <details class="help-popover">
+          <summary class="help-badge bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-200">?</summary>
+          <div class="mt-2 w-96 max-w-[90vw] p-3 bg-white dark:bg-slate-800 rounded-xl shadow-card ring-1 ring-black/5 text-sm leading-relaxed">
+            <ul class="list-disc pl-5 space-y-1">
+              <li><strong>Quantity / Unit / Name</strong> — fill what you have; blank fields are okay.</li>
+              <li><strong>Linked recipe</strong> — reference a sub-recipe (e.g., “basic tomato sauce”).</li>
+              <li>Use <strong>Add Ingredient</strong> to create rows; remove with the trash button.</li>
+            </ul>
+          </div>
+        </details>
+        <button type="button" class="add-row inline-flex items-center gap-1 rounded-xl bg-slate-800 text-white px-3 py-2 text-sm font-semibold hover:bg-slate-900" data-prefix="ingredients">
+          <span class="material-symbols-rounded text-base">add</span> Add Ingredient
+        </button>
+      </div>
+    </div>
+
+    {{ ingredient_formset.management_form }}
+    <div id="ingredients-formset" class="mt-3 space-y-2">
+      {% for form in ingredient_formset %}
+        <div class="entry rounded-xl ring-1 ring-black/5 bg-white dark:bg-slate-900 p-3 grid gap-3 md:grid-cols-5">
+          {% for hidden in form.hidden_fields %}{{ hidden }}{% endfor %}
+          {% for field in form.visible_fields %}
+            {% if field.name != 'DELETE' %}
+              <label class="form-group block">
+                <span class="block text-xs font-semibold mb-1">{{ field.label }}</span>
+                {{ field }}
+                {% if field.name == 'linked_recipe' %}
+                  <span class="mt-1 block text-[11px] text-slate-500">Optional link to another recipe.</span>
+                {% endif %}
+              </label>
+            {% endif %}
           {% endfor %}
-          <input type="hidden" name="{{ form.prefix }}-DELETE" id="id_{{ form.prefix }}-DELETE">
-          <button type="button" class="delete-row">❌</button>
+          <!-- keep a hidden DELETE input to be set by the remove button -->
+          <input type="hidden" name="{{ form.prefix }}-DELETE" id="id_{{ form.prefix }}-DELETE" value="">
+          <div class="md:col-span-5 flex justify-end">
+            <button type="button" class="delete-row inline-flex items-center gap-1 rounded-lg bg-rose-600 text-white px-2.5 py-1.5 text-sm font-semibold hover:bg-rose-700">
+              <span class="material-symbols-rounded text-base">delete</span> Remove
+            </button>
+          </div>
         </div>
       {% endfor %}
     </div>
-    <button type="button" class="add-row" data-prefix="instructions">➕ Add Instruction</button>
+  </section>
+
+  <!-- Instructions -->
+  <section class="card p-4 md:p-5">
+    <div class="flex items-start justify-between gap-4">
+      <div>
+        <h2 class="text-base font-semibold">📋 Instructions</h2>
+        <p class="text-sm text-slate-600 dark:text-slate-300 mt-1">Write clear, short steps. Steps auto-number as you add them.</p>
+      </div>
+      <div class="flex items-center gap-2">
+        <details class="help-popover">
+          <summary class="help-badge bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-200">?</summary>
+          <div class="mt-2 w-96 max-w-[90vw] p-3 bg-white dark:bg-slate-800 rounded-xl shadow-card ring-1 ring-black/5 text-sm leading-relaxed">
+            <ul class="list-disc pl-5 space-y-1">
+              <li>Keep one action per step where possible.</li>
+              <li>Include timers/temperatures as useful hints.</li>
+              <li>Use <strong>Add Instruction</strong> to append more steps; they will auto-number.</li>
+            </ul>
+          </div>
+        </details>
+        <button type="button" class="add-row inline-flex items-center gap-1 rounded-xl bg-slate-800 text-white px-3 py-2 text-sm font-semibold hover:bg-slate-900" data-prefix="instructions">
+          <span class="material-symbols-rounded text-base">add</span> Add Instruction
+        </button>
+      </div>
+    </div>
+
+    {{ instruction_formset.management_form }}
+    <div id="instructions-formset" class="mt-3 space-y-2">
+      {% for form in instruction_formset %}
+        <div class="entry instruction-entry rounded-xl ring-1 ring-black/5 bg-white dark:bg-slate-900 p-3 grid gap-3 md:grid-cols-6">
+          {% for hidden in form.hidden_fields %}{{ hidden }}{% endfor %}
+          {% for field in form.visible_fields %}
+            {% if field.name != 'DELETE' %}
+              <label class="form-group block {% if field.name == 'description' %}md:col-span-5{% endif %}">
+                <span class="block text-xs font-semibold mb-1">{{ field.label }}</span>
+                {{ field }}
+              </label>
+            {% endif %}
+          {% endfor %}
+          <!-- keep a hidden DELETE input to be set by the remove button -->
+          <input type="hidden" name="{{ form.prefix }}-DELETE" id="id_{{ form.prefix }}-DELETE" value="">
+          <div class="md:col-span-6 flex justify-end">
+            <button type="button" class="delete-row inline-flex items-center gap-1 rounded-lg bg-rose-600 text-white px-2.5 py-1.5 text-sm font-semibold hover:bg-rose-700">
+              <span class="material-symbols-rounded text-base">delete</span> Remove
+            </button>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </section>
+
+  <!-- Sticky Action Bar -->
+  <div class="sticky-actions">
+    <div class="mx-auto w-full md:max-w-3xl rounded-2xl bg-white/90 dark:bg-slate-800/90 backdrop-blur ring-1 ring-black/10 shadow-card p-3 flex items-center justify-between gap-3">
+      <div class="text-xs md:text-sm text-slate-600 dark:text-slate-300">
+        <span class="inline-flex items-center gap-1"><span class="material-symbols-rounded text-base">tips_and_updates</span> Removed rows are saved as deleted.</span>
+      </div>
+      <button type="submit" class="inline-flex items-center gap-2 rounded-xl bg-emerald-600 text-white px-4 py-2 text-sm font-semibold hover:bg-emerald-700">
+        <span class="material-symbols-rounded">save</span> Save Changes
+      </button>
+    </div>
   </div>
 
-  <br>
-  <button type="submit" class="submit-btn">💾 Save Changes</button>
+  {# Hidden templates for new formset rows #}
+  <div id="empty-ingredients-form" class="hidden">
+    <div class="entry rounded-xl ring-1 ring-black/5 bg-white dark:bg-slate-900 p-3 grid gap-3 md:grid-cols-5">
+      {% for hidden in ingredient_formset.empty_form.hidden_fields %}{{ hidden }}{% endfor %}
+      {% for field in ingredient_formset.empty_form.visible_fields %}
+        {% if field.name != 'DELETE' %}
+          <label class="form-group block">
+            <span class="block text-xs font-semibold mb-1">{{ field.label }}</span>
+            {{ field }}
+          </label>
+        {% endif %}
+      {% endfor %}
+      <!-- Hidden delete for newly added row -->
+      <input type="hidden" name="ingredients-__prefix__-DELETE" id="id_ingredients-__prefix__-DELETE" value="">
+      <div class="md:col-span-5 flex justify-end">
+        <button type="button" class="delete-row inline-flex items-center gap-1 rounded-lg bg-rose-600 text-white px-2.5 py-1.5 text-sm font-semibold hover:bg-rose-700">
+          <span class="material-symbols-rounded text-base">delete</span> Remove
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="empty-instructions-form" class="hidden">
+    <div class="entry instruction-entry rounded-xl ring-1 ring-black/5 bg-white dark:bg-slate-900 p-3 grid gap-3 md:grid-cols-6">
+      {% for hidden in instruction_formset.empty_form.hidden_fields %}{{ hidden }}{% endfor %}
+      {% for field in instruction_formset.empty_form.visible_fields %}
+        {% if field.name != 'DELETE' %}
+          <label class="form-group block {% if field.name == 'description' %}md:col-span-5{% endif %}">
+            <span class="block text-xs font-semibold mb-1">{{ field.label }}</span>
+            {{ field }}
+          </label>
+        {% endif %}
+      {% endfor %}
+      <!-- Hidden delete for newly added row -->
+      <input type="hidden" name="instructions-__prefix__-DELETE" id="id_instructions-__prefix__-DELETE" value="">
+      <div class="md:col-span-6 flex justify-end">
+        <button type="button" class="delete-row inline-flex items-center gap-1 rounded-lg bg-rose-600 text-white px-2.5 py-1.5 text-sm font-semibold hover:bg-rose-700">
+          <span class="material-symbols-rounded text-base">delete</span> Remove
+        </button>
+      </div>
+    </div>
+  </div>
 </form>
-
-<!-- Empty form templates -->
-<div id="empty-ingredients-form" style="display: none;">
-  <div class="form-inline entry">
-    {% for hidden in ingredient_formset.empty_form.hidden_fields %}
-      {{ hidden }}
-    {% endfor %}
-    {% for field in ingredient_formset.empty_form.visible_fields %}
-      {% if field.name != 'DELETE' %}
-        <div class="form-group">
-          {{ field.label_tag }} {{ field }}
-        </div>
-      {% endif %}
-    {% endfor %}
-    <input type="hidden" name="ingredients-__prefix__-DELETE" id="id_ingredients-__prefix__-DELETE">
-    <button type="button" class="delete-row">❌</button>
-  </div>
-</div>
-
-<div id="empty-instructions-form" style="display: none;">
-  <div class="form-inline entry">
-    {% for hidden in instruction_formset.empty_form.hidden_fields %}
-      {{ hidden }}
-    {% endfor %}
-    {% for field in instruction_formset.empty_form.visible_fields %}
-      {% if field.name != 'DELETE' %}
-        <div class="form-group">
-          {{ field.label_tag }} {{ field }}
-        </div>
-      {% endif %}
-    {% endfor %}
-    <input type="hidden" name="instructions-__prefix__-DELETE" id="id_instructions-__prefix__-DELETE">
-    <button type="button" class="delete-row">❌</button>
-  </div>
-</div>
-
-<!-- ========== STYLES ========== -->
-<style>
-  .card {
-    background: #fff;
-    border: 2px solid #ddd;
-    padding: 1.5rem;
-    margin-bottom: 2rem;
-    border-radius: 10px;
-    box-shadow: 0 0 6px rgba(0, 0, 0, 0.05);
-  }
-
-  .form-inline {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-    margin-bottom: 1rem;
-    border: 1px solid #ddd;
-    padding: 1rem;
-    border-radius: 8px;
-    align-items: flex-end;
-  }
-
-  .form-group {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    min-width: 150px;
-  }
-
-  .form-group label {
-    font-weight: 600;
-    margin-bottom: 4px;
-  }
-
-  .form-group input,
-  .form-group select,
-  .form-group textarea {
-    padding: 0.4rem;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    font-size: 1rem;
-    width: 100%;
-    box-sizing: border-box;
-  }
-
-  textarea {
-    height: 60px;
-    resize: vertical;
-  }
-
-  .delete-row {
-    background: #dc3545;
-    color: white;
-    font-size: 1.2rem;
-    padding: 0.4rem 0.8rem;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    height: 38px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .delete-row::before {
-    content: "✖";
-  }
-
-  .delete-row:hover {
-    background-color: #b42d3b;
-  }
-
-  .add-row {
-    background: #007bff;
-    color: white;
-    padding: 0.5rem 1rem;
-    border-radius: 5px;
-    font-weight: bold;
-    border: none;
-    cursor: pointer;
-  }
-
-  .add-row:hover {
-    background-color: #0056b3;
-  }
-
-  .submit-btn {
-    background-color: #28a745;
-    color: white;
-    font-size: 1.1rem;
-    padding: 0.75rem 1.5rem;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    display: block;
-    margin: 2rem auto 0;
-  }
-
-  .submit-btn:hover {
-    background-color: #218838;
-  }
-</style>
-
-<!-- ========== SCRIPT ========== -->
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    function attachDeleteButtons() {
-      document.querySelectorAll('.delete-row').forEach(button => {
-        button.onclick = function () {
-          const entry = button.closest('.entry');
-          const deleteInput = entry.querySelector('input[name$="-DELETE"]');
-          if (deleteInput) {
-            deleteInput.value = 'on';
-          }
-          entry.style.display = 'none';
-        };
-      });
-    }
-
-    function addForm(prefix) {
-      const totalForms = document.getElementById(`id_${prefix}-TOTAL_FORMS`);
-      const formsetDiv = document.getElementById(`${prefix}-formset`);
-      const newIndex = parseInt(totalForms.value);
-      const template = document.getElementById(`empty-${prefix}-form`).innerHTML;
-      const newFormHtml = template.replace(/__prefix__/g, newIndex);
-      const wrapper = document.createElement('div');
-      wrapper.innerHTML = newFormHtml;
-      formsetDiv.appendChild(wrapper.firstElementChild);
-      totalForms.value = newIndex + 1;
-      attachDeleteButtons();
-    }
-
-    document.querySelectorAll('.add-row').forEach(button => {
-      button.addEventListener('click', () => {
-        addForm(button.dataset.prefix);
-      });
-    });
-
-    attachDeleteButtons();
-  });
-</script>
 {% endblock %}
 
+{% block extra_scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
 
+  /* ===== Image live preview (without showing filename) ===== */
+  (function(){
+    const fileInput = document.getElementById('{{ recipe_form.image.id_for_label }}') || document.querySelector('input[type="file"][name="{{ recipe_form.image.name }}"]');
+    const preview = document.getElementById('imagePreview');
+
+    if (fileInput && preview){
+      fileInput.addEventListener('change', () => {
+        const [file] = fileInput.files || [];
+        if (!file) return;
+        const url = URL.createObjectURL(file);
+        preview.innerHTML = `<img src="${url}" alt="Selected image preview" class="h-24 w-32 object-cover rounded-lg ring-1 ring-black/5">`;
+      });
+    }
+  })();
+
+  /* ===== Delete row: set hidden DELETE to "on" so formset deletes it ===== */
+  function markDeleted(entry){
+    const del = entry.querySelector('input[name$="-DELETE"]');
+    if (del) del.value = 'on';
+    entry.style.display = 'none';
+  }
+  function attachDeleteButtons(scope){
+    (scope || document).querySelectorAll('.delete-row').forEach(btn=>{
+      btn.onclick = () => {
+        const entry = btn.closest('.entry');
+        if (entry) markDeleted(entry);
+        renumberInstructionSteps();
+      };
+    });
+  }
+
+  /* ===== Add form: standard Django formset pattern with __prefix__ ===== */
+  function addForm(prefix){
+    const total = document.getElementById(`id_${prefix}-TOTAL_FORMS`);
+    const formsetDiv = document.getElementById(`${prefix}-formset`);
+    const tpl = document.getElementById(`empty-${prefix}-form`);
+    if (!total || !formsetDiv || !tpl) return;
+
+    const newIndex = parseInt(total.value, 10);
+    const html = tpl.innerHTML.replace(/__prefix__/g, newIndex);
+    const wrapper = document.createElement('div');
+    wrapper.innerHTML = html;
+    const node = wrapper.firstElementChild;
+    formsetDiv.appendChild(node);
+    total.value = newIndex + 1;
+
+    attachDeleteButtons(node);
+    if (prefix === 'instructions') autoFillNewInstructionStep(node);
+  }
+
+  document.querySelectorAll('.add-row').forEach(btn=>{
+    btn.addEventListener('click', () => addForm(btn.dataset.prefix));
+  });
+
+  /* ===== Instruction step numbering ===== */
+  function renumberInstructionSteps(){
+    const rows = Array.from(document.querySelectorAll('#instructions-formset .instruction-entry'))
+      .filter(r => r.style.display !== 'none'); // ignore deleted
+    let n = 1;
+    rows.forEach(row=>{
+      const stepInput = row.querySelector('input[name*="-step_number"]');
+      if (stepInput) stepInput.value = n++;
+    });
+  }
+  function autoFillNewInstructionStep(row){
+    const visibleRows = Array.from(document.querySelectorAll('#instructions-formset .instruction-entry'))
+      .filter(r => r.style.display !== 'none');
+    const stepInput = row.querySelector('input[name*="-step_number"]');
+    if (stepInput) stepInput.value = visibleRows.length; // append number
+  }
+
+  // Initial wiring
+  attachDeleteButtons();        // existing rows
+  renumberInstructionSteps();   // ensure numbers are sequential on load
+
+  // Prevent accidental submit when pressing Enter in single-line inputs
+  document.getElementById('recipeForm').addEventListener('keydown', (e)=>{
+    if (e.key === 'Enter' && e.target.tagName === 'INPUT' && !(e.metaKey || e.ctrlKey)) {
+      e.preventDefault();
+    }
+  });
+});
+</script>
+{% endblock %}

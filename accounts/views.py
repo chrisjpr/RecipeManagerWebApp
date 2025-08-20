@@ -285,7 +285,6 @@ from django.contrib import messages
 
 from .forms import AccountProfileForm, ICON_CHOICES
 
-
 @login_required
 def account_settings(request):
     user = request.user
@@ -311,13 +310,69 @@ def account_settings(request):
             else:
                 messages.error(request, "❌ Please correct the password form.")
 
-    # Send emoji strings (not tuples) to the template
-    icon_strings = [k for k, _ in ICON_CHOICES]
+    # ---- New: Build icon categories (simple sets by theme) ----
+    all_icons = [k for k, _ in ICON_CHOICES]
+
+    animals = set([
+        "🐶","🐱","🐭","🐹","🐰","🦊","🐻","🐼","🐻‍❄️","🐨","🐯","🦁","🐮","🐷","🐽","🐸","🐵","🙈","🙉","🙊","🐒",
+        "🐺","🐗","🐴","🦄","🦍","🦧","🦣","🐘","🦛","🦏","🐪","🐫","🦒","🦘","🦬","🐃","🐂","🐄","🐎","🐖","🐏","🐑",
+        "🦙","🐐","🦌","🫎","🐕","🐩","🦮","🐕‍🦺","🐈","🐈‍⬛","🐁","🐀","🐿","🦔","🐾","🐉","🐲"
+    ])
+    birds_bugs = set([
+        "🐔","🐧","🐦","🐦‍⬛","🐤","🐣","🐥","🦆","🦅","🦉","🦇","🪽","🪶","🐓","🦃","🦤","🦚","🦜","🦢","🪿","🦩","🕊",
+        "🐝","🪱","🐛","🦋","🐌","🐞","🐜","🪰","🪲","🪳","🦟","🦗","🕷","🕸","🦂"
+    ])
+    sea_life = set([
+        "🐙","🦑","🦐","🦞","🦀","🪼","🪸","🐡","🐠","🐟","🐬","🐳","🐋","🦈","🐊","🐚","🌊"
+    ])
+    reptiles_amphibians = set(["🐢","🐍","🦎","🦖","🦕"])
+    plants_flowers = set([
+        "🌵","🎄","🌲","🌳","🪾","🌴","🪹","🪺","🪵","🌱","🌿","☘️","🍀","🎍","🪴","🎋","🍃","🍂","🍁","🍄","🍄‍🟫",
+        "🌾","💐","🌷","🪷","🌹","🥀","🌺","🌸","🪻","🌼","🌻","🪨"
+    ])
+    space = set([
+        "🌞","🌝","🌛","🌜","🌚","🌕","🌖","🌗","🌘","🌑","🌒","🌓","🌔","🌙","🌎","🌍","🌏","🪐","💫","⭐️","🌟","✨","☄️"
+    ])
+    weather_water = set([
+        "⚡️","💥","🔥","🌪","🌈","☀️","🌤","⛅️","🌥","☁️","🌦","🌧","⛈","🌩","🌨","❄️","☃️","⛄️","🌬","💨","💧","💦","🫧","☔️","☂️"
+    ])
+
+    categories_order = [
+        ("Animals", animals),
+        ("Birds & Bugs", birds_bugs),
+        ("Sea Life", sea_life),
+        ("Reptiles & Amphibians", reptiles_amphibians),
+        ("Plants & Flowers", plants_flowers),
+        ("Space", space),
+        ("Weather & Water", weather_water),
+        ("Other", set())  # fallback bucket
+    ]
+
+    # bucket icons
+    buckets = {name: [] for name, _ in categories_order}
+    seen = set()
+    for icon in all_icons:
+        placed = False
+        for name, bucket_set in categories_order:
+            if icon in bucket_set:
+                buckets[name].append(icon)
+                placed = True
+                break
+        if not placed:
+            buckets["Other"].append(icon)
+        seen.add(icon)
+
+    icon_categories = [(name, buckets[name]) for name, _ in categories_order if buckets[name]]
+
+    # default tab
+    default_category = icon_categories[0][0] if icon_categories else "Animals"
 
     return render(request, "accounts/settings.html", {
         "profile_form": profile_form,
         "password_form": password_form,
-        "icon_choices": icon_strings,   # <— used by the radio grid in template
+        # Old flat list no longer needed by template
+        "icon_categories": icon_categories,  # list of (name, [icons])
+        "default_category": default_category
     })
 
 ###################### /ACCOUNT SETTINGS #####################

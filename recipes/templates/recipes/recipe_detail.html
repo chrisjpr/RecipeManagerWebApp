@@ -2,182 +2,339 @@
 {% block title %}{{ recipe.title }} | Recipe Manager{% endblock %}
 
 {% block content %}
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-<style>
-  body { font-family: 'Inter', sans-serif; background: #f7f9fc; color: #333; margin: 0; padding: 0; }
-  .recipe-header { display: flex; flex-wrap: wrap; justify-content: space-between; background: linear-gradient(120deg, #fff6ec, #fefeff); border-bottom: 1px solid #ddd; padding: 2rem; align-items: center; border-radius: 12px; margin-bottom: 2rem; }
-  .recipe-header img { max-width: 300px; border-radius: 12px; border: 4px solid #ffecd1; }
-  .recipe-info { flex: 1; margin-left: 2rem; }
-  .recipe-info h2 { font-size: 2.5rem; margin-bottom: 0.5rem; }
-  .recipe-meta { font-size: 1.1rem; color: #555; margin-bottom: 1rem; }
-  .content-section { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 2rem; }
-  .box { flex: 1; background: white; padding: 2rem; border-radius: 12px; border: 1px solid #eee; box-shadow: 0 2px 8px rgba(0,0,0,0.05); min-width: 300px; }
-  .box h3 { text-align: center; margin-bottom: 1.5rem; font-size: 1.5rem; border-bottom: 1px solid #f0d9c3; padding-bottom: 0.5rem; }
-  .ingredient-item { margin-bottom: 0.75rem; }
-  .portion-controls { text-align: center; margin-bottom: 1.5rem; }
-  .portion-controls input { width: 60px; padding: 6px; font-size: 1rem; margin-right: 10px; border-radius: 6px; border: 1px solid #ccc; }
-  .portion-controls button { background-color: #ffcb91; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 600; transition: 0.2s ease; }
-  .portion-controls button:hover { background-color: #ffa95e; }
-  ol { padding-left: 1.5rem; line-height: 1.7; }
-  .notes-box { margin-top: 2rem; background-color: #fff8ef; border-left: 5px solid #ffcb91; padding: 1rem 1.5rem; border-radius: 8px; }
-  .action-buttons{
-  margin-top: 1rem;
-  display: flex;              /* stack rows */
-  flex-direction: column;
-  gap: .5rem;                 /* space between rows */
-  align-items: center;
-  text-align: center;
-}
-.action-buttons .btn-row{
-  display: flex;              /* buttons within a row */
-  flex-wrap: wrap;
-  gap: .5rem;
-  justify-content: center;
-}
-  .action-buttons a { margin: 0 0.5rem; padding: 8px 16px; background: #e7f1ff; color: #333; text-decoration: none; border-radius: 6px; border: 1px solid #b8daff; font-weight: 500; }
-  .action-buttons a:hover { background-color: #cde4ff; }
-  .action-buttons form { display: inline; }
-  .pdf-btn{
-  background-color:#ffe8b5;
-  border:1px solid #ffd27a;
-  color:#333;
-  padding:8px 16px;
-  border-radius:6px;
-  font-weight:600;
-  text-decoration:none;
-}
-.pdf-btn:hover{ background-color:#ffd98f; }
-.copy-btn {
-  background-color: #e7f1ff;
-  color: #333;
-  padding: 8px 16px;
-  border-radius: 6px;
-  border: 1px solid #b8daff;
-  font-weight: 500;
-  cursor: pointer;
-}
-.copy-btn:hover { background-color: #cde4ff; }
-</style>
-
-<div class="recipe-header">
-  {% if recipe.image %}
-    <img src="{{ recipe.image.url }}" alt="{{ recipe.title }}">
-  {% endif %}
-  <div class="recipe-info">
-    <h2>{{ recipe.title }}</h2>
-<div class="recipe-meta">
-  <p>🕒 Cook Time: {{ recipe.cook_time }} min</p>
-  <p>🍽️ Portions: <span id="base-portions">{{ recipe.portions }}</span></p>
-<div class="action-buttons">
-  {% if user == recipe.user %}
-    <div class="btn-row">
-      <a href="{% url 'recipes:recipe_edit' recipe.recipe_id %}">✏️ Edit</a>
-      <a href="{% url 'recipes:recipe_delete' recipe.recipe_id %}">🗑️ Delete</a>
+<main class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-6 md:py-10">
+  <!-- HERO (Pastel, minimal, image fitted) -->
+  <header class="relative overflow-hidden rounded-3xl ring-1 ring-slate-200/70 shadow-sm"
+          style="background: linear-gradient(120deg, #fff6ec, #fefeff);">
+    <div class="relative p-6 md:p-10">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+        <div class="lg:col-span-7 order-2 lg:order-1 text-center lg:text-left">
+          <h1 class="text-3xl md:text-5xl font-extrabold tracking-tight text-slate-900">
+            {{ recipe.title }}
+          </h1>
+          <div class="mt-4 flex flex-wrap justify-center lg:justify-start gap-3 text-sm">
+            <span class="inline-flex items-center gap-1.5 rounded-full bg-emerald-100 text-emerald-900 ring-1 ring-emerald-200/70 px-3 py-1.5">
+              🕒 <span class="font-semibold">{{ recipe.cook_time }}</span> min
+            </span>
+            <span class="inline-flex items-center gap-1.5 rounded-full bg-amber-100 text-amber-900 ring-1 ring-amber-200/70 px-3 py-1.5">
+              🍽️ Portions: <span id="portions-display" class="font-semibold">{{ recipe.portions }}</span>
+            </span>
+          </div>
+        </div>
+        <div class="lg:col-span-5 order-1 lg:order-2">
+          {% if recipe.image %}
+          <figure class="mx-auto w-full max-w-[520px]">
+            <img src="{{ recipe.image.url }}" alt="{{ recipe.title }} image"
+                 class="w-full h-auto rounded-2xl border border-slate-200 ring-1 ring-slate-200/50 shadow-lg object-cover max-h-[420px]">
+          </figure>
+          {% endif %}
+        </div>
+      </div>
     </div>
-  {% elif user.is_authenticated %}
-    <div class="btn-row">
-      <form method="post" action="{% url 'recipes:copy_recipe' recipe.recipe_id %}">
-        {% csrf_token %}
-        <input type="hidden" name="next" value="{{ request.get_full_path }}">
-        <button type="submit" class="copy-btn">📋 Copy to My Recipes</button>
-      </form>
+  </header>
+
+  <!-- CONTENT GRID -->
+  <section class="mt-6 md:mt-10 grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8">
+    <!-- LEFT: Ingredients -->
+    <aside class="lg:col-span-5">
+      <div class="rounded-2xl bg-white ring-1 ring-slate-200/70 shadow-sm p-5 md:p-6">
+        <div class="flex items-center justify-between gap-3">
+          <h2 class="text-lg md:text-xl font-bold">🧂 Ingredients</h2>
+          <!-- Portion Controls -->
+          <div class="flex items-center gap-2">
+            <button type="button" class="h-9 w-9 rounded-lg ring-1 ring-slate-200 bg-white hover:bg-slate-50 grid place-items-center" onclick="updateMultiplier(-0.5)" aria-label="Decrease portions">−</button>
+            <input id="portionMultiplier" type="number" value="1" step="0.1" min="0.1" aria-label="Portion multiplier"
+              class="w-20 rounded-lg border-slate-300 bg-white shadow-sm text-sm focus:border-sky-400 focus:ring-sky-400 text-center" />
+            <button type="button" class="h-9 w-9 rounded-lg ring-1 ring-slate-200 bg-white hover:bg-slate-50 grid place-items-center" onclick="updateMultiplier(0.5)" aria-label="Increase portions">+</button>
+          </div>
+        </div>
+        <p class="mt-1 text-xs text-slate-500">Adjust to scale ingredient amounts. Your setting is saved.</p>
+
+        <div class="mt-4 space-y-4" id="ingredients-root">
+          {% regroup recipe.ingredients.all by category as ingredient_groups %}
+          {% for group in ingredient_groups %}
+            <section>
+              <h3 class="text-base font-semibold text-slate-800 border-b border-slate-100 pb-1">{{ group.grouper|default:"Other" }}</h3>
+              <ul class="mt-2 space-y-1.5 list-disc list-outside pl-5">
+                {% for ingredient in group.list %}
+                  <li class="leading-6 ingredient-line"
+                      data-quantity="{{ ingredient.quantity|default_if_none:'' }}"
+                      data-unit="{{ ingredient.unit|default_if_none:'' }}"
+                      data-name="{{ ingredient.name }}">
+                    {% if ingredient.linked_recipe %}
+                      <a href="{% url 'recipes:recipe_detail' ingredient.linked_recipe.recipe_id %}"
+                         target="_blank" class="hover:underline">
+                        {% if ingredient.quantity %}{{ ingredient.quantity }}{% endif %}{% if ingredient.unit %}{% if ingredient.quantity %} {% endif %}{{ ingredient.unit }}{% endif %}{% if ingredient.quantity or ingredient.unit %} {% endif %}{{ ingredient.name }}
+                      </a>
+                    {% else %}
+                        {% if ingredient.quantity %}{{ ingredient.quantity }}{% endif %}{% if ingredient.unit %}{% if ingredient.quantity %} {% endif %}{{ ingredient.unit }}{% endif %}{% if ingredient.quantity or ingredient.unit %} {% endif %}{{ ingredient.name }}
+                    {% endif %}
+                  </li>
+                {% endfor %}
+              </ul>
+            </section>
+          {% empty %}
+            <p class="text-slate-600">No ingredients listed.</p>
+          {% endfor %}
+        </div>
+
+        <!-- Shopping List Toggle -->
+        <div class="mt-5 flex items-center justify-between">
+          <button type="button" id="toggle-shopping" class="inline-flex items-center gap-2 rounded-xl px-3.5 py-2 text-sm font-semibold ring-1 ring-slate-200 bg-white hover:bg-slate-50">
+            🧺 Shopping list
+          </button>
+          <span id="shop-count" class="text-xs text-slate-500"></span>
+        </div>
+        <div id="shopping-panel" class="mt-3 hidden rounded-xl border border-slate-200 p-3 bg-slate-50/60">
+          <p class="text-xs text-slate-500 mb-2">Check items as you shop. Saved for next time.</p>
+          <ul id="shopping-list" class="space-y-2"></ul>
+        </div>
+      </div>
+    </aside>
+
+    <!-- RIGHT: Instructions -->
+    <article class="lg:col-span-7">
+      <div class="rounded-2xl bg-white ring-1 ring-slate-200/70 shadow-sm p-5 md:p-6">
+        <div class="flex items-center justify-between">
+          <h2 class="text-lg md:text-xl font-bold">📋 Instructions</h2>
+          <div class="flex items-center gap-2">
+            <button type="button" class="text-sm rounded-lg ring-1 ring-slate-200 px-3 py-1.5 hover:bg-slate-50" onclick="resetChecklist()">Reset</button>
+          </div>
+        </div>
+        <ol class="mt-3 space-y-2" id="instructions-list">
+          {% for instruction in recipe.instructions.all %}
+            <li class="leading-7">
+              <label class="flex items-start gap-3 cursor-pointer select-none">
+                <input type="checkbox" class="mt-1 h-4 w-4 rounded border-slate-300 text-sky-600 focus:ring-sky-400 instruction-check">
+                <span class="inline-flex shrink-0 items-center justify-center h-7 w-7 rounded-full bg-sky-100 text-sky-900 ring-1 ring-sky-200 text-sm font-semibold step-number">{{ forloop.counter }}</span>
+                <span class="prose prose-slate max-w-none text-slate-800">{{ instruction.description|safe }}</span>
+              </label>
+            </li>
+          {% empty %}
+            <li>No instructions provided.</li>
+          {% endfor %}
+        </ol>
+      </div>
+    </article>
+
+    {% if recipe.notes %}
+    <!-- NOTES spanning both columns -->
+    <div class="lg:col-span-12">
+      <div class="rounded-2xl bg-rose-50/70 ring-1 ring-rose-200/70 text-rose-900 shadow-sm p-4 md:p-5">
+        <h3 class="font-semibold mb-1">Notes</h3>
+        <div class="prose prose-rose prose-sm max-w-none text-left">{{ recipe.notes|linebreaks }}</div>
+      </div>
     </div>
-  {% else %}
-    <div class="btn-row">
-      <a href="{% url 'accounts:login' %}?next={{ request.get_full_path|urlencode }}">🔑 Log in to copy</a>
+    {% endif %}
+  </section>
+
+  <!-- ACTIONS -->
+  <section class="mt-6">
+    <div class="rounded-2xl bg-white ring-1 ring-slate-200/70 shadow-sm p-4 md:p-5 flex flex-wrap items-center justify-center gap-2 md:gap-3">
+      {% if user == recipe.user %}
+        <a href="{% url 'recipes:recipe_edit' recipe.recipe_id %}"
+           class="inline-flex items-center gap-2 rounded-xl px-3.5 py-2 text-sm font-semibold ring-1 ring-slate-200 bg-white hover:bg-slate-50">
+          ✏️ Edit
+        </a>
+        <a href="{% url 'recipes:recipe_delete' recipe.recipe_id %}"
+           class="inline-flex items-center gap-2 rounded-xl px-3.5 py-2 text-sm font-semibold ring-1 ring-rose-200 bg-rose-50 hover:bg-rose-100">
+          🗑️ Delete
+        </a>
+      {% elif user.is_authenticated %}
+        <form method="post" action="{% url 'recipes:copy_recipe' recipe.recipe_id %}" class="contents">
+          {% csrf_token %}
+          <input type="hidden" name="next" value="{{ request.get_full_path }}">
+          <button type="submit"
+                  class="inline-flex items-center gap-2 rounded-xl px-3.5 py-2 text-sm font-semibold ring-1 ring-slate-200 bg-white hover:bg-slate-50">
+            📋 Copy to My Recipes
+          </button>
+        </form>
+      {% else %}
+        <a href="{% url 'accounts:login' %}?next={{ request.get_full_path|urlencode }}"
+           class="inline-flex items-center gap-2 rounded-xl px-3.5 py-2 text-sm font-semibold ring-1 ring-slate-200 bg-white hover:bg-slate-50">
+          🔑 Log in to copy
+        </a>
+      {% endif %}
+
+      <a href="{% url 'recipes:recipe_pdf_xhtml2pdf' recipe.recipe_id %}"
+         class="inline-flex items-center gap-2 rounded-xl px-3.5 py-2 text-sm font-semibold ring-1 ring-amber-200 bg-amber-50 hover:bg-amber-100">
+        ⬇️ PDF
+      </a>
+      <button type="button" onclick="window.print()" class="inline-flex items-center gap-2 rounded-xl px-3.5 py-2 text-sm font-semibold ring-1 ring-slate-200 bg-white hover:bg-slate-50">🖨️ Print</button>
+      <button type="button" onclick="shareRecipe()" class="inline-flex items-center gap-2 rounded-xl px-3.5 py-2 text-sm font-semibold ring-1 ring-sky-200 bg-sky-50 text-sky-900 hover:bg-sky-100">🔗 Share</button>
     </div>
-  {% endif %}
+  </section>
+</main>
 
-  <!-- always visible, on its own row -->
-  <div class="btn-row">
-    <a class="pdf-btn" href="{% url 'recipes:recipe_pdf_xhtml2pdf' recipe.recipe_id %}">⬇️ Download as PDF</a>
-  </div>
-</div>
-
-</div>
-  </div>
-</div>
-
-<div class="content-section">
-  <!-- Ingredients Box -->
-  <div class="box">
-    <h3>🧂 Ingredients</h3>
-
-    <div class="portion-controls">
-      <input id="portionMultiplier" type="number" value="1" step="0.1" min="0.1">
-      <button onclick="adjustPortions()">Adjust</button>
-    </div>
-
-    <ul>
-      {% regroup recipe.ingredients.all by category as ingredient_groups %}
-      {% for group in ingredient_groups %}
-        <li style="list-style-type: none; margin-top: 1.25rem;">
-          <strong style="font-size: 1.2rem;">{{ group.grouper|default:"Other" }}</strong>
-          <ul style="margin-top: 0.5rem;">
-            {% for ingredient in group.list %}
-              <li class="ingredient-item ingredient"
-                  data-quantity="{{ ingredient.quantity|default_if_none:'' }}"
-                  data-unit="{{ ingredient.unit|default_if_none:'' }}"
-                  data-name="{{ ingredient.name }}">
-                {% if ingredient.linked_recipe %}
-                  <a href="{% url 'recipes:recipe_detail' ingredient.linked_recipe.recipe_id %}" target="_blank">
-                    {% if ingredient.quantity %}{{ ingredient.quantity }}{% endif %}{% if ingredient.unit %}{% if ingredient.quantity %} {% endif %}{{ ingredient.unit }}{% endif %}{% if ingredient.quantity or ingredient.unit %} {% endif %}{{ ingredient.name }}
-                  </a>
-                {% else %}
-                  {% if ingredient.quantity %}{{ ingredient.quantity }}{% endif %}{% if ingredient.unit %}{% if ingredient.quantity %} {% endif %}{{ ingredient.unit }}{% endif %}{% if ingredient.quantity or ingredient.unit %} {% endif %}{{ ingredient.name }}
-                {% endif %}
-              </li>
-            {% endfor %}
-          </ul>
-        </li>
-      {% empty %}
-        <li>No ingredients listed.</li>
-      {% endfor %}
-    </ul>
-  </div>
-
-  <!-- Instructions Box -->
-  <div class="box">
-    <h3>📋 Instructions</h3>
-    <ol>
-      {% for instruction in recipe.instructions.all %}
-        <li>{{ instruction.description|safe }}</li>
-      {% empty %}
-        <li>No instructions provided.</li>
-      {% endfor %}
-    </ol>
-  </div>
-</div>
-
-{% if recipe.notes %}
-  <div class="notes-box">
-    <strong>Notes:</strong><br>
-    {{ recipe.notes|linebreaks }}
-  </div>
-{% endif %}
-
+{% block extra_scripts %}
 <script>
-function adjustPortions() {
-  const multiplier = parseFloat(document.getElementById("portionMultiplier").value) || 1;
+  // --- Portions multiplier persistence & application ---
+  const STORAGE_KEY = 'recipe_multiplier_{{ recipe.recipe_id }}';
+  const basePortions = Number('{{ recipe.portions|default:1 }}') || 1;
 
-  document.querySelectorAll('.ingredient').forEach(el => {
-    const quantityRaw = el.getAttribute('data-quantity'); // '' if none
-    const unit = (el.getAttribute('data-unit') || '').trim();
-    const name = (el.getAttribute('data-name') || '').trim();
+  function applyMultiplier(mult) {
+    const portionsEl = document.getElementById('portions-display');
+    if (portionsEl) portionsEl.textContent = (Math.round(basePortions * mult * 10) / 10).toString();
 
-    const parts = [];
+    document.querySelectorAll('.ingredient-line').forEach(el => {
+      const quantityRaw = el.getAttribute('data-quantity');
+      const unit = (el.getAttribute('data-unit') || '').trim();
+      const name = (el.getAttribute('data-name') || '').trim();
+      const parts = [];
+      if (quantityRaw !== '' && !isNaN(parseFloat(quantityRaw))) {
+        const base = parseFloat(quantityRaw) * mult;
+        const formatted = (Math.round(base * 10) / 10).toString();
+        parts.push(formatted);
+      }
+      if (unit) parts.push(unit);
+      if (name) parts.push(name);
+      el.innerHTML = parts.join(' ');
+    });
 
-    if (quantityRaw !== '' && !isNaN(parseFloat(quantityRaw))) {
-      const base = parseFloat(quantityRaw) * multiplier;
-      const formatted = (Math.round(base * 10) / 10).toString();
-      parts.push(formatted);
+    // Refresh shopping list values if open
+    if (!document.getElementById('shopping-panel').classList.contains('hidden')) {
+      buildShoppingList();
     }
-    if (unit) parts.push(unit);
-    if (name) parts.push(name);
+  }
 
-    el.textContent = parts.join(' ');
+  function setMultiplier(mult) {
+    localStorage.setItem(STORAGE_KEY, String(mult));
+    document.getElementById('portionMultiplier').value = mult;
+    applyMultiplier(mult);
+  }
+
+  function updateMultiplier(delta) {
+    const input = document.getElementById('portionMultiplier');
+    const next = Math.max(0.1, (parseFloat(input.value) || 1) + delta);
+    setMultiplier(Number(next.toFixed(1)));
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const saved = parseFloat(localStorage.getItem(STORAGE_KEY));
+    const mult = (!isNaN(saved) && saved > 0) ? saved : 1;
+    document.getElementById('portionMultiplier').value = mult;
+    applyMultiplier(mult);
   });
-}
-</script>
 
+  document.getElementById('portionMultiplier').addEventListener('change', (e) => {
+    const v = Math.max(0.1, parseFloat(e.target.value) || 1);
+    setMultiplier(Number(v.toFixed(1)));
+  });
+
+  // --- Instruction checklist with numbers & persistence ---
+  const CHECK_KEY = 'recipe_checks_{{ recipe.recipe_id }}';
+  function loadChecks() { try { return JSON.parse(localStorage.getItem(CHECK_KEY) || '[]'); } catch { return []; } }
+  function saveChecks(arr) { localStorage.setItem(CHECK_KEY, JSON.stringify(arr)); }
+  function resetChecklist() {
+    saveChecks([]);
+    document.querySelectorAll('#instructions-list .instruction-check').forEach(cb => {
+      cb.checked = false;
+      const li = cb.closest('label');
+      li?.classList.remove('opacity-60');
+      li?.querySelector('.step-number')?.classList.remove('bg-sky-200');
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const checks = new Set(loadChecks());
+    document.querySelectorAll('#instructions-list .instruction-check').forEach((cb, idx) => {
+      cb.dataset.index = idx;
+      const label = cb.closest('label');
+      const circle = label?.querySelector('.step-number');
+      if (checks.has(idx)) {
+        cb.checked = true;
+        label?.classList.add('opacity-60');
+        circle?.classList.add('bg-sky-200');
+      }
+      cb.addEventListener('change', (e) => {
+        const i = Number(e.target.dataset.index);
+        const current = new Set(loadChecks());
+        if (e.target.checked) current.add(i); else current.delete(i);
+        saveChecks([...current]);
+        label?.classList.toggle('opacity-60', e.target.checked);
+        circle?.classList.toggle('bg-sky-200', e.target.checked);
+      });
+    });
+  });
+
+  // --- Shopping list (toggle, build from scaled ingredients, persistence) ---
+  const SHOP_KEY = 'recipe_shop_{{ recipe.recipe_id }}';
+  function loadShop() { try { return JSON.parse(localStorage.getItem(SHOP_KEY) || '[]'); } catch { return []; } }
+  function saveShop(arr) { localStorage.setItem(SHOP_KEY, JSON.stringify(arr)); }
+
+  function buildShoppingList() {
+    const list = document.getElementById('shopping-list');
+    list.innerHTML = '';
+    const items = [];
+    // Build from current ingredient DOM (already scaled)
+    document.querySelectorAll('#ingredients-root .ingredient-line').forEach((el, idx) => {
+      const text = el.textContent.trim();
+      if (!text) return;
+      items.push({ idx, text });
+    });
+
+    const checked = new Set(loadShop());
+    items.forEach(({ idx, text }) => {
+      const li = document.createElement('li');
+      li.className = 'flex items-start gap-3';
+      li.innerHTML = `
+        <label class="flex items-start gap-3 cursor-pointer select-none w-full">
+          <input type="checkbox" class="mt-1 h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-400 shop-check" data-idx="${idx}">
+          <span class="text-sm text-slate-800">${text}</span>
+        </label>`;
+      const cb = li.querySelector('input');
+      cb.checked = checked.has(idx);
+      if (cb.checked) li.querySelector('span')?.classList.add('line-through','text-slate-400');
+      cb.addEventListener('change', (e) => {
+        const i = Number(e.target.getAttribute('data-idx'));
+        const current = new Set(loadShop());
+        if (e.target.checked) current.add(i); else current.delete(i);
+        saveShop([...current]);
+        li.querySelector('span')?.classList.toggle('line-through', e.target.checked);
+        li.querySelector('span')?.classList.toggle('text-slate-400', e.target.checked);
+        updateShopCount();
+      });
+      list.appendChild(li);
+    });
+    updateShopCount();
+  }
+
+  function updateShopCount() {
+    const total = document.querySelectorAll('#shopping-list .shop-check').length;
+    const checked = document.querySelectorAll('#shopping-list .shop-check:checked').length;
+    const el = document.getElementById('shop-count');
+    if (total > 0) el.textContent = `${checked}/${total} checked`;
+    else el.textContent = '';
+  }
+
+  document.getElementById('toggle-shopping').addEventListener('click', () => {
+    const panel = document.getElementById('shopping-panel');
+    const isHidden = panel.classList.contains('hidden');
+    panel.classList.toggle('hidden');
+    if (isHidden) buildShoppingList();
+  });
+
+  // Rebuild shopping list if ingredients change due to multiplier toggle while open
+  window.addEventListener('storage', (e) => {
+    if (e.key === STORAGE_KEY && !document.getElementById('shopping-panel').classList.contains('hidden')) {
+      buildShoppingList();
+    }
+  });
+
+  // --- Share API ---
+  function shareRecipe() {
+    const shareData = {
+      title: '{{ recipe.title|escapejs }}',
+      text: '{{ recipe.title|escapejs }}',
+      url: window.location.href
+    };
+    if (navigator.share) {
+      navigator.share(shareData).catch(()=>{});
+    } else {
+      navigator.clipboard.writeText(window.location.href);
+      alert('Link copied to clipboard');
+    }
+  }
+</script>
+{% endblock %}
 {% endblock %}
