@@ -69,7 +69,6 @@
       </details>
     </div>
 
-    <!-- Notes made line-breaking without affecting layout -->
     <p class="text-sm text-slate-600 dark:text-slate-300 mt-1">
       Only change your username if you need to. It’s how you log in and is visible to others. The emoji avatar is just for fun!
       <strong class="block mt-2">Note:</strong> Changing your username will also change how you log in.
@@ -88,7 +87,6 @@
         {% if profile_form.username.errors %}
           <div class="mt-1 text-rose-600 dark:text-rose-300 text-xs">{{ profile_form.username.errors|join:", " }}</div>
         {% else %}
-          <!-- Make NOTE start on its own line -->
           <div class="mt-1 text-xs text-slate-500">
             This is how other users will see you.
             <strong class="block mt-1">NOTE:</strong> This is also updating the username you need to login!
@@ -107,25 +105,45 @@
         </div>
 
         {% with selected=profile_form.profile_icon.value %}
-          <div class="mt-2 grid grid-cols-4 sm:grid-cols-6 lg:grid-cols-8 gap-2">
-            {% for icon in icon_choices %}
-              <label class="flex items-center gap-2 rounded-xl ring-1 ring-black/5 bg-white dark:bg-slate-900 px-2.5 py-2 cursor-pointer hover:shadow-sm">
-                <input type="radio" name="profile_icon" value="{{ icon }}"
-                       class="shrink-0"
-                       {% if selected %}
-                         {% if selected == icon %}checked{% endif %}
-                       {% else %}
-                         {% if profile_form.instance.profile_icon == icon %}checked{% endif %}
-                       {% endif %}>
-                <span class="emoji-icon">{{ icon }}</span>
-              </label>
+        <!-- Category Tabs -->
+        <div class="mt-2 border-b border-slate-200 dark:border-slate-700">
+          <div class="flex flex-wrap gap-1">
+            {% for cat_name, icons in icon_categories %}
+              <button type="button"
+                      class="icon-tab px-3 py-1.5 text-sm rounded-t-lg border border-b-0 border-transparent hover:bg-slate-50 dark:hover:bg-slate-700"
+                      data-cat="{{ cat_name|slugify }}">
+                {{ cat_name }}
+              </button>
             {% endfor %}
           </div>
+        </div>
+
+        <!-- Category Panels -->
+        <div id="icon-panels" class="mt-3">
+          {% for cat_name, icons in icon_categories %}
+            <div class="icon-panel hidden" data-panel="{{ cat_name|slugify }}">
+              <div class="grid grid-cols-4 sm:grid-cols-6 lg:grid-cols-8 gap-2">
+                {% for icon in icons %}
+                  <label class="flex items-center gap-2 rounded-xl ring-1 ring-black/5 bg-white dark:bg-slate-900 px-2.5 py-2 cursor-pointer hover:shadow-sm">
+                    <input type="radio" name="profile_icon" value="{{ icon }}" class="shrink-0"
+                      {% if selected %}
+                        {% if selected == icon %}checked{% endif %}
+                      {% else %}
+                        {% if profile_form.instance.profile_icon == icon %}checked{% endif %}
+                      {% endif %}>
+                    <span class="emoji-icon">{{ icon }}</span>
+                  </label>
+                {% endfor %}
+              </div>
+            </div>
+          {% endfor %}
+        </div>
         {% endwith %}
+
         {% if profile_form.profile_icon.errors %}
           <div class="mt-1 text-rose-600 dark:text-rose-300 text-xs">{{ profile_form.profile_icon.errors|join:", " }}</div>
         {% else %}
-          <div class="mt-2 text-xs text-slate-500">Pick your favorite — animals, plants, weather, or celestial vibes 🌿✨.</div>
+          <div class="mt-2 text-xs text-slate-500">Switch categories to explore animals, plants, sea life, weather, and space 🌿✨.</div>
         {% endif %}
       </div>
 
@@ -197,4 +215,42 @@
     </form>
   </section>
 </div>
+
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+  (function(){
+    const STORAGE_KEY = "iconCategory";
+    const defaultCat = "{{ default_category|slugify }}";
+    const tabs = Array.from(document.querySelectorAll(".icon-tab"));
+    const panels = Array.from(document.querySelectorAll(".icon-panel"));
+
+    function activate(cat){
+      // tabs
+      tabs.forEach(btn => {
+        const active = btn.dataset.cat === cat;
+        btn.classList.toggle("bg-white", active);
+        btn.classList.toggle("dark:bg-slate-800", active);
+        btn.classList.toggle("border-slate-200", active);
+        btn.classList.toggle("dark:border-slate-700", active);
+      });
+      // panels
+      panels.forEach(p => {
+        p.classList.toggle("hidden", p.dataset.panel !== cat);
+      });
+    }
+
+    const initial = localStorage.getItem(STORAGE_KEY) || defaultCat;
+    activate(initial);
+
+    tabs.forEach(btn => {
+      btn.addEventListener("click", () => {
+        const cat = btn.dataset.cat;
+        localStorage.setItem(STORAGE_KEY, cat);
+        activate(cat);
+      });
+    });
+  })();
+</script>
 {% endblock %}
