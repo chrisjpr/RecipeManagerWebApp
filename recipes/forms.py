@@ -94,24 +94,6 @@ class BaseIngredientFormSet(BaseInlineFormSet):
         
         return not name and not quantity and not unit and not category and not linked_recipe
 
-    def is_valid(self):
-        """Override to handle empty forms before validation"""
-        # Mark completely empty forms as deleted before validation
-        for form in self.forms:
-            if form.is_bound:
-                name = form.data.get(form.add_prefix('name'), '').strip()
-                quantity = form.data.get(form.add_prefix('quantity'), '').strip()
-                unit = form.data.get(form.add_prefix('unit'), '').strip()
-                category = form.data.get(form.add_prefix('category'), '').strip()
-                linked_recipe = form.data.get(form.add_prefix('linked_recipe'), '').strip()
-                
-                if not name and not quantity and not unit and not category and not linked_recipe:
-                    # Mark as deleted
-                    form.data = form.data.copy()
-                    form.data[form.add_prefix('DELETE')] = 'on'
-        
-        return super().is_valid()
-
 
 
 
@@ -141,21 +123,6 @@ class BaseInstructionFormSet(BaseInlineFormSet):
         step_number = form.cleaned_data.get('step_number')
         
         return not description
-
-    def is_valid(self):
-        """Override to handle empty forms before validation"""
-        # Mark forms with no description as deleted before validation
-        for form in self.forms:
-            if form.is_bound:
-                description = form.data.get(form.add_prefix('description'), '').strip()
-                step_number = form.data.get(form.add_prefix('step_number'), '').strip()
-                
-                if not description:
-                    # Mark as deleted
-                    form.data = form.data.copy()
-                    form.data[form.add_prefix('DELETE')] = 'on'
-        
-        return super().is_valid()
 
 
 
