@@ -44,6 +44,32 @@ class IngredientForm(forms.ModelForm):
         else:
             # fallback: no recipe options
             self.fields['linked_recipe'].queryset = Recipe.objects.none()
+        
+        # Make name field not required at the field level to allow empty forms
+        # We'll handle validation in the clean method
+        self.fields['name'].required = False
+
+    def clean(self):
+        cleaned_data = super().clean()
+        # If all fields are empty, this form should be ignored
+        name = cleaned_data.get('name', '').strip() if cleaned_data.get('name') else ''
+        quantity = cleaned_data.get('quantity')
+        unit = cleaned_data.get('unit', '').strip() if cleaned_data.get('unit') else ''
+        category = cleaned_data.get('category', '').strip() if cleaned_data.get('category') else ''
+        linked_recipe = cleaned_data.get('linked_recipe')
+        
+        if not name and not quantity and not unit and not category and not linked_recipe:
+            # All fields are empty, mark for deletion
+            cleaned_data['DELETE'] = True
+        elif not name and (quantity or unit or category or linked_recipe):
+            # Name is required if any other field has content
+            raise forms.ValidationError("Ingredient name is required if you provide other details.")
+        
+        return cleaned_data
+
+
+
+
 
 
 class BaseIngredientFormSet(BaseInlineFormSet):
@@ -53,6 +79,86 @@ class BaseIngredientFormSet(BaseInlineFormSet):
         for form in self.forms:
             if self.user and 'linked_recipe' in form.fields:
                 form.fields['linked_recipe'].queryset = Recipe.objects.filter(user=self.user)
+
+    def _should_delete_form(self, form):
+        """Override to handle empty forms as deleted"""
+        if form.cleaned_data.get('DELETE', False):
+            return True
+        
+        # Check if form is completely empty
+        name = form.cleaned_data.get('name', '').strip() if form.cleaned_data.get('name') else ''
+        quantity = form.cleaned_data.get('quantity')
+        unit = form.cleaned_data.get('unit', '').strip() if form.cleaned_data.get('unit') else ''
+        category = form.cleaned_data.get('category', '').strip() if form.cleaned_data.get('category') else ''
+        linked_recipe = form.cleaned_data.get('linked_recipe')
+        
+        return not name and not quantity and not unit and not category and not linked_recipe
+
+    def is_valid(self):
+        """Override to handle empty forms before validation"""
+        # Mark completely empty forms as deleted before validation
+        for form in self.forms:
+            if form.is_bound:
+                name = form.data.get(form.add_prefix('name'), '').strip()
+                quantity = form.data.get(form.add_prefix('quantity'), '').strip()
+                unit = form.data.get(form.add_prefix('unit'), '').strip()
+                category = form.data.get(form.add_prefix('category'), '').strip()
+                linked_recipe = form.data.get(form.add_prefix('linked_recipe'), '').strip()
+                
+                if not name and not quantity and not unit and not category and not linked_recipe:
+                    # Mark as deleted
+                    form.data = form.data.copy()
+                    form.data[form.add_prefix('DELETE')] = 'on'
+        
+        return super().is_valid()
+
+
+
+
+class InstructionForm(forms.ModelForm):
+    class Meta:
+        model = Instruction
+        fields = ['step_number', 'description']
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Make description field not required at the field level to allow empty forms
+        # We'll handle validation in the formset clean method
+        self.fields['description'].required = False
+
+
+
+
+
+class BaseInstructionFormSet(BaseInlineFormSet):
+    def _should_delete_form(self, form):
+        """Override to handle empty forms as deleted"""
+        if form.cleaned_data.get('DELETE', False):
+            return True
+        
+        # Check if form has no meaningful content
+        description = form.cleaned_data.get('description', '').strip() if form.cleaned_data.get('description') else ''
+        step_number = form.cleaned_data.get('step_number')
+        
+        return not description
+
+    def is_valid(self):
+        """Override to handle empty forms before validation"""
+        # Mark forms with no description as deleted before validation
+        for form in self.forms:
+            if form.is_bound:
+                description = form.data.get(form.add_prefix('description'), '').strip()
+                step_number = form.data.get(form.add_prefix('step_number'), '').strip()
+                
+                if not description:
+                    # Mark as deleted
+                    form.data = form.data.copy()
+                    form.data[form.add_prefix('DELETE')] = 'on'
+        
+        return super().is_valid()
+
+
+
 
 IngredientFormSet = inlineformset_factory(
     parent_model=Recipe,
@@ -68,10 +174,11 @@ IngredientFormSet = inlineformset_factory(
 InstructionFormSet = inlineformset_factory(
     Recipe,
     Instruction,
-    fields=["step_number", "description"],
+    form=InstructionForm,
     exclude=['instruction_id'],
     extra=1,
-    can_delete=True
+    can_delete=True,
+    formset=BaseInstructionFormSet
 )
 
 class AddRecipeForm(forms.Form):

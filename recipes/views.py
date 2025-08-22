@@ -322,10 +322,7 @@ def recipe_edit(request, pk):
         ingredient_formset = IngredientFormSet(request.POST, instance=recipe, prefix="ingredients", user=request.user)
         instruction_formset = InstructionFormSet(request.POST, instance=recipe, prefix="instructions")
 
-        # ✅ Skip empty instruction forms
-        for form in instruction_formset.forms:
-            if not form.data.get(form.add_prefix('description')) and not form.data.get(form.add_prefix('step_number')):
-                form.empty_permitted = True
+        # Formsets now handle empty forms automatically
 
         if recipe_form.is_valid() and ingredient_formset.is_valid() and instruction_formset.is_valid():
             recipe_form.save()
@@ -367,10 +364,7 @@ def create_recipe(request):
         transform_vegan = request.POST.get("transform_vegan") == "on"
         custom_instruction = request.POST.get("custom_instruction", "")
 
-        # ✅ Skip empty instruction forms
-        for form in instruction_formset.forms:
-            if not form.data.get(form.add_prefix('description')) and not form.data.get(form.add_prefix('step_number')):
-                form.empty_permitted = True
+        # Formsets now handle empty forms automatically
 
         if use_llm:
             ingredients_text = request.POST.get('ingredients_text', '')
