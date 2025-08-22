@@ -360,7 +360,7 @@ def create_recipe(request):
         ingredient_formset = IngredientFormSet(request.POST, prefix="ingredients")
         instruction_formset = InstructionFormSet(request.POST, prefix="instructions")
 
-        use_llm = request.POST.get("use_llm") == "ai"
+        use_llm = request.POST.get("use_llm") == "on"
         transform_vegan = request.POST.get("transform_vegan") == "on"
         custom_instruction = request.POST.get("custom_instruction", "")
 
@@ -423,20 +423,27 @@ def create_recipe(request):
                 messages.error(request, "Please correct the form errors above.")
         else:
             # Manual input path
-            if recipe_form.is_valid() and ingredient_formset.is_valid() and instruction_formset.is_valid():
+            if recipe_form.is_valid():
                 recipe = recipe_form.save(commit=False)
                 recipe.user = request.user
                 recipe.save()
 
-                ingredient_formset.instance = recipe
-                instruction_formset.instance = recipe
-                ingredient_formset.save()
-                instruction_formset.save()
+                # Now bind the formsets to the recipe instance
+                ingredient_formset = IngredientFormSet(request.POST, instance=recipe, prefix="ingredients")
+                instruction_formset = InstructionFormSet(request.POST, instance=recipe, prefix="instructions")
 
-                messages.success(request, f"✅ Recipe '{recipe.title}' created.")
-                return redirect('recipes:recipe_detail', recipe_id=recipe.recipe_id)
+                if ingredient_formset.is_valid() and instruction_formset.is_valid():
+                    ingredient_formset.save()
+                    instruction_formset.save()
 
-            messages.error(request, "Please correct the errors below.")
+                    messages.success(request, f"✅ Recipe '{recipe.title}' created.")
+                    return redirect('recipes:recipe_detail', recipe_id=recipe.recipe_id)
+                else:
+                    # If formsets are invalid, delete the recipe and show errors
+                    recipe.delete()
+                    messages.error(request, "Please correct the errors below.")
+            else:
+                messages.error(request, "Please correct the form errors above.")
 
     else:
         recipe_form = RecipeForm()
