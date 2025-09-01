@@ -503,27 +503,33 @@ def add_recipe_from_url(request):
     # GET: render the form page
     return render(request, 'recipes/add_recipe_from_url.html')
 
-# views.py
 @login_required
 def add_recipe_from_image(request):
     if request.method == 'POST':
-        images = request.FILES.getlist('images')
+        uploads = request.FILES.getlist('images')  # keep field name for backward compat
         transform_vegan = request.POST.get('transform_vegan') == 'on'
         custom_instruction = request.POST.get('custom_instruction', '')
         custom_title = request.POST.get('custom_title', '')
 
         try:
-            images_as_bytes = []
-            for f in images:
-                b = f.read()
-                if b:
-                    images_as_bytes.append(b)
+            # NEW: keep metadata so the worker can split images vs docs
+            uploads_serialized = []
+            for f in uploads:
+                blob = f.read()
+                if not blob:
+                    continue
+                uploads_serialized.append({
+                    "name": getattr(f, "name", ""),
+                    "content_type": getattr(f, "content_type", "") or "",
+                    "bytes": blob,
+                })
 
             queue = get_safe_rq_queue('default')
+            # NEW: route to a more general worker that accepts mixed uploads
             job = queue.enqueue(
-                'recipes.tasks.process_recipe_from_image',
+                'recipes.tasks.process_recipe_from_uploads',
                 request.user.id,
-                images_as_bytes,
+                uploads_serialized,
                 transform_vegan,
                 custom_instruction,
                 custom_title,
@@ -542,8 +548,9 @@ def add_recipe_from_image(request):
             messages.error(request, "❌ The recipe generation services are currently in maintenance. Try again later!")
             return redirect('recipes:recipe_list')
 
-    # GET: render the form page
+    # GET unchanged
     return render(request, 'recipes/add_recipe_from_image.html')
+
 
 
 # views.py

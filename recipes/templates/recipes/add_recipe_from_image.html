@@ -103,7 +103,7 @@
 
   <!-- Inline quick instructions always visible -->
   <p class="mt-2 text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
-    Upload one or more recipe images. The AI will read the text and create a recipe for you.
+    Upload one or more recipe images/files. The AI will read the text and create a recipe for you.
     <br><span class="font-semibold">Tip:</span> You can add multiple pages/screenshots at once.
   </p>
 
@@ -111,14 +111,16 @@
   <div id="dropzone" class="dropzone mt-3">
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
       <div class="text-sm text-slate-700 dark:text-slate-200">
-        Drag & drop images here or click <span class="font-semibold">Select images</span>.
-        <div class="text-xs mt-1 opacity-80">Accepted: JPG, PNG, WEBP • You can select multiple files.</div>
+        Drag & drop images, a PDF or a Word document here or click <span class="font-semibold">Select files</span>.
+        <div class="text-xs mt-1 opacity-80">You can select multiple image files or a single Word / PDF file.</div>
       </div>
       <div>
         <!-- Keep exact input name and multiple -->
-        <input id="imagesInput" class="hidden" type="file" name="images" accept="image/*" multiple required>
+        <input id="imagesInput" class="hidden" type="file" name="images"
+       accept="image/*,.pdf,application/pdf,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+       multiple required>
         <button type="button" id="selectBtn" class="inline-flex items-center gap-2 rounded-xl bg-slate-800 text-white px-3 py-2 text-sm font-semibold hover:bg-slate-900">
-          <span class="material-symbols-rounded text-base">upload_file</span> Select images
+          <span class="material-symbols-rounded text-base">upload_file</span> Select files
         </button>
       </div>
     </div>
@@ -193,10 +195,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const form      = document.getElementById('imageImportForm');
   const submitBtn = document.getElementById('submitBtn');
 
-  /* --- Helpers to manage FileList via DataTransfer so we can remove items --- */
-  function currentFiles(){
-    return Array.from(fileInput.files || []);
-  }
+  function currentFiles(){ return Array.from(fileInput.files || []); }
   function setFiles(filesArray){
     const dt = new DataTransfer();
     filesArray.forEach(f => dt.items.add(f));
@@ -204,22 +203,38 @@ document.addEventListener('DOMContentLoaded', () => {
     renderThumbs();
   }
 
-  /* --- Render previews and count --- */
+  function isImage(file){
+    return (file.type && file.type.startsWith('image/')) ||
+           /\.(png|jpe?g|webp|gif|bmp)$/i.test(file.name || '');
+  }
+
   function renderThumbs(){
     const files = currentFiles();
     thumbs.innerHTML = '';
     files.forEach((file, idx) => {
-      const url = URL.createObjectURL(file);
       const item = document.createElement('div');
-      item.className = 'thumb aspect-[4/3] ring-1 ring-black/5';
+      item.className = 'thumb aspect-[4/3] ring-1 ring-black/5 grid place-items-center text-sm';
+      let inner;
+      if (isImage(file)) {
+        const url = URL.createObjectURL(file);
+        inner = `<img src="${url}" alt="preview ${idx+1}">`;
+      } else {
+        const ext = (file.name.split('.').pop() || '').toUpperCase();
+        inner = `
+          <div class="flex flex-col items-center justify-center h-full opacity-80">
+            <span class="material-symbols-rounded text-3xl">description</span>
+            <div class="mt-1 text-xs">${ext || 'FILE'}</div>
+          </div>`;
+      }
       item.innerHTML = `
-        <img src="${url}" alt="preview ${idx+1}">
+        ${inner}
         <button type="button" class="remove" data-idx="${idx}" title="Remove">×</button>
       `;
       thumbs.appendChild(item);
     });
-    countLbl.textContent = files.length ? `${files.length} image${files.length===1?'':'s'} selected` : 'No images selected yet';
-    // Attach remove handlers
+    countLbl.textContent =
+      files.length ? `${files.length} file${files.length===1?'':'s'} selected` : 'No files selected yet';
+
     thumbs.querySelectorAll('.remove').forEach(btn=>{
       btn.addEventListener('click', (e)=>{
         const i = parseInt(e.currentTarget.dataset.idx, 10);
@@ -229,7 +244,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  /* --- Click & Drag-and-Drop --- */
   selectBtn.addEventListener('click', () => fileInput.click());
   dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('dragover'); });
   dz.addEventListener('dragleave', () => dz.classList.remove('dragover'));
@@ -242,13 +256,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   fileInput.addEventListener('change', renderThumbs);
-
-  /* --- Prevent accidental Enter submit in inputs --- */
-  form.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' && e.target.tagName === 'INPUT') e.preventDefault();
-  });
-
-  /* --- Loading state on submit --- */
+  form.addEventListener('keydown', (e) => { if (e.key === 'Enter' && e.target.tagName === 'INPUT') e.preventDefault(); });
   form.addEventListener('submit', () => {
     submitBtn.disabled = true;
     submitBtn.classList.add('opacity-70');
@@ -256,8 +264,8 @@ document.addEventListener('DOMContentLoaded', () => {
     submitBtn.querySelector('.spinner').classList.remove('hidden');
   });
 
-  // Initial state
   renderThumbs();
 });
 </script>
+
 {% endblock %}
