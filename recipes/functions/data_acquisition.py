@@ -395,13 +395,65 @@ def extract_text_from_docx_bytes(docx_bytes: bytes) -> str:
     except Exception as e:
         print("⚠️ DOCX text extraction failed:", e)
         return ""
+    
+
+def _images_from_pdf(pdf_bytes: bytes):
+    """
+    Return a list of raw image bytes embedded in the PDF.
+    Requires PyMuPDF (fitz). Falls back to empty list if unavailable.
+    """
+    try:
+        import fitz  # PyMuPDF
+    except Exception as e:
+        print("ℹ️ PyMuPDF not installed; skipping PDF image extraction:", e)
+        return []
+
+    imgs = []
+    try:
+        doc = fitz.open(stream=pdf_bytes, filetype="pdf")
+        for page_index in range(len(doc)):
+            page = doc[page_index]
+            for img in page.get_images(full=True):
+                xref = img[0]
+                try:
+                    pix = fitz.Pixmap(doc, xref)
+                    if pix.alpha:
+                        pix = fitz.Pixmap(fitz.csRGB, pix)
+                    imgs.append(pix.tobytes("png"))
+                except Exception as ie:
+                    print("⚠️ Could not extract image from PDF:", ie)
+        return imgs
+    except Exception as e:
+        print("⚠️ PDF image extraction failed:", e)
+        return []
+
+def _images_from_docx(docx_bytes: bytes):
+    """
+    Return a list of raw image bytes from a DOCX (reads /word/media/* inside the zip).
+    """
+    import zipfile
+    from io import BytesIO
+    imgs = []
+    try:
+        with zipfile.ZipFile(BytesIO(docx_bytes)) as z:
+            for name in z.namelist():
+                if name.startswith("word/media/") and name.lower().split(".")[-1] in {"png","jpg","jpeg","gif","bmp","webp"}:
+                    try:
+                        imgs.append(z.read(name))
+                    except Exception as ie:
+                        print("⚠️ Could not read DOCX media:", ie)
+    except Exception as e:
+        print("⚠️ DOCX image extraction failed:", e)
+    return imgs
 
 def extract_recipe_from_documents(files, api_key, transform_vegan=False, custom_instruction="", custom_title=""):
     """
     files: list of dicts: {"name": str, "content_type": str, "bytes": bytes}
-    Returns structured recipe dict (same shape as image/url flows). No image extraction here.
+    Returns structured recipe dict (same shape as image/url flows). Also tries to
+    derive a title image (data["image_bytes"]) from embedded document images.
     """
     all_texts = []
+    gathered_images = []  # NEW
 
     for f in files:
         name = (f.get("name") or "").lower()
@@ -411,8 +463,12 @@ def extract_recipe_from_documents(files, api_key, transform_vegan=False, custom_
         text = ""
         if "pdf" in ctype or name.endswith(".pdf"):
             text = extract_text_from_pdf_bytes(blob)
+            # NEW: extract embedded images
+            gathered_images.extend(_images_from_pdf(blob))
         elif "wordprocessingml" in ctype or name.endswith(".docx"):
             text = extract_text_from_docx_bytes(blob)
+            # NEW: extract embedded images
+            gathered_images.extend(_images_from_docx(blob))
         elif "msword" in ctype or name.endswith(".doc"):
             # Legacy .doc is not natively supported; recommend converting to .docx
             print("ℹ️ Legacy .doc detected (convert to .docx for best results).")
@@ -427,7 +483,7 @@ def extract_recipe_from_documents(files, api_key, transform_vegan=False, custom_
     if not combined:
         raise ValueError("No extractable text found in uploaded document(s).")
 
-    # Build prompt: same output contract you already use for images/URL/text
+    # Build prompt (same output contract you already use elsewhere)
     if transform_vegan:
         preface = """You are a vegan chef, capable of transforming all non-vegan Recipes
         into 100% vegan Recipes, using the best of what the world of vegan replacement products/ cooking
@@ -480,7 +536,29 @@ Here is one more custom instruction from the user (respect it without changing t
         data = json.loads(response.choices[0].message.content.strip())
         if custom_title:
             data["title"] = custom_title
-        # No "image_bytes" for docs; downstream handles optional image
+
+        # NEW: try to select + refine a hero image from the doc images
+        if gathered_images:
+            best_result, best_bytes = identify_best_dish_image(gathered_images, api_key)  # your existing scorer
+            if best_bytes:
+                # Background removal (same as image flow)
+                raw_img = Image.open(BytesIO(best_bytes)).convert("RGBA")
+                fg_only = remove(raw_img)
+
+                buf = BytesIO()
+                fg_only.save(buf, format="PNG")
+                buf.seek(0)
+
+                cropped = crop_image_to_visible_area(
+                    image_bytes=buf.getvalue(),
+                    white_threshold=240,
+                    alpha_threshold=10,
+                    margin=2
+                )
+                data["image_bytes"] = cropped
+            else:
+                print("ℹ️ No suitable dish image found inside the document.")
+
         return data
     except Exception as e:
         print("❌ Failed to parse document LLM response:", e)

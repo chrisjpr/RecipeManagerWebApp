@@ -82,7 +82,7 @@ def get_data_from_documents(documents, api_key, transform_vegan, custom_instruct
         )
         if result is None:
             raise ValueError("No result returned from document analysis.")
-        return result, None  # no hero image from docs
+        return result, result.get("image_bytes")  # may be None
     except Exception as e:
         print("❌ Failed to extract recipe from document(s):", e)
         raise

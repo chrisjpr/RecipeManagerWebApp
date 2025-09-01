@@ -222,7 +222,7 @@ def process_recipe_from_uploads(user_id, uploads, transform_vegan=False, custom_
 
         # 1) Prefer reading the text from documents (PDF/DOCX) if present
         if document_files:
-            structured_data, _ = get_data_from_documents(
+            structured_data, best_image_bytes = get_data_from_documents(
                 documents=document_files,
                 api_key=api_key,
                 transform_vegan=transform_vegan,
