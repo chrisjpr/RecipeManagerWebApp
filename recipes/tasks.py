@@ -276,3 +276,63 @@ def process_recipe_from_uploads(user_id, uploads, transform_vegan=False, custom_
 
     except Exception as e:
         _fail_job("mixed_import_failed", f"Import failed: {e}")
+
+
+def process_recipe_from_manual_llm(user_id, base_fields, ingredients_text, instructions_text, transform_vegan=False, custom_instruction=""):
+    """
+    Background job for create_recipe (when 'AI Assistance' is ON).
+    - Takes the basic form fields the user entered (title/cook_time/portions/notes),
+      plus two textareas (ingredients_text, instructions_text).
+    - Calls organize_with_llm to structure the recipe.
+    - Saves via save_structured_recipe_to_db.
+    - Overrides the title/cook_time/portions/notes with what the user entered (if present).
+    - No title image is required (non-fatal).
+    """
+    User = get_user_model()
+    user = User.objects.get(pk=user_id)
+
+    print(f"🧾 [TASK] Manual+LLM create started for user={user_id}")
+
+    try:
+        api_key = _openai_key()
+        if not api_key:
+            _fail_job("manual_import_failed", "OPENAI_KEY missing for LLM mode.")
+
+        ingredients = [ln.strip() for ln in (ingredients_text or "").splitlines() if ln.strip()]
+        instructions = [ln.strip() for ln in (instructions_text or "").splitlines() if ln.strip()]
+
+        raw_data = {"ingredients": ingredients, "instructions": instructions}
+
+        structured = organize_with_llm(
+            data=raw_data,
+            api_key=api_key,
+            transform_vegan=transform_vegan,
+            custom_instructions=custom_instruction,
+        )
+
+        # Respect user-provided base fields (if set)
+        if base_fields:
+            if base_fields.get("title"):
+                structured["title"] = base_fields["title"]
+            # Your save util expects numbers in strings too; we keep ints fine
+            if base_fields.get("cook_time") is not None:
+                structured["cook_time"] = base_fields["cook_time"]
+            if base_fields.get("portions") is not None:
+                structured["portions"] = base_fields["portions"]
+            # Notes: we append user notes if present
+            if base_fields.get("notes"):
+                structured["notes"] = base_fields["notes"]
+
+        # Save (no image)
+        recipe = save_structured_recipe_to_db(
+            data=structured,
+            user=user,
+            image_bytes=None,  # no requirement for a title image here
+        )
+
+        print(f"✅ [TASK] Manual+LLM create done: {recipe.title} (id={recipe.recipe_id})")
+        return {"ok": True, "recipe_id": recipe.recipe_id, "title": recipe.title}
+
+    except Exception as e:
+        _fail_job("manual_import_failed", f"Manual+LLM import failed: {e}")
+
