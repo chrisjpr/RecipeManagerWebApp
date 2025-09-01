@@ -14,6 +14,7 @@ from rembg import new_session
 import openai
 import io
 import numpy as np
+from recipes.models import Recipe, Ingredient, Instruction
 
 
 OPENAI_TEXT_MODEL = os.getenv("OPENAI_TEXT_MODEL", "gpt-4-turbo")
