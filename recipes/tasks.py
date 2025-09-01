@@ -12,7 +12,7 @@ from .functions.pipelines import (
     get_data_from_url,
     get_data_from_image,
     save_structured_recipe_to_db,
-    get_data_from_documents,   # <-- NEW
+    get_data_from_documents, 
 )
 
 from .functions.data_acquisition import (
