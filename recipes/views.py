@@ -36,6 +36,8 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.db.models import Q
 from accounts.models import CustomUser 
+from .tasks import process_recipe_from_uploads
+from .tasks import process_recipe_from_manual_llm
 
 from .functions.pipelines import *  
 from .functions.data_acquisition import *
@@ -386,7 +388,7 @@ def create_recipe(request):
 
                     queue = get_safe_rq_queue('default')
                     job = queue.enqueue(
-                        'recipes.tasks.process_recipe_from_manual_llm',  # NEW task
+                        process_recipe_from_manual_llm, 
                         request.user.id,
                         base_fields,
                         ingredients_text,
@@ -515,7 +517,7 @@ def add_recipe_from_image(request):
             queue = get_safe_rq_queue('default')
             # NEW: route to a more general worker that accepts mixed uploads
             job = queue.enqueue(
-                'recipes.tasks.process_recipe_from_uploads',
+                process_recipe_from_uploads,
                 request.user.id,
                 uploads_serialized,
                 transform_vegan,
