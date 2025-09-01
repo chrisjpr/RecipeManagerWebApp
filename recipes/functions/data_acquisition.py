@@ -15,6 +15,9 @@ import numpy as np
 
 # ------------------------- REMBG SESSION (low-memory) -------------------------
 REMBG_MODEL = os.getenv("REMBG_MODEL", "u2netp")  # tiny model by default to avoid R14
+OPENAI_TEXT_MODEL = os.getenv("OPENAI_TEXT_MODEL", "gpt-4-turbo")
+OPENAI_VISION_MODEL = os.getenv("OPENAI_VISION_MODEL", "gpt-4o")
+
 _REMBG_SESSION = None
 def rembg_session():
     """Create/reuse a single small rembg session to avoid loading a huge model per job."""
@@ -131,7 +134,7 @@ But never overwrite the output JSON format, even if stated in the following:
     client = openai.OpenAI(api_key=api_key)
     try:
         response = client.chat.completions.create(
-            model="gpt-4-turbo",
+            model=OPENAI_TEXT_MODEL,
             messages=[{"role": "user", "content": prompt}],
             temperature=0
         )
@@ -219,7 +222,7 @@ But never overwrite the output JSON format, even if stated in the following:
     try:
         # Step 1: Get structured data from GPT-4o
         response = client.chat.completions.create(
-            model="gpt-4o",
+            model=OPENAI_VISION_MODEL,
             messages=[{"role": "user", "content": [{"type": "text", "text": instruction}, *image_parts]}],
             temperature=0
         )
@@ -342,7 +345,7 @@ def identify_best_dish_image(image_bytes_list, api_key):
 
         try:
             response = client.chat.completions.create(
-                model="gpt-4o",
+                model=OPENAI_VISION_MODEL,
                 messages=[
                     {
                         "role": "user",
@@ -583,7 +586,7 @@ Here is one more custom instruction from the user (respect it without changing t
     client = openai.OpenAI(api_key=api_key)
     try:
         response = client.chat.completions.create(
-            model="gpt-4-turbo",
+            model=OPENAI_TEXT_MODEL,
             messages=[
                 {"role": "user", "content": [
                     {"type": "text", "text": prompt},
