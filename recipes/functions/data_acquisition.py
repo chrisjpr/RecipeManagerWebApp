@@ -365,3 +365,125 @@ def identify_best_dish_image(image_bytes_list, api_key):
 ##################### EXTRACT RECIPE FROM IMAGES #####################
 #endregion
 
+
+#region EXTRACT RECIPE FROM DOCUMENTS
+##################### EXTRACT RECIPE FROM DOCUMENTS #####################
+import os
+
+def _normalize_text_chunks(chunks):
+    text = "\n".join([c for c in chunks if c]).strip()
+    return re.sub(r'\n{3,}', '\n\n', text)
+
+def extract_text_from_pdf_bytes(pdf_bytes: bytes) -> str:
+    """Lightweight PDF text extraction."""
+    try:
+        from PyPDF2 import PdfReader
+        reader = PdfReader(BytesIO(pdf_bytes))
+        pages = [page.extract_text() or "" for page in reader.pages]
+        return _normalize_text_chunks(pages)
+    except Exception as e:
+        print("⚠️ PDF text extraction failed:", e)
+        return ""
+
+def extract_text_from_docx_bytes(docx_bytes: bytes) -> str:
+    """DOCX text extraction."""
+    try:
+        from docx import Document
+        doc = Document(BytesIO(docx_bytes))
+        paras = [p.text for p in doc.paragraphs]
+        return _normalize_text_chunks(paras)
+    except Exception as e:
+        print("⚠️ DOCX text extraction failed:", e)
+        return ""
+
+def extract_recipe_from_documents(files, api_key, transform_vegan=False, custom_instruction="", custom_title=""):
+    """
+    files: list of dicts: {"name": str, "content_type": str, "bytes": bytes}
+    Returns structured recipe dict (same shape as image/url flows). No image extraction here.
+    """
+    all_texts = []
+
+    for f in files:
+        name = (f.get("name") or "").lower()
+        ctype = (f.get("content_type") or "").lower()
+        blob = f.get("bytes") or b""
+
+        text = ""
+        if "pdf" in ctype or name.endswith(".pdf"):
+            text = extract_text_from_pdf_bytes(blob)
+        elif "wordprocessingml" in ctype or name.endswith(".docx"):
+            text = extract_text_from_docx_bytes(blob)
+        elif "msword" in ctype or name.endswith(".doc"):
+            # Legacy .doc is not natively supported; recommend converting to .docx
+            print("ℹ️ Legacy .doc detected (convert to .docx for best results).")
+        else:
+            # Ignore non-doc types - image pipeline handles those
+            continue
+
+        if text:
+            all_texts.append(text)
+
+    combined = "\n\n".join(all_texts).strip()
+    if not combined:
+        raise ValueError("No extractable text found in uploaded document(s).")
+
+    # Build prompt: same output contract you already use for images/URL/text
+    if transform_vegan:
+        preface = """You are a vegan chef, capable of transforming all non-vegan Recipes
+        into 100% vegan Recipes, using the best of what the world of vegan replacement products/ cooking
+        techniques has to offer. Please transform the following recipe to a vegan Recipe,
+        by applying only proofingly working techniques and mimicking taste and food texture as good as
+        possible."""
+    else:
+        preface = "You are a chef assistant. Extract a complete recipe from the text."
+
+    prompt = f"""
+{preface}
+
+Return JSON:
+{{
+"title": "string",
+"cook_time": "string or number",
+"portions": "string or number",
+"ingredients": [{{"category": "Ingredients", "items": [{{"name": "string", "quantity": "string", "unit": "string"}}]}}], 
+"instructions": ["step 1", "step 2", ...]
+}}
+Please fulfill the following requirements precisely:
+- Translate to german.
+- Provide cook time in minutes.
+- Split dressings/sauces/.. into extra groups when applicable.
+- Convert fractions and ranges to decimal.
+- Split quantity and unit (unit can be an empty string).
+- Only in the instructions: 
+    - ALWAYS: Add the required quantities to the respective ingredients, like Meat [500g] or Lettuce [1 Head]. DO NOT FORGET!
+    - ALWAYS: For ingredients mentioned add bold formatting, such that it is correctly identified as bold in html code by using <b> tags! Do not forget to do this for every ingredient!
+    - NEVER ADD step numbers to the instructions, just write the steps in order.
+- Output the result as raw JSON only (no Markdown formatting, no commentary, no "```json" wrappers, no text before or after the JSON).
+- Do NOT include any extraneous information.
+
+Here is one more custom instruction from the user (respect it without changing the JSON format):
+{custom_instruction}
+"""
+
+    client = openai.OpenAI(api_key=api_key)
+    try:
+        response = client.chat.completions.create(
+            model="gpt-4-turbo",
+            messages=[
+                {"role": "user", "content": [
+                    {"type": "text", "text": prompt},
+                    {"type": "text", "text": combined}
+                ]}
+            ],
+            temperature=0
+        )
+        data = json.loads(response.choices[0].message.content.strip())
+        if custom_title:
+            data["title"] = custom_title
+        # No "image_bytes" for docs; downstream handles optional image
+        return data
+    except Exception as e:
+        print("❌ Failed to parse document LLM response:", e)
+        return None
+
+

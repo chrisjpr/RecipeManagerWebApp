@@ -66,6 +66,28 @@ def get_data_from_image(images, api_key, transform_vegan, custom_instruction, cu
         print("❌ Failed to extract recipe from image:", e)
         raise
 
+
+def get_data_from_documents(documents, api_key, transform_vegan, custom_instruction, custom_title=""):
+    """
+    documents: list of dicts {"name": str, "content_type": str, "bytes": bytes}
+    Returns (structured_data, image_bytes=None) to match the existing function shapes.
+    """
+    try:
+        result = extract_recipe_from_documents(
+            files=documents,
+            api_key=api_key,
+            transform_vegan=transform_vegan,
+            custom_instruction=custom_instruction,
+            custom_title=custom_title
+        )
+        if result is None:
+            raise ValueError("No result returned from document analysis.")
+        return result, None  # no hero image from docs
+    except Exception as e:
+        print("❌ Failed to extract recipe from document(s):", e)
+        raise
+
+
 ##################### GET DATA FROM URL / IMAGE FUNCTIONS #####################
 
 

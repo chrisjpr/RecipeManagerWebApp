@@ -12,7 +12,9 @@ from .functions.pipelines import (
     get_data_from_url,
     get_data_from_image,
     save_structured_recipe_to_db,
+    get_data_from_documents,   # <-- NEW
 )
+
 from .functions.data_acquisition import (
     organize_with_llm,
     crop_image_to_visible_area,
@@ -107,15 +109,11 @@ def process_recipe_from_image(user_id, images_bytes_list, transform_vegan, custo
         # Keep your extra crop step (you do this in the view)
         best_image_bytes = crop_image_to_visible_area(best_image_bytes) if best_image_bytes else None
 
-        # If nothing usable as a "main" image exists, expose specific error
-        has_any_image = bool(best_image_bytes or structured_data.get("image_bytes") or structured_data.get("image_url"))
-        if not has_any_image:
-            _fail_job("no_main_image", "No main image of the dish could be extracted.")
 
         recipe = save_structured_recipe_to_db(
             data=structured_data,
             user=user,
-            image_bytes=(best_image_bytes or structured_data.get("image_bytes")),
+            image_bytes=(best_image_bytes or structured_data.get("image_bytes")),  # may be None
         )
 
         print(f"✅ [TASK] Image import done: {recipe.title} (id={recipe.recipe_id})")
@@ -186,3 +184,95 @@ def process_recipe_from_text(user_id, raw_text, use_llm, custom_instruction):
 
     except Exception as e:
         _fail_job("manual_import_failed", f"Manual import failed: {e}")
+
+
+def process_recipe_from_uploads(user_id, uploads, transform_vegan=False, custom_instruction="", custom_title=""):
+    """
+    NEW: Handles mixed uploads of images and documents.
+    `uploads` is a list of dicts: {"name": str, "content_type": str, "bytes": bytes}
+    - Prefer documents for text extraction if present.
+    - Use images to try to get a title image (optional).
+    - Never fail just because a title image was not found.
+    """
+    import io
+    User = get_user_model()
+    user = User.objects.get(pk=user_id)
+
+    print(f"📦 [TASK] Mixed upload started for user={user_id} files={len(uploads) if uploads else 0}")
+
+    try:
+        api_key = _openai_key()
+
+        image_files = []
+        document_files = []
+        for f in (uploads or []):
+            name = (f.get("name") or "").lower()
+            ctype = (f.get("content_type") or "").lower()
+            blob = f.get("bytes") or b""
+            if not blob:
+                continue
+            if ctype.startswith("image/") or name.endswith((".png", ".jpg", ".jpeg", ".webp", ".gif", ".bmp")):
+                image_files.append(io.BytesIO(blob))
+            elif ("pdf" in ctype or name.endswith(".pdf") or
+                  "word" in ctype or name.endswith(".docx") or name.endswith(".doc")):
+                document_files.append({"name": name, "content_type": ctype, "bytes": blob})
+
+        structured_data = None
+        best_image_bytes = None
+
+        # 1) Prefer reading the text from documents (PDF/DOCX) if present
+        if document_files:
+            structured_data, _ = get_data_from_documents(
+                documents=document_files,
+                api_key=api_key,
+                transform_vegan=transform_vegan,
+                custom_instruction=custom_instruction,
+                custom_title=custom_title
+            )
+
+        # 2) If no structured text yet, fall back to OCR/vision on images
+        if not structured_data and image_files:
+            structured_data, best_image_bytes = get_data_from_image(
+                images=image_files,
+                api_key=api_key,
+                transform_vegan=transform_vegan,
+                custom_instruction=custom_instruction,
+                custom_title=custom_title,
+                return_image_bytes=True,
+            )
+
+        if not structured_data:
+            _fail_job("import_failed", "Could not extract a recipe from the provided files.")
+
+        # 3) If text came from docs and we also have images, try to pick a title image (optional)
+        if best_image_bytes is None and image_files:
+            try:
+                _, best_image_bytes = get_data_from_image(
+                    images=image_files,
+                    api_key=api_key,
+                    transform_vegan=transform_vegan,
+                    custom_instruction=custom_instruction,
+                    custom_title=custom_title,
+                    return_image_bytes=True,
+                )
+            except Exception as e:
+                print("⚠️ Could not derive hero image from images:", e)
+
+        # 4) Optional crop step—same helper you already use
+        if best_image_bytes:
+            try:
+                best_image_bytes = crop_image_to_visible_area(best_image_bytes)
+            except Exception:
+                pass
+
+        recipe = save_structured_recipe_to_db(
+            data=structured_data,
+            user=user,
+            image_bytes=best_image_bytes,   # may be None — that’s OK
+        )
+
+        print(f"✅ [TASK] Mixed upload done: {recipe.title} (id={recipe.recipe_id})")
+        return {"ok": True, "recipe_id": recipe.recipe_id, "title": recipe.title}
+
+    except Exception as e:
+        _fail_job("mixed_import_failed", f"Import failed: {e}")
