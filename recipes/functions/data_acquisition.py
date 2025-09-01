@@ -1,3 +1,4 @@
+import os
 import re
 import json
 import base64
@@ -7,13 +8,20 @@ from fractions import Fraction
 from PIL import Image, ImageChops
 from recipe_scrapers import scrape_me
 from rembg import remove
+from rembg import new_session  # NEW
 import openai
 import io
 import numpy as np
-import os
 
-OPENAI_TEXT_MODEL = os.getenv("OPENAI_TEXT_MODEL", "gpt-4-turbo")
-OPENAI_VISION_MODEL = os.getenv("OPENAI_VISION_MODEL", "gpt-4o")
+# ------------------------- REMBG SESSION (low-memory) -------------------------
+REMBG_MODEL = os.getenv("REMBG_MODEL", "u2netp")  # tiny model by default to avoid R14
+_REMBG_SESSION = None
+def rembg_session():
+    """Create/reuse a single small rembg session to avoid loading a huge model per job."""
+    global _REMBG_SESSION
+    if _REMBG_SESSION is None:
+        _REMBG_SESSION = new_session(REMBG_MODEL)
+    return _REMBG_SESSION
 
 # ------------------------- UTILS -------------------------
 
@@ -41,6 +49,26 @@ def parse_quantity_to_float(s):
         return float(s)
     except ValueError:
         return None
+
+
+def _downscale_image_bytes(image_bytes: bytes, max_side: int = int(os.getenv("IMG_MAX_SIDE", "1600")), format_hint: str = "JPEG") -> bytes:
+    """
+    Downscale large images to keep memory low. Returns RGB bytes in the chosen format.
+    Idempotent for images already smaller than 'max_side'.
+    """
+    try:
+        img = Image.open(BytesIO(image_bytes))
+        img = img.convert("RGB")
+        w, h = img.size
+        if max(w, h) > max_side:
+            scale = max_side / float(max(w, h))
+            img = img.resize((int(w*scale), int(h*scale)), Image.LANCZOS)
+        buf = BytesIO()
+        # Use JPEG to keep bytes small; PNG if you need alpha (we only need RGB here)
+        img.save(buf, format=format_hint, quality=85, optimize=True)
+        return buf.getvalue()
+    except Exception:
+        return image_bytes
 
 # ------------------- FETCH FROM URL ----------------------
 
@@ -103,7 +131,7 @@ But never overwrite the output JSON format, even if stated in the following:
     client = openai.OpenAI(api_key=api_key)
     try:
         response = client.chat.completions.create(
-            model=OPENAI_TEXT_MODEL,
+            model="gpt-4-turbo",
             messages=[{"role": "user", "content": prompt}],
             temperature=0
         )
@@ -133,8 +161,12 @@ def extract_recipe_from_images(images, api_key, transform_vegan=False, custom_in
         image_bytes = file.read()
         if not image_bytes:
             continue
-        original_images.append(image_bytes)
-        b64 = base64.b64encode(image_bytes).decode("utf-8")
+
+        # NEW: downscale to keep memory + payload small
+        ds_bytes = _downscale_image_bytes(image_bytes)
+        original_images.append(ds_bytes)
+
+        b64 = base64.b64encode(ds_bytes).decode("utf-8")
         image_parts.append({
             "type": "image_url",
             "image_url": {"url": f"data:image/png;base64,{b64}"}
@@ -187,7 +219,7 @@ But never overwrite the output JSON format, even if stated in the following:
     try:
         # Step 1: Get structured data from GPT-4o
         response = client.chat.completions.create(
-            model=OPENAI_VISION_MODEL,
+            model="gpt-4o",
             messages=[{"role": "user", "content": [{"type": "text", "text": instruction}, *image_parts]}],
             temperature=0
         )
@@ -200,9 +232,9 @@ But never overwrite the output JSON format, even if stated in the following:
             best_result, best_bytes = identify_best_dish_image(original_images, api_key)
 
             if best_bytes:
-                # Step 3: Background removal
+                # Step 3: Background removal (use shared small model session)
                 raw_img = Image.open(BytesIO(best_bytes)).convert("RGBA")
-                fg_only = remove(raw_img)
+                fg_only = remove(raw_img, session=rembg_session())  # CHANGED
 
                 # Step 4: Strict crop of transparent + white space
                 buffer = BytesIO()
@@ -295,6 +327,9 @@ def identify_best_dish_image(image_bytes_list, api_key):
     print(f"🧠 Evaluating {len(image_bytes_list)} image(s)...")
     for idx, image_bytes in enumerate(image_bytes_list):
         try:
+            # NEW: ensure candidate is downscaled to control memory
+            image_bytes = _downscale_image_bytes(image_bytes)
+
             img = Image.open(BytesIO(image_bytes)).convert("RGB")
             width, height = img.size
             print(f"📐 Image {idx}: dimensions {width}x{height}")
@@ -307,7 +342,7 @@ def identify_best_dish_image(image_bytes_list, api_key):
 
         try:
             response = client.chat.completions.create(
-                model=OPENAI_VISION_MODEL,
+                model="gpt-4o",
                 messages=[
                     {
                         "role": "user",
@@ -372,7 +407,6 @@ def identify_best_dish_image(image_bytes_list, api_key):
 
 #region EXTRACT RECIPE FROM DOCUMENTS
 ##################### EXTRACT RECIPE FROM DOCUMENTS #####################
-import os
 
 def _normalize_text_chunks(chunks):
     text = "\n".join([c for c in chunks if c]).strip()
@@ -401,10 +435,13 @@ def extract_text_from_docx_bytes(docx_bytes: bytes) -> str:
         return ""
     
 
-def _images_from_pdf(pdf_bytes: bytes):
+def _images_from_pdf(pdf_bytes: bytes,
+                     max_pages: int = int(os.getenv("DOC_IMAGE_MAX_PAGES", "5")),
+                     max_images: int = int(os.getenv("MAX_DOC_IMAGES", "8")),
+                     thumb_max_side: int = int(os.getenv("DOC_IMAGE_MAX_SIDE", "1600"))):
     """
-    Return a list of raw image bytes embedded in the PDF.
-    Requires PyMuPDF (fitz). Falls back to empty list if unavailable.
+    Extract up to `max_images` embedded images from the first `max_pages` of a PDF
+    using doc.extract_image(xref) (more memory-friendly). Downscale big images.
     """
     try:
         import fitz  # PyMuPDF
@@ -412,28 +449,40 @@ def _images_from_pdf(pdf_bytes: bytes):
         print("ℹ️ PyMuPDF not installed; skipping PDF image extraction:", e)
         return []
 
-    imgs = []
+    out = []
     try:
         doc = fitz.open(stream=pdf_bytes, filetype="pdf")
-        for page_index in range(len(doc)):
+        seen = set()
+        for page_index in range(min(len(doc), max_pages)):
             page = doc[page_index]
             for img in page.get_images(full=True):
+                if len(out) >= max_images:
+                    break
                 xref = img[0]
+                if xref in seen:
+                    continue
+                seen.add(xref)
                 try:
-                    pix = fitz.Pixmap(doc, xref)
-                    if pix.alpha:
-                        pix = fitz.Pixmap(fitz.csRGB, pix)
-                    imgs.append(pix.tobytes("png"))
+                    info = doc.extract_image(xref)
+                    img_bytes = info.get("image", b"")
+                    if not img_bytes:
+                        continue
+                    img_bytes = _downscale_image_bytes(img_bytes, max_side=thumb_max_side)
+                    out.append(img_bytes)
                 except Exception as ie:
                     print("⚠️ Could not extract image from PDF:", ie)
-        return imgs
+            if len(out) >= max_images:
+                break
+        doc.close()
     except Exception as e:
         print("⚠️ PDF image extraction failed:", e)
-        return []
+    return out
 
-def _images_from_docx(docx_bytes: bytes):
+def _images_from_docx(docx_bytes: bytes,
+                      max_images: int = int(os.getenv("MAX_DOC_IMAGES", "8")),
+                      thumb_max_side: int = int(os.getenv("DOC_IMAGE_MAX_SIDE", "1600"))):
     """
-    Return a list of raw image bytes from a DOCX (reads /word/media/* inside the zip).
+    Read /word/media/* from docx zip, cap the count, and downscale.
     """
     import zipfile
     from io import BytesIO
@@ -441,11 +490,17 @@ def _images_from_docx(docx_bytes: bytes):
     try:
         with zipfile.ZipFile(BytesIO(docx_bytes)) as z:
             for name in z.namelist():
-                if name.startswith("word/media/") and name.lower().split(".")[-1] in {"png","jpg","jpeg","gif","bmp","webp"}:
-                    try:
-                        imgs.append(z.read(name))
-                    except Exception as ie:
-                        print("⚠️ Could not read DOCX media:", ie)
+                if len(imgs) >= max_images:
+                    break
+                ext = name.lower().split(".")[-1]
+                if not (name.startswith("word/media/") and ext in {"png","jpg","jpeg","gif","bmp","webp"}):
+                    continue
+                try:
+                    b = z.read(name)
+                    b = _downscale_image_bytes(b, max_side=thumb_max_side)
+                    imgs.append(b)
+                except Exception as ie:
+                    print("⚠️ Could not read DOCX media:", ie)
     except Exception as e:
         print("⚠️ DOCX image extraction failed:", e)
     return imgs
@@ -528,7 +583,7 @@ Here is one more custom instruction from the user (respect it without changing t
     client = openai.OpenAI(api_key=api_key)
     try:
         response = client.chat.completions.create(
-            model=OPENAI_TEXT_MODEL,
+            model="gpt-4-turbo",
             messages=[
                 {"role": "user", "content": [
                     {"type": "text", "text": prompt},
@@ -545,9 +600,9 @@ Here is one more custom instruction from the user (respect it without changing t
         if gathered_images:
             best_result, best_bytes = identify_best_dish_image(gathered_images, api_key)  # your existing scorer
             if best_bytes:
-                # Background removal (same as image flow)
+                # Background removal (same as image flow) — use shared small session
                 raw_img = Image.open(BytesIO(best_bytes)).convert("RGBA")
-                fg_only = remove(raw_img)
+                fg_only = remove(raw_img, session=rembg_session())  # CHANGED
 
                 buf = BytesIO()
                 fg_only.save(buf, format="PNG")
@@ -567,5 +622,3 @@ Here is one more custom instruction from the user (respect it without changing t
     except Exception as e:
         print("❌ Failed to parse document LLM response:", e)
         return None
-
-
