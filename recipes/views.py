@@ -35,7 +35,8 @@ from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.db.models import Q
-from accounts.models import CustomUser 
+from accounts.models import CustomUser
+from . import tasks
 from .tasks import process_recipe_from_uploads
 from .tasks import process_recipe_from_manual_llm
 
