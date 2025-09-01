@@ -1,4 +1,6 @@
 import os
+from .data_acquisition import *
+import uuid
 import re
 import json
 import base64
@@ -8,7 +10,7 @@ from fractions import Fraction
 from PIL import Image, ImageChops
 from recipe_scrapers import scrape_me
 from rembg import remove
-from rembg import new_session  # NEW
+from rembg import new_session  
 import openai
 import io
 import numpy as np

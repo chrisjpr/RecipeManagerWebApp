@@ -1,4 +1,3 @@
-
 import os
 import django_rq
 import redis
