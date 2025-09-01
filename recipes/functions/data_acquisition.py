@@ -10,7 +10,7 @@ from rembg import remove
 import openai
 import io
 import numpy as np
-
+import os
 
 OPENAI_TEXT_MODEL = os.getenv("OPENAI_TEXT_MODEL", "gpt-4-turbo")
 OPENAI_VISION_MODEL = os.getenv("OPENAI_VISION_MODEL", "gpt-4o")
