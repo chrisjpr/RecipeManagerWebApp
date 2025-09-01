@@ -1,20 +1,28 @@
+
 import os
-from .data_acquisition import *
 import uuid
 import re
 import json
 import base64
-import requests
+import io
 from io import BytesIO
 from fractions import Fraction
+
+import requests
 from PIL import Image, ImageChops
 from recipe_scrapers import scrape_me
-from rembg import remove
-from rembg import new_session  
-import openai
-import io
-import numpy as np
+from rembg import remove, new_session
+
+from django.conf import settings
+from django.core.files.base import ContentFile  # <-- needed for ContentFile(image_bytes)
 from recipes.models import Recipe, Ingredient, Instruction
+
+from .data_acquisition import (
+    organize_with_llm,
+    crop_image_to_visible_area,
+    extract_recipe_from_images,
+    extract_recipe_from_documents,
+)
 
 
 OPENAI_TEXT_MODEL = os.getenv("OPENAI_TEXT_MODEL", "gpt-4-turbo")
