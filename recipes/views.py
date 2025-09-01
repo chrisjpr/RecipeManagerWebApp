@@ -367,60 +367,48 @@ def create_recipe(request):
         # Formsets now handle empty forms automatically
 
         if use_llm:
-            ingredients_text = request.POST.get('ingredients_text', '')
-            instructions_text = request.POST.get('instructions_text', '')
 
-            ingredients = [line.strip() for line in ingredients_text.splitlines() if line.strip()]
-            instructions = [line.strip() for line in instructions_text.splitlines() if line.strip()]
-
-            raw_data = {
-                "ingredients": ingredients,
-                "instructions": instructions
-            }
 
             if recipe_form.is_valid():
                 try:
-                    structured_data = organize_with_llm(
-                        data=raw_data,
-                        api_key=os.getenv("OPENAI_KEY"),
-                        transform_vegan=transform_vegan,
-                        custom_instructions=custom_instruction
+                    # serialize the LLM text inputs
+                    ingredients_text = request.POST.get('ingredients_text', '')
+                    instructions_text = request.POST.get('instructions_text', '')
+
+                    # base fields from the form the user already filled
+                    base_fields = {
+                        "title": recipe_form.cleaned_data.get("title"),
+                        "cook_time": recipe_form.cleaned_data.get("cook_time") or 0,
+                        "portions": recipe_form.cleaned_data.get("portions") or 1,
+                        "notes": recipe_form.cleaned_data.get("notes", ""),
+                        # we do not send the uploaded image to the task here; it’s an optional cover photo for manual create
+                    }
+
+                    queue = get_safe_rq_queue('default')
+                    job = queue.enqueue(
+                        'recipes.tasks.process_recipe_from_manual_llm',  # NEW task
+                        request.user.id,
+                        base_fields,
+                        ingredients_text,
+                        instructions_text,
+                        transform_vegan,
+                        custom_instruction,
                     )
 
-                    recipe = Recipe.objects.create(
-                        user=request.user,
-                        title=recipe_form.cleaned_data.get("title"),
-                        cook_time=recipe_form.cleaned_data.get("cook_time") or 0,
-                        portions=recipe_form.cleaned_data.get("portions") or 1,
-                        notes=recipe_form.cleaned_data.get("notes", ""),
-                        image=recipe_form.cleaned_data.get("image")
-                    )
-
-                    for group in structured_data.get("ingredients", []):
-                        for item in group.get("items", []):
-                            Ingredient.objects.create(
-                                recipe=recipe,
-                                name=item.get("name", ""),
-                                quantity=float(item.get("quantity") or 0),
-                                unit=item.get("unit", ""),
-                                category=group.get("category", "")
-                            )
-
-                    for i, step in enumerate(structured_data.get("instructions", []), start=1):
-                        Instruction.objects.create(
-                            recipe_id=recipe,
-                            step_number=i,
-                            description=step
-                        )
-
-                    messages.success(request, f"✅ Recipe '{recipe.title}' created via LLM.")
-                    return redirect('recipes:recipe_detail', recipe_id=recipe.recipe_id)
+                    messages.success(request, "✅ Import request was succesfully submitted. It can take a few minutes. If something goes wrong with the import, you will be notified.")
+                    resp = redirect('recipes:recipe_list')
+                    existing = request.COOKIES.get('last_import_job')
+                    val = job.id if not existing else f"{existing},{job.id}"
+                    resp.set_cookie('last_import_job', val, max_age=900, samesite='Lax')
+                    return resp
 
                 except Exception as e:
-                    print("❌ LLM error:", repr(e))
-                    messages.error(request, f"Failed to parse and save recipe using LLM: {str(e)}")
+                    print("❌ Error enqueueing manual LLM create:", e)
+                    messages.error(request, "❌ The recipe generation services are currently in maintenance. Try again later!")
+                    return redirect('recipes:recipe_list')
             else:
                 messages.error(request, "Please correct the form errors above.")
+
         else:
             # Manual input path
             if recipe_form.is_valid():
@@ -486,7 +474,7 @@ def add_recipe_from_url(request):
                 custom_instruction,
                 custom_title
             )
-            messages.success(request, "✅ Import request was succesfullys bumitted. It can take a few minutes. If something goes wrong with the import, you will be notified.")
+            messages.success(request, "✅ Import request was succesfully submitted. It can take a few minutes. If something goes wrong with the import, you will be notified.")
             resp = redirect('recipes:recipe_list')
 
             # append job id into cookie (comma-separated), ~15 minutes
@@ -535,7 +523,7 @@ def add_recipe_from_image(request):
                 custom_title,
             )
 
-            messages.success(request, "✅ Import request was succesfullys bumitted. It can take a few minutes. If something goes wrong with the import, you will be notified.")
+            messages.success(request, "✅ Import request was succesfully submitted. It can take a few minutes. If something goes wrong with the import, you will be notified.")
             resp = redirect('recipes:recipe_list')
 
             existing = request.COOKIES.get('last_import_job')
@@ -571,7 +559,7 @@ def add_recipe_from_text(request):
                     use_llm,
                     custom_instruction,
                 )
-                messages.success(request, "✅ Import request was succesfullys bumitted. It can take a few minutes. If something goes wrong with the import, you will be notified.")
+                messages.success(request, "✅ Import request was succesfully submitted. It can take a few minutes. If something goes wrong with the import, you will be notified.")
                 resp = redirect('recipes:recipe_list')
 
                 existing = request.COOKIES.get('last_import_job')
