@@ -146,8 +146,10 @@ DATABASES = {
     )
 }
 
+CONN_HEALTH_CHECKS = True
+
 # ------------------------------------------------------------
-# Redis / RQ (single, no duplication)
+# Redis / RQ
 # ------------------------------------------------------------
 from urllib.parse import urlparse, parse_qsl, urlencode, urlunparse
 
@@ -165,7 +167,11 @@ REDIS_URL = _ensure_redis_url_flags(os.getenv("REDIS_URL", "redis://127.0.0.1:63
 RQ_QUEUES = {
     "default": {
         "URL": REDIS_URL,
-        "DEFAULT_TIMEOUT": 600,
+        "DEFAULT_TIMEOUT": 600,   # keep if you need long jobs
+        "RESULT_TTL": 0,          # do NOT store results (saves lots of Redis memory)
+        "FAILURE_TTL": 3600,      # failed jobs kept for 1 hour only
+        # Optional: cut down worker heartbeats/registries pressure a bit
+        # "WORKER_TTL": 420,
     }
 }
 
