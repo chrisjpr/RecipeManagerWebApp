@@ -383,18 +383,24 @@ def create_recipe(request):
                         "cook_time": recipe_form.cleaned_data.get("cook_time") or 0,
                         "portions": recipe_form.cleaned_data.get("portions") or 1,
                         "notes": recipe_form.cleaned_data.get("notes", ""),
-                        # we do not send the uploaded image to the task here; it’s an optional cover photo for manual create
                     }
+
+                    # FIX: Serialize the uploaded image if present
+                    image_bytes = None
+                    if recipe_form.cleaned_data.get("image"):
+                        uploaded_file = recipe_form.cleaned_data["image"]
+                        image_bytes = uploaded_file.read()
 
                     queue = get_safe_rq_queue('default')
                     job = queue.enqueue(
-                        process_recipe_from_manual_llm, 
+                        process_recipe_from_manual_llm,
                         request.user.id,
                         base_fields,
                         ingredients_text,
                         instructions_text,
                         transform_vegan,
                         custom_instruction,
+                        image_bytes,  # Now passing the image!
                     )
 
                     messages.success(request, "✅ Import request was succesfully submitted. It can take a few minutes. If something goes wrong with the import, you will be notified.")
@@ -414,9 +420,9 @@ def create_recipe(request):
         else:
             # Manual input path
             if recipe_form.is_valid():
-                recipe = recipe_form.save(commit=False)
-                recipe.user = request.user
-                recipe.save()
+                # FIX: Set user before saving to ensure file uploads are handled properly
+                recipe_form.instance.user = request.user
+                recipe = recipe_form.save()  # This properly saves the image
 
                 # Now bind the formsets to the recipe instance
                 ingredient_formset = IngredientFormSet(request.POST, instance=recipe, prefix="ingredients")

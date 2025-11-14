@@ -278,15 +278,15 @@ def process_recipe_from_uploads(user_id, uploads, transform_vegan=False, custom_
         _fail_job("mixed_import_failed", f"Import failed: {e}")
 
 
-def process_recipe_from_manual_llm(user_id, base_fields, ingredients_text, instructions_text, transform_vegan=False, custom_instruction=""):
+def process_recipe_from_manual_llm(user_id, base_fields, ingredients_text, instructions_text, transform_vegan=False, custom_instruction="", image_bytes=None):
     """
     Background job for create_recipe (when 'AI Assistance' is ON).
     - Takes the basic form fields the user entered (title/cook_time/portions/notes),
       plus two textareas (ingredients_text, instructions_text).
+    - Optionally accepts image_bytes for the recipe cover photo.
     - Calls organize_with_llm to structure the recipe.
     - Saves via save_structured_recipe_to_db.
     - Overrides the title/cook_time/portions/notes with what the user entered (if present).
-    - No title image is required (non-fatal).
     """
     User = get_user_model()
     user = User.objects.get(pk=user_id)
@@ -323,11 +323,11 @@ def process_recipe_from_manual_llm(user_id, base_fields, ingredients_text, instr
             if base_fields.get("notes"):
                 structured["notes"] = base_fields["notes"]
 
-        # Save (no image)
+        # Save with optional image
         recipe = save_structured_recipe_to_db(
             data=structured,
             user=user,
-            image_bytes=None,  # no requirement for a title image here
+            image_bytes=image_bytes,  # Now accepts user-uploaded cover photo
         )
 
         print(f"✅ [TASK] Manual+LLM create done: {recipe.title} (id={recipe.recipe_id})")
