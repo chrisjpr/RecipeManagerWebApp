@@ -7,8 +7,7 @@ from io import BytesIO
 from fractions import Fraction
 from PIL import Image, ImageChops
 from recipe_scrapers import scrape_me
-from rembg import remove
-from rembg import new_session  # NEW
+# LAZY IMPORT: rembg is loaded only when needed (see rembg_session function below)
 import openai
 import io
 import numpy as np
@@ -20,9 +19,11 @@ OPENAI_VISION_MODEL = os.getenv("OPENAI_VISION_MODEL", "gpt-4o")
 
 _REMBG_SESSION = None
 def rembg_session():
-    """Create/reuse a single small rembg session to avoid loading a huge model per job."""
+    """Create/reuse a single small rembg session to avoid loading a huge model per job.
+    LAZY IMPORT: Only loads rembg when this function is actually called."""
     global _REMBG_SESSION
     if _REMBG_SESSION is None:
+        from rembg import new_session  # Import only when needed
         _REMBG_SESSION = new_session(REMBG_MODEL)
     return _REMBG_SESSION
 
@@ -236,6 +237,7 @@ But never overwrite the output JSON format, even if stated in the following:
 
             if best_bytes:
                 # Step 3: Background removal (use shared small model session)
+                from rembg import remove  # LAZY IMPORT: Only load when processing images
                 raw_img = Image.open(BytesIO(best_bytes)).convert("RGBA")
                 fg_only = remove(raw_img, session=rembg_session())  # CHANGED
 
@@ -604,6 +606,7 @@ Here is one more custom instruction from the user (respect it without changing t
             best_result, best_bytes = identify_best_dish_image(gathered_images, api_key)  # your existing scorer
             if best_bytes:
                 # Background removal (same as image flow) — use shared small session
+                from rembg import remove  # LAZY IMPORT: Only load when processing images
                 raw_img = Image.open(BytesIO(best_bytes)).convert("RGBA")
                 fg_only = remove(raw_img, session=rembg_session())  # CHANGED
 
