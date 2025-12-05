@@ -52,8 +52,16 @@ AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
 AWS_STORAGE_BUCKET_NAME = os.getenv("AWS_STORAGE_BUCKET_NAME")
 AWS_S3_REGION_NAME = os.getenv("AWS_S3_REGION_NAME", "eu-central-1")
 AWS_QUERYSTRING_AUTH = False
-AWS_S3_FILE_OVERWRITE = False
+# Set to True to avoid 403 errors when checking if files exist
+# This will overwrite files with the same name instead of generating unique names
+AWS_S3_FILE_OVERWRITE = True
 AWS_DEFAULT_ACL = None
+# Additional S3 settings to prevent 403 errors
+AWS_S3_OBJECT_PARAMETERS = {
+    'CacheControl': 'max-age=86400',
+}
+# Use signature version 4 for better compatibility
+AWS_S3_SIGNATURE_VERSION = 's3v4'
 
 # MEDIA_LOCAL=true -> use local FS; otherwise S3
 USE_S3 = os.getenv("MEDIA_LOCAL", "false").lower() not in ("true", "1")
