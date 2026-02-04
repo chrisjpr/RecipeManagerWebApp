@@ -57,7 +57,10 @@ def test_email_view(request):
 
 ## URL PATTERNS (CONNECTS WEBPAGE URLS TO BACKEND FUNCTIONS)
 urlpatterns = [
-    
+
+    # FAVICON – browsers always request /favicon.ico at the root
+    path('favicon.ico', RedirectView.as_view(url=settings.STATIC_URL + 'images/favicon.ico', permanent=True)),
+
     # REIDRECT ROOT URL TO RECIPES APP
     path('', RedirectView.as_view(url='/recipemanager/', permanent=False)),
     # ADMIN PAGE
